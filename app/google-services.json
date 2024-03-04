@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "766855733157",
+    "project_id": "mobileproject-d6899",
+    "storage_bucket": "mobileproject-d6899.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766855733157:android:fd5d6981899291e13e924c",
+        "android_client_info": {
+          "package_name": "com.socksapp.mobileproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAme3__aGtYrG4k-4XMoAE63WE3DMTJbpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
