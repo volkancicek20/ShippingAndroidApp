@@ -51,6 +51,7 @@ public class MainFragment extends Fragment {
         binding.cardView5.setOnClickListener(this::logout);
         binding.cardView6.setOnClickListener(this::goProfileFragment);
         binding.cardView3.setOnClickListener(this::goAddFragment);
+        binding.cardView1.setOnClickListener(this::goGetPostingJobFragment);
     }
 
     private void logout(View v) {
@@ -74,5 +75,9 @@ public class MainFragment extends Fragment {
 
     private void goAddFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_addFragment);
+    }
+
+    private void goGetPostingJobFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_getPostingJobFragment);
     }
 }

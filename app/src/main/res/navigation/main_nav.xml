@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainFragment_to_addFragment"
             app:destination="@id/addFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_getPostingJobFragment"
+            app:destination="@id/getPostingJobFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -39,6 +42,15 @@
             app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_addFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/getPostingJobFragment"
+        android:name="com.socksapp.mobileproject.fragment.GetPostingJobFragment"
+        android:label="fragment_get_posting_job"
+        tools:layout="@layout/fragment_get_posting_job" >
+        <action
+            android:id="@+id/action_getPostingJobFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>
