@@ -37,11 +37,16 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        binding.backMain.setOnClickListener(this::goMainFragment);
+//        binding.backMain.setOnClickListener(this::goMainFragment);
+        binding.institutionalFragmentText.setOnClickListener(this::goInstitutionalFragment);
     }
 
 
     private void goMainFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_mainFragment);
+    }
+
+    private void goInstitutionalFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_institutionalFragment);
     }
 }

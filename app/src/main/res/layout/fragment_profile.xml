@@ -33,8 +33,9 @@
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="User 9022"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:text=""
         android:textColor="@color/black"
         android:textStyle="normal"
         android:textSize="20sp"
@@ -46,8 +47,9 @@
         android:id="@+id/profile_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="user@example.com"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:text=""
         android:textColor="@color/black"
         android:textStyle="normal"
         android:textSize="18sp"
@@ -59,8 +61,9 @@
         android:id="@+id/profile_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="+90 555 555 55 55"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:text=""
         android:textColor="@color/black"
         android:textStyle="normal"
         android:textSize="18sp"
@@ -88,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="User 9022"
+            android:hint="Kullanıcı Adınızı Giriniz"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textColorHint="@color/gray"
@@ -115,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="user@example.com"
+            android:hint="Kullanıcı E-posta Adresinizi Giriniz"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textColorHint="@color/gray"
@@ -142,13 +145,25 @@
             android:id="@+id/number_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="555 555 55 55"
+            android:hint="Telefon Numaranızı Giriniz"
             android:inputType="number"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textColorHint="@color/gray"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/institutionalFragmentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/app_theme"
+        android:textSize="14sp"
+        android:layout_margin="20dp"
+        android:text="İş almak mı istiyorsunuz? Profili oluşturunuz."
+        app:layout_constraintTop_toBottomOf="@id/number_text_input_layout"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/save_profile"
@@ -158,20 +173,20 @@
         android:layout_margin="20dp"
         android:text="KAYDET"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/back_main"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/back_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_profile_button_2"
-        android:layout_margin="20dp"
-        android:text="GERİ DÖN"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/back_main"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:background="@drawable/bg_profile_button_2"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:text="GERİ DÖN"-->
+<!--        android:textColor="@color/white"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
