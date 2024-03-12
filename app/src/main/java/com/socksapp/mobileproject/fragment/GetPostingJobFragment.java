@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentGetPostingJobBinding;
@@ -16,6 +18,9 @@ import com.socksapp.mobileproject.databinding.FragmentGetPostingJobBinding;
 public class GetPostingJobFragment extends Fragment {
 
     private FragmentGetPostingJobBinding binding;
+    private String[] cityNames;
+    private ArrayAdapter<String> cityAdapter;
+    private AutoCompleteTextView cityCompleteTextView;
 
     public GetPostingJobFragment() {
         // Required empty public constructor
@@ -35,5 +40,10 @@ public class GetPostingJobFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        cityNames = getResources().getStringArray(R.array.city_names);
+        cityAdapter = new ArrayAdapter<>(requireContext(), R.layout.list_item,cityNames);
+        cityCompleteTextView = binding.getRoot().findViewById(R.id.city_complete_text);
+        cityCompleteTextView.setAdapter(cityAdapter);
     }
 }

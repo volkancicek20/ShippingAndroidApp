@@ -2,6 +2,7 @@ package com.socksapp.mobileproject.fragment;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.play.core.integrity.n;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentProfileBinding;
 
@@ -37,10 +39,16 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-//        binding.backMain.setOnClickListener(this::goMainFragment);
         binding.institutionalFragmentText.setOnClickListener(this::goInstitutionalFragment);
-    }
+        binding.goInstitutionalProfile.setOnClickListener(this::goInstitutionalFragment);
 
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                goMainFragment(view);
+            }
+        });
+    }
 
     private void goMainFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_mainFragment);
@@ -49,4 +57,6 @@ public class ProfileFragment extends Fragment {
     private void goInstitutionalFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_institutionalFragment);
     }
+
+
 }

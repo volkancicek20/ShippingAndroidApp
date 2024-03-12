@@ -61,7 +61,7 @@
         android:name="com.socksapp.mobileproject.fragment.InstitutionalFragment"
         android:label="InstitutionalFragment" >
         <action
-            android:id="@+id/action_institutionalFragment2_to_profileFragment"
+            android:id="@+id/action_institutionalFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

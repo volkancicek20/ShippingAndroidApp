@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ public class InstitutionalFragment extends Fragment {
 
     private FragmentInstitutionalBinding binding;
     private boolean [] selectedCity;
-    private final ArrayList<Integer> cityList = new ArrayList<>();
+    private ArrayList<String> cityList;
     private final String[] cityArray = {
             "İstanbul","Ankara","İzmir","Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Antalya", "Artvin", "Aydın", "Balıkesir",
             "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli",
@@ -52,8 +53,10 @@ public class InstitutionalFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        cityList = new ArrayList<>();
         selectedCity = new boolean[cityArray.length];
         binding.cityCardView.setOnClickListener(this::showCityDialog);
+        binding.backPersonalProfile.setOnClickListener(this::goPersonalProfile);
     }
 
     private void showCityDialog(View view){
@@ -63,19 +66,28 @@ public class InstitutionalFragment extends Fragment {
         builder.setCancelable(false);
 
         builder.setMultiChoiceItems(cityArray, selectedCity, (dialog, which, isChecked) -> {
+            System.out.println("which: "+which);
+            String city = cityArray[which];
+            System.out.println("city: "+city);
+            System.out.println("++++++++++++++++++++++");
             if(isChecked){
-                cityList.add(which);
+                cityList.add(city);
             }else {
-                cityList.remove(which);
+                cityList.remove(city);
             }
         }).setPositiveButton("TAMAM", (dialog, which) -> {
             StringBuilder stringBuilder = new StringBuilder();
-            for(int i = 0; i < cityList.size(); i++){
-                stringBuilder.append(cityArray[cityList.get(i)]);
+            int i = 0;
+            for(String city : cityList){
+                stringBuilder.append(city);
                 if(i != cityList.size() - 1){
                     stringBuilder.append(",");
                 }
                 binding.selectCityText.setText(stringBuilder.toString());
+                i++;
+            }
+            if(cityList.size() == 0){
+                binding.selectCityText.setText("");
             }
         }).setNegativeButton("ÇIK", (dialog, which) -> {
             dialog.dismiss();
@@ -87,5 +99,9 @@ public class InstitutionalFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    private void goPersonalProfile(View v){
+        Navigation.findNavController(v).navigate(R.id.action_institutionalFragment_to_profileFragment);
     }
 }
