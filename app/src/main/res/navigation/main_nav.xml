@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_mainFragment_to_getPostingJobFragment"
             app:destination="@id/getPostingJobFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_offersFragment"
+            app:destination="@id/offersFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_searchingFragment"
+            app:destination="@id/searchingFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -63,5 +69,23 @@
         <action
             android:id="@+id/action_institutionalFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/offersFragment"
+        android:name="com.socksapp.mobileproject.fragment.OffersFragment"
+        android:label="fragment_offers"
+        tools:layout="@layout/fragment_offers" >
+        <action
+            android:id="@+id/action_offersFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchingFragment"
+        android:name="com.socksapp.mobileproject.fragment.SearchingFragment"
+        android:label="fragment_searching"
+        tools:layout="@layout/fragment_searching" >
+        <action
+            android:id="@+id/action_searchingFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

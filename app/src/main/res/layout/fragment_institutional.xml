@@ -89,7 +89,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 >
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/name_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,8 +98,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textColorHint="@color/gray"
-                    >
-                </com.google.android.material.textfield.TextInputEditText>
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -116,7 +115,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 >
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/mail_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,7 +142,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 >
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/number_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.socksapp.mobileproject.fragment;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,7 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -26,6 +30,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentAddBinding;
 import com.socksapp.mobileproject.databinding.FragmentProfileBinding;
@@ -35,14 +47,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class AddFragment extends Fragment {
 
     private FragmentAddBinding binding;
+    private FirebaseFirestore firestore;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
     private String[] cityNames,districtNames,cityNames2,districtNames2,loadTypes,loadAmounts;
     private ArrayAdapter<String> cityAdapter,districtAdapter,cityAdapter2,districtAdapter2,loadAdapter,loadAdapter2;
     private AutoCompleteTextView cityCompleteTextView,districtCompleteTextView,cityCompleteTextView2,districtCompleteTextView2,loadTypeText,loadAmountText;
+    private int mYear,mMonth,mDay;
 
     public AddFragment() {
         // Required empty public constructor
@@ -51,6 +70,9 @@ public class AddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
     }
 
     @Override
@@ -97,7 +119,6 @@ public class AddFragment extends Fragment {
             binding.districtCompleteText2.setAdapter(null);
             selectDistrict2(selectedCity);
         });
-
 
         binding.loadInfoTitleConstraintLayout.setOnTouchListener((v, event) -> {
             int checkVisible = binding.visibleLoadInfo.getVisibility();
@@ -149,173 +170,66 @@ public class AddFragment extends Fragment {
             return false;
         });
 
-        binding.checkBoxConcact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    binding.mailTextInputLayout.setVisibility(View.GONE);
-                    binding.numberTextInputLayout.setVisibility(View.GONE);
-                } else {
-                    binding.mailTextInputLayout.setVisibility(View.VISIBLE);
-                    binding.numberTextInputLayout.setVisibility(View.VISIBLE);
-                }
+        binding.checkBoxConcact.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.mailTextInputLayout.setVisibility(View.GONE);
+                binding.numberTextInputLayout.setVisibility(View.GONE);
+            } else {
+                binding.mailTextInputLayout.setVisibility(View.VISIBLE);
+                binding.numberTextInputLayout.setVisibility(View.VISIBLE);
             }
         });
 
-        binding.openDate.setOnClickListener(this::showCustomDateDialog);
+        binding.dateEditText.setOnTouchListener((v, event) -> {
+            showCustomDateDialog(v);
+            return false;
+        });
 
-        binding.openTime.setOnClickListener(this::showCustomTimeDialog);
+        binding.timeEditText.setOnTouchListener((v, event) -> {
+            showCustomTimeDialog(v);
+            return false;
+        });
+
+
+        binding.addPost.setOnClickListener(this::addPost);
 
     }
 
     private void showCustomTimeDialog(View view) {
-        Dialog dialog = new Dialog(view.getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.start_and_end_time_layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        final Calendar currentTime = Calendar.getInstance();
+        int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = currentTime.get(Calendar.MINUTE);
 
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                view.getContext(),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                        String timeString = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
+                        binding.timeEditText.setText(timeString);
+                    }
+                },
+                hour,
+                minute,
+                true
+        );
 
-//        Button first = dialog.findViewById(R.id.firstTime);
-//        Button second = dialog.findViewById(R.id.secondTime);
-        Button save = dialog.findViewById(R.id.saveTime);
-//        TextView firstText = dialog.findViewById(R.id.firstTimeText);
-//        TextView secondText = dialog.findViewById(R.id.secondTimeText);
-
-//
-//        Calendar calendar = Calendar.getInstance();
-//        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-//        int minute = calendar.get(Calendar.MINUTE);
-//
-//        first.setOnClickListener(v ->{
-//            TimePickerDialog timePickerDialog = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
-//                @Override
-//                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                    @SuppressLint("DefaultLocale") String time = String.format("%02d:%02d", hourOfDay, minute);
-//                    firstText.setText(time);
-//                }
-//            }, hourOfDay, minute, true);
-//            timePickerDialog.show();
-//        });
-//
-//        second.setOnClickListener(v ->{
-//            TimePickerDialog timePickerDialog = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
-//                @Override
-//                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                    @SuppressLint("DefaultLocale") String time = String.format("%02d:%02d", hourOfDay, minute);
-//                    secondText.setText(time);
-//                }
-//            }, hourOfDay, minute, true);
-//            timePickerDialog.show();
-//        });
-
-        save.setOnClickListener(v ->{
-//            String firstTime = firstText.getText().toString();
-//            String secondTime = secondText.getText().toString();
-
-//            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//            try {
-//                Date date1 = sdf.parse(firstTime);
-//                Date date2 = sdf.parse(secondTime);
-//                int comparisonResult = date1.compareTo(date2);
-//
-//                if (comparisonResult < 0) {
-//                    // time1, time2'den önce
-//                    String time = firstTime + " - " + secondTime;
-//
-//                    binding.timeText.setText(time);
-//                    dialog.dismiss();
-//                } else if (comparisonResult > 0) {
-//                    Toast.makeText(v.getContext(),"Bitiş saati başlangıç saatinden önce olamaz!",Toast.LENGTH_LONG).show();
-//                } else {
-//                    // time1 ve time2 aynı saate sahip
-//                    String time = firstTime + " - " + secondTime;
-//
-//                    binding.timeText.setText(time);
-//                    dialog.dismiss();
-//                }
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-        });
-
-        dialog.show();
+        timePickerDialog.show();
     }
-
     private void showCustomDateDialog(View view) {
-        Dialog dialog = new Dialog(view.getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.start_and_end_date_layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        final Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-
-//        Button first = dialog.findViewById(R.id.firstDate);
-//        Button second = dialog.findViewById(R.id.secondDate);
-        Button save = dialog.findViewById(R.id.saveDate);
-//        TextView firstText = dialog.findViewById(R.id.firstDateText);
-//        TextView secondText = dialog.findViewById(R.id.secondDateText);
-
-//        Calendar calendar = Calendar.getInstance();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//        first.setOnClickListener(v ->{
-//            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(),
-//                    new DatePickerDialog.OnDateSetListener() {
-//                        @Override
-//                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                            String monthName = new DateFormatSymbols(new Locale("tr")).getMonths()[month];
-//                            String selectedDate = dayOfMonth + " " + monthName + " " + year;
-//                            firstText.setText(selectedDate);
-//                        }
-//                    }, year, month, dayOfMonth);
-//
-//            datePickerDialog.show();
-//        });
-//
-//        second.setOnClickListener(v ->{
-//            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(),
-//                    new DatePickerDialog.OnDateSetListener() {
-//                        @Override
-//                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                            String monthName = new DateFormatSymbols(new Locale("tr")).getMonths()[month];
-//                            String selectedDate = dayOfMonth + " " + monthName + " " + year;
-//                            secondText.setText(selectedDate);
-//                        }
-//                    }, year, month, dayOfMonth);
-//
-//            datePickerDialog.show();
-//        });
-
-        save.setOnClickListener(v ->{
-//            String firstDate = firstText.getText().toString();
-//            String secondDate = secondText.getText().toString();
-
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", new Locale("tr"));
-//            try {
-//                Date date1 = sdf.parse(firstDate);
-//                Date date2 = sdf.parse(secondDate);
-//                int comparisonResult = date1.compareTo(date2);
-//
-//                if (comparisonResult < 0) {
-//                    String dateRange = firstDate + " - " + secondDate;
-//                    binding.dateText.setText(dateRange);
-//                    dialog.dismiss();
-//                } else if (comparisonResult > 0) {
-//                    Toast.makeText(v.getContext(), "Bitiş tarihi başlangıç tarihinden önce olamaz!", Toast.LENGTH_LONG).show();
-//                } else {
-//                    String dateRange = firstDate + " - " + secondDate;
-//                    binding.dateText.setText(dateRange);
-//                    dialog.dismiss();
-//                }
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-        });
-
-        dialog.show();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String timeString = String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, (month + 1), year);
+                binding.dateEditText.setText(timeString);
+            }
+        },mYear,mMonth,mDay);
+        datePickerDialog.show();
     }
 
     private void selectDistrict(String selectedCity){
@@ -1302,4 +1216,148 @@ public class AddFragment extends Fragment {
                 break;
         }
     }
+
+    private void addPost(View view){
+        String startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail;
+        boolean startCityCheck,startDistrictCheck,endCityCheck,endDistrictCheck,loadTypeCheck,loadAmountCheck,dateCheck,timeCheck,numberCheck,mailCheck;
+
+        startCity = binding.cityCompleteText.getText().toString();
+        startDistrict = binding.districtCompleteText.getText().toString();
+        endCity = binding.cityCompleteText2.getText().toString();
+        endDistrict = binding.districtCompleteText2.getText().toString();
+        loadType = binding.loadTypeText.getText().toString();
+        loadAmount = binding.loadAmountText.getText().toString();
+        date = binding.dateEditText.getText().toString();
+        time = binding.timeEditText.getText().toString();
+        number = binding.numberEdittext.getText().toString();
+        mail = binding.mailEdittext.getText().toString();
+
+
+        startCityCheck = !startCity.isEmpty();
+        startDistrictCheck = !startDistrict.isEmpty();
+        endCityCheck = !endCity.isEmpty();
+        endDistrictCheck = !endDistrict.isEmpty();
+        loadTypeCheck = !loadType.isEmpty();
+        loadAmountCheck = !loadAmount.isEmpty();
+
+        if(!date.isEmpty()){
+            Pattern pattern = Pattern.compile("\\d{2}/\\d{2}/\\d{4}");
+            dateCheck = pattern.matcher(date).matches();
+        }else {
+            dateCheck = false;
+        }
+
+        if(!time.isEmpty()){
+            Pattern pattern = Pattern.compile("\\d{2}:\\d{2}");
+            timeCheck = pattern.matcher(time).matches();
+        }else {
+            timeCheck = false;
+        }
+
+        if(!number.isEmpty()){
+            Pattern pattern = Pattern.compile("\\d{10}");
+            String strippedPhoneNumber = number.replaceAll("\\s+", "");
+            numberCheck = pattern.matcher(strippedPhoneNumber).matches();
+        }else {
+            numberCheck = false;
+        }
+
+        if(!mail.isEmpty()){
+            Pattern pattern = Patterns.EMAIL_ADDRESS;
+            mailCheck = pattern.matcher(mail).matches();
+        }else {
+            mailCheck = false;
+        }
+
+        if(startCityCheck && startDistrictCheck && endCityCheck && endDistrictCheck && loadTypeCheck && loadAmountCheck && dateCheck && timeCheck && numberCheck && mailCheck){
+            ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+            progressDialog.setMessage("İlan ekleniyor..");
+            progressDialog.show();
+
+            Map<String, Object> post = new HashMap<>();
+            post.put("startCity",startCity);
+            post.put("startDistrict",startDistrict);
+            post.put("endCity",endCity);
+            post.put("endDistrict",endDistrict);
+            post.put("loadType",loadType);
+            post.put("loadAmount",loadAmount);
+            post.put("date",date);
+            post.put("time",time);
+            post.put("number",number);
+            post.put("mail",mail);
+            post.put("timestamp", new Date());
+
+            CollectionReference collection = firestore.collection("post"+startCity);
+            collection.add(post).addOnSuccessListener(documentReference -> {
+                progressDialog.dismiss();
+                Toast.makeText(view.getContext(),"İlanınız Eklendi",Toast.LENGTH_LONG).show();
+            }).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+            });
+
+        }else {
+            if(!startCityCheck){
+                binding.cityCompleteText.setError("Başlangıç ilini seçiniz!");
+            }else {
+                binding.cityCompleteText.setError(null);
+            }
+
+            if(!startDistrictCheck){
+                binding.districtCompleteText.setError("Başlangıç ilçeyi seçiniz!");
+            }else {
+                binding.districtCompleteText.setError(null);
+            }
+
+            if(!endCityCheck){
+                binding.cityCompleteText2.setError("Varış ilini seçiniz!");
+            }else {
+                binding.cityCompleteText2.setError(null);
+            }
+
+            if(!endDistrictCheck){
+                binding.districtCompleteText2.setError("Varış ilçeyi seçiniz!");
+            }else {
+                binding.districtCompleteText2.setError(null);
+            }
+
+            if(!loadTypeCheck){
+                binding.loadTypeText.setError("Yük tipini seçiniz!");
+            }else {
+                binding.loadTypeText.setError(null);
+            }
+
+            if(!loadAmountCheck){
+                binding.loadAmountText.setError("Yük miktarını seçiniz!");
+            }else {
+                binding.loadAmountText.setError(null);
+            }
+
+            if(!dateCheck){
+                binding.dateEditText.setError("Planlanan tarihi giriniz!");
+            }else {
+                binding.dateEditText.setError(null);
+            }
+
+            if(!timeCheck){
+                binding.timeEditText.setError("Planlanan saati giriniz!");
+            }else {
+                binding.timeEditText.setError(null);
+            }
+
+            if(!numberCheck){
+                binding.numberEdittext.setError("Telefon numaranızı giriniz!");
+            }else {
+                binding.numberEdittext.setError(null);
+            }
+
+            if(!mailCheck){
+                binding.mailEdittext.setError("E-posta adresinizi giriniz!");
+            }else {
+                binding.mailEdittext.setError(null);
+            }
+        }
+    }
+
+
 }

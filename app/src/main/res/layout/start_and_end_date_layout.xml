@@ -24,9 +24,14 @@
         android:orientation="horizontal">
 
         <DatePicker
+            android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"/>
+            android:layout_margin="16dp"
+            android:datePickerMode="calendar"
+            android:calendarTextColor="@color/white"
+            android:startYear="2024"
+            style="@style/CustomDatePicker"/>
 
     </LinearLayout>
 
