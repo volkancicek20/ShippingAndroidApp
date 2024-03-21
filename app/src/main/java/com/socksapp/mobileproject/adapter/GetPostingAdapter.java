@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,6 +35,7 @@ import com.socksapp.mobileproject.model.GetPostingModel;
 
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +111,7 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                 getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,getPostingHolder);
 
                 getPostingHolder.recyclerViewPostBinding.offersButton.setOnClickListener(v ->{
-                    getOffers(mail);
+                    getOffers(mail,startCity,startDistrict,endCity,endDistrict);
                 });
 
                 break;
@@ -189,7 +191,7 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
     }
 
 
-    private void getOffers(String offersMail){
+    private void getOffers(String offersMail,String startCity,String startDistrict,String endCity,String endDistrict){
         View view = LayoutInflater.from(context).inflate(R.layout.offers_layout, null);
 
         EditText editText = view.findViewById(R.id.price_edittext);
@@ -203,11 +205,11 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
 
         okButton.setOnClickListener(v -> {
             String price = editText.getText().toString();
-            getInstitutionalData(user.getEmail(),offersMail,price,alertDialog);
+            getInstitutionalData(user.getEmail(),offersMail,price,startCity,startDistrict,endCity,endDistrict,alertDialog);
         });
     }
 
-    private void getInstitutionalData(String userMail,String offersMail,String price,AlertDialog alertDialog){
+    private void getInstitutionalData(String userMail,String offersMail,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog){
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Teklifiniz ekleniyor..");
         progressDialog.show();
@@ -223,7 +225,7 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
 
                     ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
 
-                    if(name != null && !name.isEmpty() && mail != null && !mail.isEmpty() && number != null && !number.isEmpty() && imageUrl != null && !imageUrl.isEmpty() && citiesData != null && !citiesData.isEmpty()){
+                    if(name != null && !name.isEmpty() && mail != null && !mail.isEmpty() && number != null && !number.isEmpty() && imageUrl != null && citiesData != null && !citiesData.isEmpty()){
 
                         WriteBatch batch = firebaseFirestore.batch();
 
@@ -233,16 +235,25 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                         data.put("institutionalMail",mail);
                         data.put("institutionalName",name);
                         data.put("institutionalNumber",number);
-                        data.put("institutionalImageUrl",imageUrl);
+                        if(imageUrl.isEmpty()){
+                            data.put("institutionalImageUrl","");
+                        }else {
+                            data.put("institutionalImageUrl",imageUrl);
+                        }
+                        data.put("startCity",startCity);
+                        data.put("startDistrict",startDistrict);
+                        data.put("endCity",endCity);
+                        data.put("endDistrict",endDistrict);
+                        data.put("timestamp",new Date());
 
-                        DocumentReference offerDocRef = firebaseFirestore.collection("offers").document(offersMail);
+                        CollectionReference collectionReference = firebaseFirestore.collection("offers").document(offersMail).collection(offersMail);
+                        DocumentReference offerDocRef = collectionReference.document();
                         batch.set(offerDocRef, data, SetOptions.merge());
 
                         Map<String, Object> citiesMap = new HashMap<>();
                         citiesMap.put("cities", new ArrayList<>(citiesData));
 
-                        DocumentReference userDocRef = firebaseFirestore.collection("offers").document(offersMail);
-                        batch.set(userDocRef, citiesMap, SetOptions.merge());
+                        batch.set(offerDocRef, citiesMap, SetOptions.merge());
 
                         batch.commit().addOnSuccessListener(unused -> {
                             Toast.makeText(context,"Teklifiniz eklendi",Toast.LENGTH_LONG).show();

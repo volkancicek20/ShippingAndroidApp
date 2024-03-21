@@ -75,6 +75,7 @@ public class GetPostingJobFragment extends Fragment {
         getPost(view,"");
 
         binding.findPost.setOnClickListener(v -> {
+            getPostingModelArrayList.clear();
             getPost(v,binding.cityCompleteText.getText().toString());
         });
     }
@@ -90,6 +91,8 @@ public class GetPostingJobFragment extends Fragment {
 
         collection.get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                String name = documentSnapshot.getString("name");
+                String imageUrl = documentSnapshot.getString("imageUrl");
                 String startCity = documentSnapshot.getString("startCity");
                 String startDistrict = documentSnapshot.getString("startDistrict");
                 String endCity = documentSnapshot.getString("endCity");
@@ -102,7 +105,7 @@ public class GetPostingJobFragment extends Fragment {
                 String mail = documentSnapshot.getString("mail");
                 Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
 
-                GetPostingModel post = new GetPostingModel(1,"Volkan","",startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp);
+                GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp);
                 getPostingModelArrayList.add(post);
                 getPostingAdapter.notifyDataSetChanged();
 

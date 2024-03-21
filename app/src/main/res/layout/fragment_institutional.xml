@@ -186,10 +186,23 @@
                         android:id="@+id/icon_down_city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/edit_city"
+                        android:src="@drawable/icon_down_arrow" />
+
+                    <ImageView
+                        android:id="@+id/edit_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:tint="@color/gray"
+                        android:visibility="visible"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:src="@drawable/icon_down_arrow" />
+                        android:src="@drawable/icon_edit"
+                         />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

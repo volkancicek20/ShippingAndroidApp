@@ -1,8 +1,10 @@
 package com.socksapp.mobileproject.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -29,6 +31,9 @@ public class MainFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseUser user;
 
+    private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared,institutionalNameShared,institutionalNumberShared,institutionalMailShared,institutionalImageUrlShared;;
+    private SharedPreferences personalDone,institutionalDone;
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -38,6 +43,20 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        nameShared = requireActivity().getSharedPreferences("Name", Context.MODE_PRIVATE);
+        numberShared = requireActivity().getSharedPreferences("Number", Context.MODE_PRIVATE);
+        mailShared = requireActivity().getSharedPreferences("Mail", Context.MODE_PRIVATE);
+        imageUrlShared = requireActivity().getSharedPreferences("ImageUrl", Context.MODE_PRIVATE);
+
+        institutionalNameShared = requireActivity().getSharedPreferences("InstitutionalName", Context.MODE_PRIVATE);
+        institutionalNumberShared = requireActivity().getSharedPreferences("InstitutionalNumber", Context.MODE_PRIVATE);
+        institutionalMailShared = requireActivity().getSharedPreferences("InstitutionalMail", Context.MODE_PRIVATE);
+        institutionalImageUrlShared = requireActivity().getSharedPreferences("InstitutionalImageUrl", Context.MODE_PRIVATE);
+
+        personalDone = requireActivity().getSharedPreferences("PersonalDone", Context.MODE_PRIVATE);
+        institutionalDone = requireActivity().getSharedPreferences("InstitutionalDone", Context.MODE_PRIVATE);
+
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +79,7 @@ public class MainFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage("Uygulamadan çıkış yapılsın mı?");
         builder.setPositiveButton("Çık", (dialog, which) -> {
+            deleteData();
             auth.signOut();
             Intent intent = new Intent(v.getContext(), LoginActivity.class);
             startActivity(intent);
@@ -89,5 +109,25 @@ public class MainFragment extends Fragment {
 
     private void goOffersFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_offersFragment);
+    }
+
+    private void deleteData(){
+        deleteSharedPreference(nameShared);
+        deleteSharedPreference(mailShared);
+        deleteSharedPreference(numberShared);
+        deleteSharedPreference(imageUrlShared);
+
+        deleteSharedPreference(institutionalNameShared);
+        deleteSharedPreference(institutionalMailShared);
+        deleteSharedPreference(institutionalNumberShared);
+        deleteSharedPreference(institutionalImageUrlShared);
+
+        deleteSharedPreference(personalDone);
+        deleteSharedPreference(institutionalDone);
+    }
+    private void deleteSharedPreference(SharedPreferences sharedPreferences){
+        SharedPreferences.Editor delete = sharedPreferences.edit();
+        delete.clear();
+        delete.apply();
     }
 }

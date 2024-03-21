@@ -60,6 +60,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
+    private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared;
+    private SharedPreferences existsInstitutional;
     private String myUserName,myNumber,myMail,myImageUrl,userMail;
     public ActivityResultLauncher<Intent> activityResultLauncher;
     public ActivityResultLauncher<String> permissionLauncher;
@@ -77,6 +79,14 @@ public class ProfileFragment extends Fragment {
         storageReference = firebaseStorage.getReference();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        nameShared = requireActivity().getSharedPreferences("Name",Context.MODE_PRIVATE);
+        numberShared = requireActivity().getSharedPreferences("Number",Context.MODE_PRIVATE);
+        mailShared = requireActivity().getSharedPreferences("Mail",Context.MODE_PRIVATE);
+        imageUrlShared = requireActivity().getSharedPreferences("ImageUrl",Context.MODE_PRIVATE);
+
+        existsInstitutional = requireActivity().getSharedPreferences("ExistsInstitutional", Context.MODE_PRIVATE);
+
     }
 
     @Override
@@ -103,7 +113,7 @@ public class ProfileFragment extends Fragment {
 
         imageData = null;
 
-        getDataPersonal();
+        setProfile();
         registerLauncher(view);
 
         binding.profileImage.setOnClickListener(this::setImage);
@@ -130,6 +140,11 @@ public class ProfileFragment extends Fragment {
             binding.numberTextInputLayout.setEndIconVisible(false);
             return false;
         });
+
+        if(existsInstitutional.getString("exists","").equals("exists")){
+            binding.institutionalFragmentText.setVisibility(View.GONE);
+            binding.goInstitutionalProfile.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -294,41 +309,69 @@ public class ProfileFragment extends Fragment {
 
     private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
         if(nameCheck){
+            SharedPreferences.Editor editor = nameShared.edit();
+            editor.putString("name",uploadName);
+            editor.apply();
+
             binding.nameEdittext.setEnabled(false);
             binding.nameEdittext.setText("");
             binding.nameEdittext.setHint(uploadName);
             binding.nameTextInputLayout.setEndIconVisible(true);
         }
         if(mailCheck){
+            SharedPreferences.Editor editor = mailShared.edit();
+            editor.putString("mail",uploadMail);
+            editor.apply();
+
             binding.mailEdittext.setEnabled(false);
             binding.mailEdittext.setText("");
             binding.mailEdittext.setHint(uploadMail);
             binding.mailTextInputLayout.setEndIconVisible(true);
         }
         if(numberCheck){
+            SharedPreferences.Editor editor = numberShared.edit();
+            editor.putString("number",uploadNumber);
+            editor.apply();
+
             binding.numberEdittext.setEnabled(false);
             binding.numberEdittext.setText("");
             binding.numberEdittext.setHint(uploadNumber);
             binding.numberTextInputLayout.setEndIconVisible(true);
         }
 
+        SharedPreferences.Editor editor = imageUrlShared.edit();
+        editor.putString("imageUrl",uploadImageUrl);
+        editor.apply();
+
         imageData = null;
     }
 
     private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
         if(nameCheck){
+            SharedPreferences.Editor editor = nameShared.edit();
+            editor.putString("name",uploadName);
+            editor.apply();
+
             binding.nameEdittext.setEnabled(false);
             binding.nameEdittext.setText("");
             binding.nameEdittext.setHint(uploadName);
             binding.nameTextInputLayout.setEndIconVisible(true);
         }
         if(mailCheck){
+            SharedPreferences.Editor editor = mailShared.edit();
+            editor.putString("mail",uploadMail);
+            editor.apply();
+
             binding.mailEdittext.setEnabled(false);
             binding.mailEdittext.setText("");
             binding.mailEdittext.setHint(uploadMail);
             binding.mailTextInputLayout.setEndIconVisible(true);
         }
         if(numberCheck){
+            SharedPreferences.Editor editor = numberShared.edit();
+            editor.putString("number",uploadNumber);
+            editor.apply();
+
             binding.numberEdittext.setEnabled(false);
             binding.numberEdittext.setText("");
             binding.numberEdittext.setHint(uploadNumber);
@@ -397,45 +440,80 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getDataPersonal(){
-        firestore.collection("users").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
-            if(documentSnapshot.exists()){
-                String name = documentSnapshot.getString("name");
-                String mail = documentSnapshot.getString("mail");
-                String number = documentSnapshot.getString("number");
-                String imageUrl = documentSnapshot.getString("imageUrl");
+    private void setProfile(){
 
-                if(name != null && !name.isEmpty()){
-                    myUserName = name;
-                    binding.nameEdittext.setHint(name);
-                    binding.nameEdittext.setEnabled(false);
-                }else {
-                    binding.nameTextInputLayout.setEndIconVisible(false);
-                }
-                if(number != null && !number.isEmpty()){
-                    myNumber = number;
-                    binding.numberEdittext.setHint(number);
-                    binding.numberEdittext.setEnabled(false);
-                }else {
-                    binding.numberTextInputLayout.setEndIconVisible(false);
-                }
-                if(mail != null && !mail.isEmpty()){
-                    myMail = mail;
-                    binding.mailEdittext.setHint(mail);
-                    binding.mailEdittext.setEnabled(false);
-                }else {
-                    binding.mailTextInputLayout.setEndIconVisible(false);
-                }
-                if(imageUrl != null && !imageUrl.isEmpty()){
-                    myImageUrl = imageUrl;
-                    Picasso.get().load(imageUrl).into(binding.profileImage);
-                }else {
-                    binding.profileImage.setImageResource(R.drawable.icon_person);
-                }
+        String name = nameShared.getString("name","");
+        String mail = mailShared.getString("mail","");
+        String number = numberShared.getString("number","");
+        String imageUrl = imageUrlShared.getString("imageUrl","");
 
-            }
-        });
+        if(!name.isEmpty()){
+            myUserName = name;
+            binding.nameEdittext.setHint(name);
+            binding.nameEdittext.setEnabled(false);
+        }else {
+            binding.nameTextInputLayout.setEndIconVisible(false);
+        }
+        if(!number.isEmpty()){
+            myNumber = number;
+            binding.numberEdittext.setHint(number);
+            binding.numberEdittext.setEnabled(false);
+        }else {
+            binding.numberTextInputLayout.setEndIconVisible(false);
+        }
+        if(!mail.isEmpty()){
+            myMail = mail;
+            binding.mailEdittext.setHint(mail);
+            binding.mailEdittext.setEnabled(false);
+        }else {
+            binding.mailTextInputLayout.setEndIconVisible(false);
+        }
+        if(!imageUrl.isEmpty()){
+            myImageUrl = imageUrl;
+            Picasso.get().load(imageUrl).into(binding.profileImage);
+        }else {
+            binding.profileImage.setImageResource(R.drawable.icon_person);
+        }
     }
+
+//    private void getDataPersonal(){
+//        firestore.collection("users").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
+//            if(documentSnapshot.exists()){
+//                String name = documentSnapshot.getString("name");
+//                String mail = documentSnapshot.getString("mail");
+//                String number = documentSnapshot.getString("number");
+//                String imageUrl = documentSnapshot.getString("imageUrl");
+//
+//                if(name != null && !name.isEmpty()){
+//                    myUserName = name;
+//                    binding.nameEdittext.setHint(name);
+//                    binding.nameEdittext.setEnabled(false);
+//                }else {
+//                    binding.nameTextInputLayout.setEndIconVisible(false);
+//                }
+//                if(number != null && !number.isEmpty()){
+//                    myNumber = number;
+//                    binding.numberEdittext.setHint(number);
+//                    binding.numberEdittext.setEnabled(false);
+//                }else {
+//                    binding.numberTextInputLayout.setEndIconVisible(false);
+//                }
+//                if(mail != null && !mail.isEmpty()){
+//                    myMail = mail;
+//                    binding.mailEdittext.setHint(mail);
+//                    binding.mailEdittext.setEnabled(false);
+//                }else {
+//                    binding.mailTextInputLayout.setEndIconVisible(false);
+//                }
+//                if(imageUrl != null && !imageUrl.isEmpty()){
+//                    myImageUrl = imageUrl;
+//                    Picasso.get().load(imageUrl).into(binding.profileImage);
+//                }else {
+//                    binding.profileImage.setImageResource(R.drawable.icon_person);
+//                }
+//            }
+//        });
+//    }
 
     public void showToastShort(String message){
         Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_SHORT).show();
