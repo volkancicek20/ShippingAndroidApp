@@ -6,6 +6,7 @@ import static com.socksapp.mobileproject.model.GetOffersModel.LAYOUT_EMPTY;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -30,6 +35,8 @@ import com.socksapp.mobileproject.databinding.RecyclerViewEmptyOfferBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyPostBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewOfferBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewPostBinding;
+import com.socksapp.mobileproject.fragment.OffersFragment;
+import com.socksapp.mobileproject.fragment.UserOffersFragment;
 import com.socksapp.mobileproject.model.GetOffersModel;
 import com.socksapp.mobileproject.model.GetPostingModel;
 import com.squareup.picasso.Picasso;
@@ -45,9 +52,9 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
     private FirebaseFirestore firebaseFirestore;
     ArrayList<GetOffersModel> arrayList;
     Context context;
-    Fragment fragment;
+    UserOffersFragment fragment;
 
-    public GetOffersAdapter(ArrayList<GetOffersModel> arrayList,Context context,Fragment fragment){
+    public GetOffersAdapter(ArrayList<GetOffersModel> arrayList,Context context,UserOffersFragment fragment){
         this.arrayList = arrayList;
         this.context = context;
         this.fragment = fragment;
@@ -87,11 +94,13 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         String imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict;
+        DocumentReference ref;
         Timestamp timestamp;
         switch (holder.getItemViewType()) {
             case LAYOUT_ONE:
                 GetOffersHolder getOffersHolder = (GetOffersHolder) holder;
 
+                ref = arrayList.get(position).ref;
                 imageUrl = arrayList.get(position).imageUrl;
                 userName = arrayList.get(position).userName;
                 number = arrayList.get(position).number;
@@ -106,7 +115,7 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
                 getShow(imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,getOffersHolder);
 
                 getOffersHolder.recyclerViewOfferBinding.offersRejectButton.setOnClickListener(v ->{
-
+                    fragment.rejectOffers(v,ref,user.getEmail(),holder.getAdapterPosition());
                 });
 
                 getOffersHolder.recyclerViewOfferBinding.offersApproveButton.setOnClickListener(v ->{
@@ -153,35 +162,90 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
             Picasso.get().load(imageUrl).into(holder.recyclerViewOfferBinding.recyclerProfileImage);
         }
 
+        ImageView start_icon = holder.recyclerViewOfferBinding.startIcon;
+        ImageView end_icon = holder.recyclerViewOfferBinding.endIcon;
+        ImageView down_icon = holder.recyclerViewOfferBinding.downIcon;
+
+        float scale = context.getResources().getDisplayMetrics().density;
+        int widthPx = (int) (24 * scale + 0.5f);
+        int heightPx = (int) (24 * scale + 0.5f);
+
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.gif_shipping_move)
+                .override(widthPx,heightPx)
+                .into(start_icon);
+
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.gif_shipping_stop)
+                .override(widthPx,heightPx)
+                .into(end_icon);
+
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.gif_movement_down)
+                .override(widthPx,heightPx)
+                .into(down_icon);
+
         String startPoint = startCity + "(" + startDistrict + ")";
         String endPoint = endCity + "(" + endDistrict + ")";
-        String resultPoint = startPoint + "->" + endPoint;
 
         holder.recyclerViewOfferBinding.recyclerUserId.setText(userName);
         holder.recyclerViewOfferBinding.recyclerPrice.setText(price);
-        holder.recyclerViewOfferBinding.text2.setText(resultPoint);
+        holder.recyclerViewOfferBinding.recyclerStartingPoint.setText(startPoint);
+        holder.recyclerViewOfferBinding.recyclerEndingPoint.setText(endPoint);
+
+        holder.recyclerViewOfferBinding.recyclerMail.setText(mail);
+        holder.recyclerViewOfferBinding.recyclerNumber.setText(number);
 
         long secondsElapsed = (Timestamp.now().getSeconds() - timestamp.getSeconds());
         String elapsedTime;
 
         if(secondsElapsed < 0){
-            elapsedTime = "şimdi";
+            elapsedTime = "şimdi •";
         } else if (secondsElapsed >= 31536000) {
-            elapsedTime = "" + (secondsElapsed / 31536000) + " yıl önce";
+            elapsedTime = "" + (secondsElapsed / 31536000) + " yıl önce •";
         } else if (secondsElapsed >= 2592000) {
-            elapsedTime = "" + (secondsElapsed / 2592000) + " ay önce";
+            elapsedTime = "" + (secondsElapsed / 2592000) + " ay önce •";
         } else if (secondsElapsed >= 86400) {
-            elapsedTime = "" + (secondsElapsed / 86400) + " gün önce";
+            elapsedTime = "" + (secondsElapsed / 86400) + " gün önce •";
         } else if (secondsElapsed >= 3600) {
-            elapsedTime = "" + (secondsElapsed / 3600) + " saat önce";
+            elapsedTime = "" + (secondsElapsed / 3600) + " saat önce •";
         } else if (secondsElapsed >= 60) {
-            elapsedTime = "" + (secondsElapsed / 60) + " dakika önce";
+            elapsedTime = "" + (secondsElapsed / 60) + " dakika önce •";
         } else {
-            elapsedTime = "" + secondsElapsed + " saniye önce";
+            elapsedTime = "" + secondsElapsed + " saniye önce •";
         }
 
         holder.recyclerViewOfferBinding.timestampTime.setText(elapsedTime);
 
     }
+
+//    public void rejectOffers(View view,DocumentReference ref,String mail){
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//        builder.setMessage("Teklifi reddetmek istiyor musunuz?");
+//        builder.setPositiveButton("REDDET", (dialog, which) ->{
+//            CollectionReference collectionReference = firebaseFirestore.collection("offers").document(mail).collection(mail);
+//            String deleteRef = ref.getId();
+//            DocumentReference documentReference = collectionReference.document(deleteRef);
+//
+//            documentReference.delete().addOnSuccessListener(unused -> {
+//                Toast.makeText(view.getContext(),"Teklif reddedildi",Toast.LENGTH_SHORT).show();
+//            }).addOnFailureListener(e -> {
+//                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+//            });
+//            dialog.dismiss();
+//        });
+//
+//        builder.setNegativeButton("Hayır", (dialog, which) -> {
+//            dialog.dismiss();
+//        });
+//
+//        AlertDialog dialog = builder.create();
+//
+//        dialog.show();
+//    }
 
 }

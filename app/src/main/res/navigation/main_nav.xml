@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_profileFragment_to_institutionalFragment"
             app:destination="@id/institutionalFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_myPostFragment"
+            app:destination="@id/myPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -87,5 +90,14 @@
         <action
             android:id="@+id/action_searchingFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPostFragment"
+        android:name="com.socksapp.mobileproject.fragment.MyPostFragment"
+        android:label="fragment_my_post"
+        tools:layout="@layout/fragment_my_post" >
+        <action
+            android:id="@+id/action_myPostFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

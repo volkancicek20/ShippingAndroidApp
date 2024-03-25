@@ -1,6 +1,7 @@
 package com.socksapp.mobileproject.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 
 public class GetOffersModel {
 
@@ -17,12 +18,13 @@ public class GetOffersModel {
     public String endCity;
     public String endDistrict;
     public Timestamp timestamp;
+    public DocumentReference ref;
 
     public GetOffersModel(){
 
     }
 
-    public GetOffersModel(int viewType, String imageUrl, String userName, String number, String mail, String price, String startCity, String startDistrict, String endCity, String endDistrict, Timestamp timestamp) {
+    public GetOffersModel(int viewType, String imageUrl, String userName, String number, String mail, String price, String startCity, String startDistrict, String endCity, String endDistrict, Timestamp timestamp,DocumentReference ref) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;
         this.userName = userName;
@@ -34,6 +36,7 @@ public class GetOffersModel {
         this.endCity = endCity;
         this.endDistrict = endDistrict;
         this.timestamp = timestamp;
+        this.ref = ref;
     }
 
     public int getViewType() {
@@ -122,5 +125,13 @@ public class GetOffersModel {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public DocumentReference getRef() {
+        return ref;
+    }
+
+    public void setRef(DocumentReference ref) {
+        this.ref = ref;
     }
 }

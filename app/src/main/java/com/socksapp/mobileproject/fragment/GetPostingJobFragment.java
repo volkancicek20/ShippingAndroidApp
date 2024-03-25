@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.adapter.GetPostingAdapter;
@@ -89,26 +90,32 @@ public class GetPostingJobFragment extends Fragment {
             collection = firestore.collection("post"+city);
         }
 
-        collection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                String name = documentSnapshot.getString("name");
-                String imageUrl = documentSnapshot.getString("imageUrl");
-                String startCity = documentSnapshot.getString("startCity");
-                String startDistrict = documentSnapshot.getString("startDistrict");
-                String endCity = documentSnapshot.getString("endCity");
-                String endDistrict = documentSnapshot.getString("endDistrict");
-                String loadType = documentSnapshot.getString("loadType");
-                String loadAmount = documentSnapshot.getString("loadAmount");
-                String date = documentSnapshot.getString("date");
-                String time = documentSnapshot.getString("time");
-                String number = documentSnapshot.getString("number");
-                String mail = documentSnapshot.getString("mail");
-                Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
-
-                GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp);
+        collection.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if(queryDocumentSnapshots.isEmpty()){
+                GetPostingModel post = new GetPostingModel();
+                post.viewType = 2;
                 getPostingModelArrayList.add(post);
                 getPostingAdapter.notifyDataSetChanged();
+            }else {
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    String name = documentSnapshot.getString("name");
+                    String imageUrl = documentSnapshot.getString("imageUrl");
+                    String startCity = documentSnapshot.getString("startCity");
+                    String startDistrict = documentSnapshot.getString("startDistrict");
+                    String endCity = documentSnapshot.getString("endCity");
+                    String endDistrict = documentSnapshot.getString("endDistrict");
+                    String loadType = documentSnapshot.getString("loadType");
+                    String loadAmount = documentSnapshot.getString("loadAmount");
+                    String date = documentSnapshot.getString("date");
+                    String time = documentSnapshot.getString("time");
+                    String number = documentSnapshot.getString("number");
+                    String mail = documentSnapshot.getString("mail");
+                    Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
 
+                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp);
+                    getPostingModelArrayList.add(post);
+                    getPostingAdapter.notifyDataSetChanged();
+                }
             }
         }).addOnFailureListener(e -> {
             Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();

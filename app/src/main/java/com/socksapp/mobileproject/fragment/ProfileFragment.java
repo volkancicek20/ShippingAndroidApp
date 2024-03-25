@@ -146,6 +146,10 @@ public class ProfileFragment extends Fragment {
             binding.goInstitutionalProfile.setVisibility(View.VISIBLE);
         }
 
+        binding.myGetJob.setOnClickListener(v ->{
+            Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_myPostFragment);
+        });
+
     }
 
     private void goMainFragment(View v){
@@ -475,45 +479,6 @@ public class ProfileFragment extends Fragment {
             binding.profileImage.setImageResource(R.drawable.icon_person);
         }
     }
-
-//    private void getDataPersonal(){
-//        firestore.collection("users").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
-//            if(documentSnapshot.exists()){
-//                String name = documentSnapshot.getString("name");
-//                String mail = documentSnapshot.getString("mail");
-//                String number = documentSnapshot.getString("number");
-//                String imageUrl = documentSnapshot.getString("imageUrl");
-//
-//                if(name != null && !name.isEmpty()){
-//                    myUserName = name;
-//                    binding.nameEdittext.setHint(name);
-//                    binding.nameEdittext.setEnabled(false);
-//                }else {
-//                    binding.nameTextInputLayout.setEndIconVisible(false);
-//                }
-//                if(number != null && !number.isEmpty()){
-//                    myNumber = number;
-//                    binding.numberEdittext.setHint(number);
-//                    binding.numberEdittext.setEnabled(false);
-//                }else {
-//                    binding.numberTextInputLayout.setEndIconVisible(false);
-//                }
-//                if(mail != null && !mail.isEmpty()){
-//                    myMail = mail;
-//                    binding.mailEdittext.setHint(mail);
-//                    binding.mailEdittext.setEnabled(false);
-//                }else {
-//                    binding.mailTextInputLayout.setEndIconVisible(false);
-//                }
-//                if(imageUrl != null && !imageUrl.isEmpty()){
-//                    myImageUrl = imageUrl;
-//                    Picasso.get().load(imageUrl).into(binding.profileImage);
-//                }else {
-//                    binding.profileImage.setImageResource(R.drawable.icon_person);
-//                }
-//            }
-//        });
-//    }
 
     public void showToastShort(String message){
         Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_SHORT).show();

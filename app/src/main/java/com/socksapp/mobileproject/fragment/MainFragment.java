@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -73,11 +74,30 @@ public class MainFragment extends Fragment {
         binding.cardView1.setOnClickListener(this::goGetPostingJobFragment);
         binding.cardView2.setOnClickListener(this::goSearchingFragment);
         binding.cardView4.setOnClickListener(this::goOffersFragment);
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                shutdown(view);
+            }
+        });
+
     }
 
-    private void logout(View v) {
+    private void shutdown(View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage("Uygulamadan çıkış yapılsın mı?");
+        builder.setPositiveButton("Çık", (dialog, which) -> {
+            System.exit(0);
+        });
+        builder.setNegativeButton("Hayır", (dialog, which) -> {
+
+        });
+        builder.show();
+    }
+    private void logout(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage("Hesaptan çıkış yapılsın mı?");
         builder.setPositiveButton("Çık", (dialog, which) -> {
             deleteData();
             auth.signOut();

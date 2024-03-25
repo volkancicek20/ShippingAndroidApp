@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentAddBinding;
 import com.socksapp.mobileproject.databinding.FragmentProfileBinding;
@@ -58,6 +61,8 @@ public class AddFragment extends Fragment {
     private FirebaseFirestore firestore;
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private String userMail;
+    private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared;
     private String[] cityNames,districtNames,cityNames2,districtNames2,loadTypes,loadAmounts;
     private ArrayAdapter<String> cityAdapter,districtAdapter,cityAdapter2,districtAdapter2,loadAdapter,loadAdapter2;
     private AutoCompleteTextView cityCompleteTextView,districtCompleteTextView,cityCompleteTextView2,districtCompleteTextView2,loadTypeText,loadAmountText;
@@ -73,6 +78,12 @@ public class AddFragment extends Fragment {
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        nameShared = requireActivity().getSharedPreferences("Name", Context.MODE_PRIVATE);
+        numberShared = requireActivity().getSharedPreferences("Number",Context.MODE_PRIVATE);
+        mailShared = requireActivity().getSharedPreferences("Mail",Context.MODE_PRIVATE);
+        imageUrlShared = requireActivity().getSharedPreferences("ImageUrl",Context.MODE_PRIVATE);
+
     }
 
     @Override
@@ -85,6 +96,8 @@ public class AddFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        userMail = user.getEmail();
 
         loadTypes = getResources().getStringArray(R.array.load_types);
         loadAdapter = new ArrayAdapter<>(requireContext(), R.layout.list_item,loadTypes);
@@ -170,7 +183,7 @@ public class AddFragment extends Fragment {
             return false;
         });
 
-        binding.checkBoxConcact.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        binding.checkBoxContact.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 binding.mailTextInputLayout.setVisibility(View.GONE);
                 binding.numberTextInputLayout.setVisibility(View.GONE);
@@ -1254,47 +1267,80 @@ public class AddFragment extends Fragment {
             timeCheck = false;
         }
 
-        if(!number.isEmpty()){
-            Pattern pattern = Pattern.compile("\\d{10}");
-            String strippedPhoneNumber = number.replaceAll("\\s+", "");
-            numberCheck = pattern.matcher(strippedPhoneNumber).matches();
+        if(binding.checkBoxContact.isChecked()){
+            numberCheck = true;
+            mailCheck = true;
         }else {
-            numberCheck = false;
+            if(!number.isEmpty()){
+                Pattern pattern = Pattern.compile("\\d{10}");
+                String strippedPhoneNumber = number.replaceAll("\\s+", "");
+                numberCheck = pattern.matcher(strippedPhoneNumber).matches();
+            }else {
+                numberCheck = false;
+            }
+
+            if(!mail.isEmpty()){
+                Pattern pattern = Patterns.EMAIL_ADDRESS;
+                mailCheck = pattern.matcher(mail).matches();
+            }else {
+                mailCheck = false;
+            }
         }
 
-        if(!mail.isEmpty()){
-            Pattern pattern = Patterns.EMAIL_ADDRESS;
-            mailCheck = pattern.matcher(mail).matches();
-        }else {
-            mailCheck = false;
-        }
 
         if(startCityCheck && startDistrictCheck && endCityCheck && endDistrictCheck && loadTypeCheck && loadAmountCheck && dateCheck && timeCheck && numberCheck && mailCheck){
-            ProgressDialog progressDialog = new ProgressDialog(view.getContext());
-            progressDialog.setMessage("İlan ekleniyor..");
-            progressDialog.show();
 
-            Map<String, Object> post = new HashMap<>();
-            post.put("startCity",startCity);
-            post.put("startDistrict",startDistrict);
-            post.put("endCity",endCity);
-            post.put("endDistrict",endDistrict);
-            post.put("loadType",loadType);
-            post.put("loadAmount",loadAmount);
-            post.put("date",date);
-            post.put("time",time);
-            post.put("number",number);
-            post.put("mail",mail);
-            post.put("timestamp", new Date());
+            String nameString = nameShared.getString("name","");
+            String numberString = numberShared.getString("number","");
+            String imageUrl = imageUrlShared.getString("imageUrl","");
+            String mailString = mailShared.getString("mail","");
 
-            CollectionReference collection = firestore.collection("post"+startCity);
-            collection.add(post).addOnSuccessListener(documentReference -> {
-                progressDialog.dismiss();
-                Toast.makeText(view.getContext(),"İlanınız Eklendi",Toast.LENGTH_LONG).show();
-            }).addOnFailureListener(e -> {
-                progressDialog.dismiss();
-                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-            });
+            if(!nameString.isEmpty() && !numberString.isEmpty() && !mailString.isEmpty() && !imageUrl.isEmpty()){
+                ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+                progressDialog.setMessage("İlan ekleniyor..");
+                progressDialog.show();
+
+                Map<String, Object> post = new HashMap<>();
+                post.put("startCity",startCity);
+                post.put("startDistrict",startDistrict);
+                post.put("endCity",endCity);
+                post.put("endDistrict",endDistrict);
+                post.put("loadType",loadType);
+                post.put("loadAmount",loadAmount);
+                post.put("date",date);
+                post.put("time",time);
+                if(binding.checkBoxContact.isChecked()){
+                    post.put("number",numberString);
+                    post.put("mail",mailString);
+                }else {
+                    post.put("number",number);
+                    post.put("mail",mail);
+                }
+                post.put("name",nameString);
+                post.put("imageUrl",imageUrl);
+                post.put("timestamp", new Date());
+
+                WriteBatch batch = firestore.batch();
+
+                DocumentReference docRef1 = firestore.collection("post" + startCity).document();
+                batch.set(docRef1, post);
+
+                DocumentReference docRef2 = firestore.collection("postMe").document(userMail).collection(userMail).document(docRef1.getId());
+                batch.set(docRef2, post);
+
+                batch.commit()
+                    .addOnSuccessListener(aVoid -> {
+                        resetAction();
+                        progressDialog.dismiss();
+                        Toast.makeText(view.getContext(), "İlan Eklendi", Toast.LENGTH_LONG).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    });
+            }else {
+                Toast.makeText(view.getContext(),"Profilinizdeki eksik bilgileri tamamladıktan sonra ilanı paylaşabilirsiniz.",Toast.LENGTH_LONG).show();
+            }
 
         }else {
             if(!startCityCheck){
@@ -1357,6 +1403,44 @@ public class AddFragment extends Fragment {
                 binding.mailEdittext.setError(null);
             }
         }
+    }
+
+    private void resetAction(){
+        binding.visibleFirstLocation.setVisibility(View.GONE);
+        binding.visibleSecondLocation.setVisibility(View.GONE);
+        binding.visibleLoadInfo.setVisibility(View.GONE);
+        binding.visibleDatePicker.setVisibility(View.GONE);
+        binding.visibleContactPicker.setVisibility(View.GONE);
+
+        binding.cityCompleteText.setText("");
+        binding.cityCompleteText.setAdapter(null);
+
+        binding.cityCompleteText2.setText("");
+        binding.cityCompleteText2.setAdapter(null);
+
+        binding.districtCompleteText.setText("");
+        binding.districtCompleteText.setAdapter(null);
+
+        binding.districtCompleteText2.setText("");
+        binding.districtCompleteText2.setAdapter(null);
+
+        binding.loadTypeText.setText("");
+        binding.loadTypeText.setAdapter(null);
+
+        binding.loadAmountText.setText("");
+        binding.loadAmountText.setAdapter(null);
+
+        binding.dateEditText.setText("");
+
+        binding.timeEditText.setText("");
+
+        binding.checkBoxContact.setChecked(false);
+
+        binding.mailEdittext.setText("");
+
+        binding.numberEdittext.setText("");
+
+
     }
 
 

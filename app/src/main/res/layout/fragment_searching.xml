@@ -34,12 +34,13 @@
         android:layout_height="50dp"
         android:src="@drawable/icon_search"
         android:layout_margin="10dp"
+        android:scaleX="-1"
         app:layout_constraintTop_toTopOf="@id/city_text_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/city_text_input"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_offers"
+        android:id="@+id/recycler_view_find"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="10dp"

@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,16 +32,19 @@ import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyPostBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewPostBinding;
+import com.socksapp.mobileproject.fragment.GetPostingJobFragment;
+import com.socksapp.mobileproject.fragment.MyPostFragment;
 import com.socksapp.mobileproject.model.GetPostingModel;
 
 import com.google.firebase.Timestamp;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GetPostingAdapter extends RecyclerView.Adapter {
-
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -62,6 +66,9 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         }else {
             if (arrayList.get(position).getViewType() == 1) {
                 return LAYOUT_ONE;
+            }
+            if (arrayList.get(position).getViewType() == 2) {
+                return LAYOUT_EMPTY;
             }
             return -1;
         }
@@ -88,10 +95,12 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail;
+        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,checkMail;
         Timestamp timestamp;
+        DocumentReference ref;
         switch (holder.getItemViewType()) {
             case LAYOUT_ONE:
+
                 GetPostingHolder getPostingHolder = (GetPostingHolder) holder;
 
                 imageUrl = arrayList.get(position).imageUrl;
@@ -107,16 +116,30 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                 number = arrayList.get(position).number;
                 mail = arrayList.get(position).mail;
                 timestamp = arrayList.get(position).timestamp;
+                checkMail = arrayList.get(position).checkMail;
+                ref = arrayList.get(position).ref;
+
 
                 getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,getPostingHolder);
+
+                if(checkMail != null && checkMail.equals(user.getEmail())){
+                    getPostingHolder.recyclerViewPostBinding.offersButton.setVisibility(View.GONE);
+                    getPostingHolder.recyclerViewPostBinding.deleteButton.setVisibility(View.VISIBLE);
+                }
 
                 getPostingHolder.recyclerViewPostBinding.offersButton.setOnClickListener(v ->{
                     getOffers(mail,startCity,startDistrict,endCity,endDistrict);
                 });
 
+                getPostingHolder.recyclerViewPostBinding.deleteButton.setOnClickListener(v ->{
+                    if(fragment instanceof MyPostFragment){
+                        MyPostFragment.deleteOffers(v,ref,user.getEmail(),getPostingHolder.getAdapterPosition(),startCity);
+                    }
+                });
+
                 break;
             case LAYOUT_EMPTY:
-                System.out.println("BB");
+
                 break;
         }
 
@@ -150,7 +173,35 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
             ImageView imageView;
             imageView = holder.recyclerViewPostBinding.recyclerProfileImage;
             imageView.setImageResource(R.drawable.icon_person);
+        }else {
+            Picasso.get().load(imageUrl).into(holder.recyclerViewPostBinding.recyclerProfileImage);
         }
+
+        ImageView start_icon = holder.recyclerViewPostBinding.startIcon;
+        ImageView end_icon = holder.recyclerViewPostBinding.endIcon;
+        ImageView down_icon = holder.recyclerViewPostBinding.downIcon;
+
+        float scale = context.getResources().getDisplayMetrics().density;
+        int widthPx = (int) (24 * scale + 0.5f);
+        int heightPx = (int) (24 * scale + 0.5f);
+
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.gif_shipping_move)
+                .override(widthPx,heightPx)
+                .into(start_icon);
+
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.gif_shipping_stop)
+                .override(widthPx,heightPx)
+                .into(end_icon);
+
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.gif_movement_down)
+                .override(widthPx,heightPx)
+                .into(down_icon);
 
         String startPoint = startCity + "/" + startDistrict;
         String endPoint = endCity + "/" + endDistrict;
@@ -171,25 +222,24 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         String elapsedTime;
 
         if(secondsElapsed < 0){
-            elapsedTime = "şimdi";
+            elapsedTime = "şimdi •";
         } else if (secondsElapsed >= 31536000) {
-            elapsedTime = "" + (secondsElapsed / 31536000) + " yıl önce";
+            elapsedTime = "" + (secondsElapsed / 31536000) + " yıl önce •";
         } else if (secondsElapsed >= 2592000) {
-            elapsedTime = "" + (secondsElapsed / 2592000) + " ay önce";
+            elapsedTime = "" + (secondsElapsed / 2592000) + " ay önce •";
         } else if (secondsElapsed >= 86400) {
-            elapsedTime = "" + (secondsElapsed / 86400) + " gün önce";
+            elapsedTime = "" + (secondsElapsed / 86400) + " gün önce •";
         } else if (secondsElapsed >= 3600) {
-            elapsedTime = "" + (secondsElapsed / 3600) + " saat önce";
+            elapsedTime = "" + (secondsElapsed / 3600) + " saat önce •";
         } else if (secondsElapsed >= 60) {
-            elapsedTime = "" + (secondsElapsed / 60) + " dakika önce";
+            elapsedTime = "" + (secondsElapsed / 60) + " dakika önce •";
         } else {
-            elapsedTime = "" + secondsElapsed + " saniye önce";
+            elapsedTime = "" + secondsElapsed + " saniye önce •";
         }
 
         holder.recyclerViewPostBinding.timestampTime.setText(elapsedTime);
 
     }
-
 
     private void getOffers(String offersMail,String startCity,String startDistrict,String endCity,String endDistrict){
         View view = LayoutInflater.from(context).inflate(R.layout.offers_layout, null);
@@ -208,6 +258,36 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
             getInstitutionalData(user.getEmail(),offersMail,price,startCity,startDistrict,endCity,endDistrict,alertDialog);
         });
     }
+
+//    public void deleteOffers(DocumentReference ref,String myMail,int position){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setMessage("Teklifi reddetmek istiyor musunuz?");
+//        builder.setPositiveButton("REDDET", (dialog, which) ->{
+//            CollectionReference collectionReference = firebaseFirestore.collection("postMe").document(myMail).collection(myMail);
+//            String deleteRef = ref.getId();
+//            DocumentReference documentReference = collectionReference.document(deleteRef);
+//
+//            documentReference.delete().addOnSuccessListener(unused -> {
+//                if (position != RecyclerView.NO_POSITION) {
+//                    getOffersModelArrayList.remove(position);
+//                    getOffersAdapter.notifyItemRemoved(position);
+//                    getOffersAdapter.notifyDataSetChanged();
+//                }
+//                Toast.makeText(view.getContext(),"Teklif reddedildi",Toast.LENGTH_SHORT).show();
+//            }).addOnFailureListener(e -> {
+//                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+//            });
+//            dialog.dismiss();
+//        });
+//
+//        builder.setNegativeButton("Hayır", (dialog, which) -> {
+//            dialog.dismiss();
+//        });
+//
+//        AlertDialog dialog = builder.create();
+//
+//        dialog.show();
+//    }
 
     private void getInstitutionalData(String userMail,String offersMail,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog){
         ProgressDialog progressDialog = new ProgressDialog(context);
