@@ -457,7 +457,7 @@ public class InstitutionalFragment extends Fragment {
 //    }
 
     private void goPersonalProfile(View v){
-        Navigation.findNavController(v).navigate(R.id.action_institutionalFragment_to_profileFragment);
+//        Navigation.findNavController(v).navigate(R.id.action_institutionalFragment_to_profileFragment);
     }
 
     private void setImage(View view) {

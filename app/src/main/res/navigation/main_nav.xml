@@ -11,9 +11,6 @@
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_mainFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_addFragment"
             app:destination="@id/addFragment" />
         <action
@@ -22,36 +19,17 @@
         <action
             android:id="@+id/action_mainFragment_to_offersFragment"
             app:destination="@id/profilePageFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_searchingFragment"
-            app:destination="@id/searchingFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.socksapp.mobileproject.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_addFragment"
-            app:destination="@id/addFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_institutionalFragment"
-            app:destination="@id/institutionalFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_myPostFragment"
-            app:destination="@id/myPostFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/addFragment"
         android:name="com.socksapp.mobileproject.fragment.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add" >
-        <action
-            android:id="@+id/action_addFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_addFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -68,11 +46,7 @@
     <fragment
         android:id="@+id/institutionalFragment"
         android:name="com.socksapp.mobileproject.fragment.InstitutionalFragment"
-        android:label="InstitutionalFragment" >
-        <action
-            android:id="@+id/action_institutionalFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        android:label="InstitutionalFragment" />
     <fragment
         android:id="@+id/profilePageFragment"
         android:name="com.socksapp.mobileproject.fragment.ProfilePageFragment"
@@ -81,23 +55,21 @@
         <action
             android:id="@+id/action_profilePageFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchingFragment"
-        android:name="com.socksapp.mobileproject.fragment.SearchingFragment"
-        android:label="fragment_searching"
-        tools:layout="@layout/fragment_searching" >
         <action
-            android:id="@+id/action_searchingFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_profilePageFragment_to_myPostFragment"
+            app:destination="@id/myPostFragment" />
+        <action
+            android:id="@+id/action_profilePageFragment_to_userOffersFragment"
+            app:destination="@id/userOffersFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
         android:name="com.socksapp.mobileproject.fragment.MyPostFragment"
         android:label="fragment_my_post"
-        tools:layout="@layout/fragment_my_post" >
-        <action
-            android:id="@+id/action_myPostFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_my_post" />
+    <fragment
+        android:id="@+id/userOffersFragment"
+        android:name="com.socksapp.mobileproject.fragment.UserOffersFragment"
+        android:label="fragment_user_offers"
+        tools:layout="@layout/fragment_user_offers" />
 </navigation>

@@ -95,12 +95,8 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
 
                 getShow(imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,getOffersHolder);
 
-                getOffersHolder.recyclerViewOfferBinding.offersRejectButton.setOnClickListener(v ->{
-                    fragment.rejectOffers(v,ref,user.getEmail(),holder.getAdapterPosition());
-                });
-
-                getOffersHolder.recyclerViewOfferBinding.offersApproveButton.setOnClickListener(v ->{
-
+                getOffersHolder.recyclerViewOfferBinding.verticalMenu.setOnClickListener(v -> {
+                    fragment.dialogShow(v,imageUrl,userName,number,mail,ref,getOffersHolder.getAdapterPosition());
                 });
 
                 break;
@@ -138,47 +134,49 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
         if(imageUrl.isEmpty()){
             ImageView imageView;
             imageView = holder.recyclerViewOfferBinding.recyclerProfileImage;
-            imageView.setImageResource(R.drawable.person_square);
+            imageView.setImageResource(R.drawable.person_active_96);
         }else {
             Picasso.get().load(imageUrl).into(holder.recyclerViewOfferBinding.recyclerProfileImage);
         }
 
-        ImageView start_icon = holder.recyclerViewOfferBinding.startIcon;
-        ImageView end_icon = holder.recyclerViewOfferBinding.endIcon;
-        ImageView down_icon = holder.recyclerViewOfferBinding.downIcon;
-
-        float scale = context.getResources().getDisplayMetrics().density;
-        int widthPx = (int) (24 * scale + 0.5f);
-        int heightPx = (int) (24 * scale + 0.5f);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.gif_shipping_move)
-                .override(widthPx,heightPx)
-                .into(start_icon);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.gif_shipping_stop)
-                .override(widthPx,heightPx)
-                .into(end_icon);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.gif_movement_down)
-                .override(widthPx,heightPx)
-                .into(down_icon);
+//        ImageView start_icon = holder.recyclerViewOfferBinding.startIcon;
+//        ImageView end_icon = holder.recyclerViewOfferBinding.endIcon;
+//        ImageView down_icon = holder.recyclerViewOfferBinding.downIcon;
+//
+//        float scale = context.getResources().getDisplayMetrics().density;
+//        int widthPx = (int) (24 * scale + 0.5f);
+//        int heightPx = (int) (24 * scale + 0.5f);
+//
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.gif_shipping_move)
+//                .override(widthPx,heightPx)
+//                .into(start_icon);
+//
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.gif_shipping_stop)
+//                .override(widthPx,heightPx)
+//                .into(end_icon);
+//
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.gif_movement_down)
+//                .override(widthPx,heightPx)
+//                .into(down_icon);
 
         String startPoint = startCity + "(" + startDistrict + ")";
         String endPoint = endCity + "(" + endDistrict + ")";
+        String point = startPoint + " -> " + endPoint;
 
         holder.recyclerViewOfferBinding.recyclerUserId.setText(userName);
         holder.recyclerViewOfferBinding.recyclerPrice.setText(price);
-        holder.recyclerViewOfferBinding.recyclerStartingPoint.setText(startPoint);
-        holder.recyclerViewOfferBinding.recyclerEndingPoint.setText(endPoint);
+        holder.recyclerViewOfferBinding.recyclerPoint.setText(point);
+//        holder.recyclerViewOfferBinding.recyclerStartingPoint.setText(startPoint);
+//        holder.recyclerViewOfferBinding.recyclerEndingPoint.setText(endPoint);
 
-        holder.recyclerViewOfferBinding.recyclerMail.setText(mail);
-        holder.recyclerViewOfferBinding.recyclerNumber.setText(number);
+//        holder.recyclerViewOfferBinding.recyclerMail.setText(mail);
+//        holder.recyclerViewOfferBinding.recyclerNumber.setText(number);
 
         long secondsElapsed = (Timestamp.now().getSeconds() - timestamp.getSeconds());
         String elapsedTime;

@@ -123,9 +123,9 @@ public class MainFragment extends Fragment {
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_getPostingJobFragment);
     }
 
-    private void goSearchingFragment(View v){
-        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_searchingFragment);
-    }
+//    private void goSearchingFragment(View v){
+//        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_searchingFragment);
+//    }
 
     private void goOffersFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_offersFragment);

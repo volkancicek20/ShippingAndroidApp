@@ -143,14 +143,16 @@ public class ProfileFragment extends Fragment {
 //            Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_myPostFragment);
 //        });
 
+        binding.myPostLinearLayout.setOnClickListener(this::goMyPostFragment);
+        binding.offersLinearLayout.setOnClickListener(this::goMyOffersFragment);
     }
 
-    private void goMainFragment(View v){
-        Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_mainFragment);
+    private void goMyOffersFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_userOffersFragment);
     }
 
-    private void goInstitutionalFragment(View v){
-        Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_institutionalFragment);
+    private void goMyPostFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_myPostFragment);
     }
 
 //    private void saveProfile(View view){

@@ -1,7 +1,10 @@
 package com.socksapp.mobileproject.fragment;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,9 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
@@ -23,6 +29,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.adapter.GetOffersAdapter;
 import com.socksapp.mobileproject.databinding.FragmentUserOffersBinding;
 import com.socksapp.mobileproject.model.GetOffersModel;
@@ -95,6 +102,77 @@ public class UserOffersFragment extends Fragment {
         }).addOnFailureListener(e -> {
             Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
         });
+    }
+
+    public void dialogShow(View view, String imageUrl,String name,String number,String mail,DocumentReference ref,int position){
+        final Dialog dialog = new Dialog(view.getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_layout_offers);
+
+        LinearLayout info = dialog.findViewById(R.id.layoutInfo);
+        LinearLayout approve = dialog.findViewById(R.id.layoutApprove);
+        LinearLayout reject = dialog.findViewById(R.id.layoutReject);
+
+
+        info.setOnClickListener(v -> {
+            dialog.dismiss();
+
+        });
+
+        approve.setOnClickListener(v -> {
+            dialog.dismiss();
+
+        });
+
+        reject.setOnClickListener(v -> {
+            dialog.dismiss();
+            rejectOffers(v,ref,mail,position);
+        });
+
+
+        if(dialog.getWindow() != null){
+            dialog.show();
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+        }
+    }
+
+    public void approveOffers(View view,DocumentReference ref,String mail,int position){
+//        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+//        progressDialog.setMessage("Teklif Kabul Ediliyor..");
+//        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//        builder.setMessage("Teklifi kabul etmek istiyor musunuz?");
+//        builder.setPositiveButton("KABUL ET", (dialog, which) ->{
+//            progressDialog.show();
+//            CollectionReference collectionReference = firestore.collection("offers").document(mail).collection(mail);
+//            String deleteRef = ref.getId();
+//            DocumentReference documentReference = collectionReference.document(deleteRef);
+//
+//            documentReference.delete().addOnSuccessListener(unused -> {
+//                if (position != RecyclerView.NO_POSITION) {
+//                    getOffersModelArrayList.remove(position);
+//                    getOffersAdapter.notifyItemRemoved(position);
+//                    getOffersAdapter.notifyDataSetChanged();
+//                }
+//                progressDialog.dismiss();
+//                dialog.dismiss();
+//                Toast.makeText(view.getContext(),"Teklif reddedildi",Toast.LENGTH_SHORT).show();
+//            }).addOnFailureListener(e -> {
+//                progressDialog.dismiss();
+//                dialog.dismiss();
+//                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+//            });
+//        });
+//
+//        builder.setNegativeButton("Hayır", (dialog, which) -> {
+//            dialog.dismiss();
+//        });
+//
+//        AlertDialog dialog = builder.create();
+//
+//        dialog.show();
     }
 
     public void rejectOffers(View view,DocumentReference ref,String mail,int position){
