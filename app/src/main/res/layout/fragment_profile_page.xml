@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.OffersFragment">
+    tools:context=".fragment.ProfilePageFragment">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/tab_bkg"
-        app:tabIndicatorColor="#000000"
+        app:tabIndicatorColor="@color/gray_with_alpha"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorAnimationMode="linear"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,8 +31,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:tabTextColor="#2E2121"
-        app:tabSelectedTextColor="@color/black"/>
+        app:tabTextColor="@color/gray"
+        app:tabSelectedTextColor="@color/white"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

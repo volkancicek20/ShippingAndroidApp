@@ -66,6 +66,8 @@ public class AddFragment extends Fragment {
     private String[] cityNames,districtNames,cityNames2,districtNames2,loadTypes,loadAmounts;
     private ArrayAdapter<String> cityAdapter,districtAdapter,cityAdapter2,districtAdapter2,loadAdapter,loadAdapter2;
     private AutoCompleteTextView cityCompleteTextView,districtCompleteTextView,cityCompleteTextView2,districtCompleteTextView2,loadTypeText,loadAmountText;
+    private TimePickerDialog timePickerDialog;
+    private DatePickerDialog datePickerDialog;
     private int mYear,mMonth,mDay;
 
     public AddFragment() {
@@ -209,11 +211,12 @@ public class AddFragment extends Fragment {
     }
 
     private void showCustomTimeDialog(View view) {
-        final Calendar currentTime = Calendar.getInstance();
-        int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = currentTime.get(Calendar.MINUTE);
+        if(timePickerDialog == null){
+            final Calendar currentTime = Calendar.getInstance();
+            int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = currentTime.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(
+            timePickerDialog = new TimePickerDialog(
                 view.getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -225,23 +228,26 @@ public class AddFragment extends Fragment {
                 hour,
                 minute,
                 true
-        );
-
+            );
+        }
         timePickerDialog.show();
     }
     private void showCustomDateDialog(View view) {
-        final Calendar calendar = Calendar.getInstance();
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH);
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String timeString = String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, (month + 1), year);
-                binding.dateEditText.setText(timeString);
-            }
-        },mYear,mMonth,mDay);
+        if(datePickerDialog == null){
+            final Calendar calendar = Calendar.getInstance();
+            mYear = calendar.get(Calendar.YEAR);
+            mMonth = calendar.get(Calendar.MONTH);
+            mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    String timeString = String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, (month + 1), year);
+                    binding.dateEditText.setText(timeString);
+                }
+            },mYear,mMonth,mDay);
+        }
         datePickerDialog.show();
     }
 

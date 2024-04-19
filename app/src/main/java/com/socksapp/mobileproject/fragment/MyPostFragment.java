@@ -1,19 +1,28 @@
 package com.socksapp.mobileproject.fragment;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
@@ -24,6 +33,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.adapter.GetPostingAdapter;
@@ -31,6 +41,9 @@ import com.socksapp.mobileproject.databinding.FragmentMyPostBinding;
 import com.socksapp.mobileproject.model.GetPostingModel;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyPostFragment extends Fragment {
 
@@ -38,7 +51,7 @@ public class MyPostFragment extends Fragment {
     public static FirebaseFirestore firestore;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private String userMail;
+    private static String userMail;
 
     public static ArrayList<GetPostingModel> getPostingModelArrayList;
     public static GetPostingAdapter getPostingAdapter;
@@ -148,5 +161,39 @@ public class MyPostFragment extends Fragment {
 
         dialog.show();
     }
+
+    public static void dialogShow(View view, DocumentReference ref, String myMail, int position,String city){
+        final Dialog dialog = new Dialog(view.getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_layout);
+
+        LinearLayout delete = dialog.findViewById(R.id.layoutDelete);
+
+        LinearLayout offers = dialog.findViewById(R.id.layoutOffer);
+        LinearLayout report = dialog.findViewById(R.id.layoutReport);
+        View line = dialog.findViewById(R.id.lineView);
+        line.setVisibility(View.GONE);
+        offers.setVisibility(View.GONE);
+        report.setVisibility(View.GONE);
+
+
+
+        delete.setOnClickListener(v -> {
+            dialog.dismiss();
+            deleteOffers(view,ref,myMail,position,city);
+        });
+
+        if(dialog.getWindow() != null){
+            dialog.show();
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+        }
+        else {
+            Toast.makeText(view.getContext(),"Dialog null",Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

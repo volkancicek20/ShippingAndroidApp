@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MobileProject" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MobileProject" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@android:color/black</item>
     </style>
 
     <style name="Theme.MobileProject" parent="Base.Theme.MobileProject" />
@@ -22,6 +23,19 @@
     <style name="CustomDatePicker" parent="@android:style/Widget.Material.Light.DatePicker">
         <item name="android:datePickerMode">calendar</item>
         <item name="android:calendarTextColor">#FF0000</item>
+    </style>
+
+    <style name="CustomTextInputLayout.Dark" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="android:textColorHint">@color/hint_color_dark</item>  <item name="colorControlActivated">@color/text_input_selection_color_dark</item>  <item name="boxBackgroundColor">@color/dark_background_color</item>
+    </style>
+
+    <style name="CustomTextInputLayout.Dark2" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/hint_color_dark</item>  <item name="colorControlActivated">@color/text_input_selection_color_dark</item>  <item name="boxBackgroundColor">@color/dark_background_color</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
 </resources>

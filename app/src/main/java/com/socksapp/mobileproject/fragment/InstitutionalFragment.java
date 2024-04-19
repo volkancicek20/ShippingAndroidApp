@@ -34,6 +34,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -122,337 +124,337 @@ public class InstitutionalFragment extends Fragment {
         cityList = new HashSet<>();
         selectedCity = new boolean[cityArray.length];
 
-        binding.cityCardView.setOnClickListener(this::showCityDialog);
-        binding.backPersonalProfile.setOnClickListener(this::goPersonalProfile);
+//        binding.cityCardView.setOnClickListener(this::showCityDialog);
+//        binding.backPersonalProfile.setOnClickListener(this::goPersonalProfile);
 
         userMail = user.getEmail();
         imageData = null;
 
-        getDataInstitutional();
-        setProfile();
+//        getDataInstitutional();
+        setProfile(view);
         registerLauncher(view);
 
         binding.profileImage.setOnClickListener(this::setImage);
 
-        binding.saveProfile.setOnClickListener(this::saveProfile);
+//        binding.saveProfile.setOnClickListener(this::saveProfile);
+//
+//        binding.nameTextInputLayout.setEndIconOnClickListener(v -> {
+//            binding.nameEdittext.setEnabled(true);
+//            binding.nameEdittext.requestFocus();
+//            binding.nameTextInputLayout.setEndIconVisible(false);
+//        });
+//
+//        binding.mailTextInputLayout.setEndIconOnClickListener(v -> {
+//            binding.mailEdittext.setEnabled(true);
+//            binding.mailEdittext.requestFocus();
+//            binding.mailTextInputLayout.setEndIconVisible(false);
+//        });
+//
+//        binding.numberTextInputLayout.setEndIconOnClickListener(v -> {
+//            binding.numberEdittext.setEnabled(true);
+//            binding.numberEdittext.requestFocus();
+//            binding.numberTextInputLayout.setEndIconVisible(false);
+//        });
+//
+//        binding.editCity.setOnClickListener(v ->{
+//            binding.cityCardView.setEnabled(true);
+//            binding.cityCardView.requestFocus();
+//            binding.selectCityText.setTextColor(Color.BLACK);
+//            binding.editCity.setVisibility(View.GONE);
+//            binding.iconDownCity.setVisibility(View.VISIBLE);
+//        });
 
-        binding.nameTextInputLayout.setEndIconOnClickListener(v -> {
-            binding.nameEdittext.setEnabled(true);
-            binding.nameEdittext.requestFocus();
-            binding.nameTextInputLayout.setEndIconVisible(false);
-        });
-
-        binding.mailTextInputLayout.setEndIconOnClickListener(v -> {
-            binding.mailEdittext.setEnabled(true);
-            binding.mailEdittext.requestFocus();
-            binding.mailTextInputLayout.setEndIconVisible(false);
-        });
-
-        binding.numberTextInputLayout.setEndIconOnClickListener(v -> {
-            binding.numberEdittext.setEnabled(true);
-            binding.numberEdittext.requestFocus();
-            binding.numberTextInputLayout.setEndIconVisible(false);
-        });
-
-        binding.editCity.setOnClickListener(v ->{
-            binding.cityCardView.setEnabled(true);
-            binding.cityCardView.requestFocus();
-            binding.selectCityText.setTextColor(Color.BLACK);
-            binding.editCity.setVisibility(View.GONE);
-            binding.iconDownCity.setVisibility(View.VISIBLE);
-        });
-
-
-    }
-
-    private void saveProfile(View view){
-        String nameString = binding.nameEdittext.getText().toString();
-        String numberString = binding.numberEdittext.getText().toString();
-        String mailString = binding.mailEdittext.getText().toString();
-
-        boolean nameCheck,numberCheck,mailCheck;
-
-        nameCheck = !nameString.isEmpty();
-
-        if(!mailString.isEmpty()){
-            Pattern patternMail = Patterns.EMAIL_ADDRESS;
-            if (!patternMail.matcher(mailString).matches()){
-                binding.mailEdittext.setError("E-posta adresiniz doğrulanamadı");
-                return;
-            }else {
-                mailCheck = true;
-            }
-        }else {
-            mailCheck = false;
-        }
-
-        if(!numberString.isEmpty()){
-            Pattern patternNumber = Pattern.compile("\\d{10}");
-            String strippedPhoneNumber = numberString.replaceAll("\\s+", "");
-            if(!patternNumber.matcher(strippedPhoneNumber).matches()){
-                binding.numberEdittext.setError("Telefon numaranızı doğrulanamadı");
-                return;
-            }else {
-                numberCheck = true;
-            }
-        }else {
-            numberCheck = false;
-        }
-
-        uploadProfile(view,nameString,mailString,numberString,nameCheck,mailCheck,numberCheck);
 
     }
 
-    private void uploadProfile(View view, String uploadName,String uploadMail,String uploadNumber,boolean nameCheck,boolean mailCheck,boolean numberCheck) {
-        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
-        progressDialog.setMessage("Kaydediliyor..");
-        progressDialog.show();
-        DocumentReference usersRef = firestore.collection("usersInstitutional").document(userMail);
-        WriteBatch batch = firestore.batch();
-        Map<String, Object> updates = new HashMap<>();
-        if (imageData != null) {
-            if(nameCheck && mailCheck && numberCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates, SetOptions.merge());
-            }else if (nameCheck && mailCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                batch.set(usersRef, updates,SetOptions.merge());
-            } else if (nameCheck && numberCheck) {
-                updates.put("name", uploadName);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (mailCheck && numberCheck){
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else {
-                if(nameCheck){
-                    updates.put("name", uploadName);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if(mailCheck){
-                    updates.put("mail", uploadMail);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if (numberCheck){
-                    updates.put("number", uploadNumber);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-            }
-
-            Map<String, Object> citiesMap = new HashMap<>();
-            citiesMap.put("cities", new ArrayList<>(cityList));
-
-            DocumentReference userDocRef = firestore.collection("usersInstitutional").document(userMail);
-            batch.set(userDocRef, citiesMap, SetOptions.merge());
-
-            storageReference.child("usersInstitutionalProfilePhoto").child(userMail).putFile(imageData)
-                .addOnSuccessListener(taskSnapshot -> {
-                    Task<Uri> downloadUrlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    downloadUrlTask.addOnCompleteListener(task -> {
-                        String imageUrl = task.getResult().toString();
-
-                        batch.update(usersRef, "imageUrl", imageUrl);
-
-                        batch.commit()
-                            .addOnSuccessListener(aVoid -> {
-                                progressDialog.dismiss();
-                                updateProfile(!citiesMap.isEmpty(),nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber,imageUrl);
-                                showToastShort("Profiliniz kaydedildi");
-                            })
-                            .addOnFailureListener(e -> {
-                                progressDialog.dismiss();
-                                showErrorMessage(view.getContext(), e.getLocalizedMessage());
-                            });
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
-                });
-
-        } else {
-            if(nameCheck && mailCheck && numberCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (nameCheck && mailCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                batch.set(usersRef, updates,SetOptions.merge());
-            } else if (nameCheck && numberCheck) {
-                updates.put("name", uploadName);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (mailCheck && numberCheck){
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else {
-                if(nameCheck){
-                    updates.put("name", uploadName);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if(mailCheck){
-                    updates.put("mail", uploadMail);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if (numberCheck){
-                    updates.put("number", uploadNumber);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-            }
-
-            Map<String, Object> citiesMap = new HashMap<>();
-            citiesMap.put("cities", new ArrayList<>(cityList));
-
-            DocumentReference userDocRef = firestore.collection("usersInstitutional").document(userMail);
-            batch.set(userDocRef, citiesMap, SetOptions.merge());
-
-            batch.commit()
-                .addOnSuccessListener(aVoid -> {
-                    progressDialog.dismiss();
-                    updateProfile(!citiesMap.isEmpty(),nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber);
-                    showToastShort("Profiliniz kaydedildi");
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
-                });
-
-        }
-    }
-
-    private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
-        if(nameCheck){
-            SharedPreferences.Editor editor = institutionalNameShared.edit();
-            editor.putString("name",uploadName);
-            editor.apply();
-
-            binding.nameEdittext.setEnabled(false);
-            binding.nameEdittext.setText("");
-            binding.nameEdittext.setHint(uploadName);
-            binding.nameTextInputLayout.setEndIconVisible(true);
-        }
-        if(mailCheck){
-            SharedPreferences.Editor editor = institutionalMailShared.edit();
-            editor.putString("mail",uploadMail);
-            editor.apply();
-
-            binding.mailEdittext.setEnabled(false);
-            binding.mailEdittext.setText("");
-            binding.mailEdittext.setHint(uploadMail);
-            binding.mailTextInputLayout.setEndIconVisible(true);
-        }
-        if(numberCheck){
-            SharedPreferences.Editor editor = institutionalNumberShared.edit();
-            editor.putString("number",uploadNumber);
-            editor.apply();
-
-            binding.numberEdittext.setEnabled(false);
-            binding.numberEdittext.setText("");
-            binding.numberEdittext.setHint(uploadNumber);
-            binding.numberTextInputLayout.setEndIconVisible(true);
-        }
-        if(cityCheck){
-            binding.cityCardView.setEnabled(false);
-            binding.editCity.setVisibility(View.VISIBLE);
-            binding.iconDownCity.setVisibility(View.GONE);
-        }
-//        if(!cityList.isEmpty()){
-//            addCity(cityList);
+//    private void saveProfile(View view){
+//        String nameString = binding.nameEdittext.getText().toString();
+//        String numberString = binding.numberEdittext.getText().toString();
+//        String mailString = binding.mailEdittext.getText().toString();
+//
+//        boolean nameCheck,numberCheck,mailCheck;
+//
+//        nameCheck = !nameString.isEmpty();
+//
+//        if(!mailString.isEmpty()){
+//            Pattern patternMail = Patterns.EMAIL_ADDRESS;
+//            if (!patternMail.matcher(mailString).matches()){
+//                binding.mailEdittext.setError("E-posta adresiniz doğrulanamadı");
+//                return;
+//            }else {
+//                mailCheck = true;
+//            }
+//        }else {
+//            mailCheck = false;
 //        }
-
-        SharedPreferences.Editor editor = institutionalImageUrlShared.edit();
-        editor.putString("imageUrl",uploadImageUrl);
-        editor.apply();
-
-        imageData = null;
-    }
-
-    private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
-        if(nameCheck){
-            SharedPreferences.Editor editor = institutionalNameShared.edit();
-            editor.putString("name",uploadName);
-            editor.apply();
-
-            binding.nameEdittext.setEnabled(false);
-            binding.nameEdittext.setText("");
-            binding.nameEdittext.setHint(uploadName);
-            binding.nameTextInputLayout.setEndIconVisible(true);
-        }
-        if(mailCheck){
-            SharedPreferences.Editor editor = institutionalMailShared.edit();
-            editor.putString("mail",uploadMail);
-            editor.apply();
-
-            binding.mailEdittext.setEnabled(false);
-            binding.mailEdittext.setText("");
-            binding.mailEdittext.setHint(uploadMail);
-            binding.mailTextInputLayout.setEndIconVisible(true);
-        }
-        if(numberCheck){
-            SharedPreferences.Editor editor = institutionalNumberShared.edit();
-            editor.putString("number",uploadNumber);
-            editor.apply();
-
-            binding.numberEdittext.setEnabled(false);
-            binding.numberEdittext.setText("");
-            binding.numberEdittext.setHint(uploadNumber);
-            binding.numberTextInputLayout.setEndIconVisible(true);
-        }
-        if(cityCheck){
-            binding.cityCardView.setEnabled(false);
-            binding.editCity.setVisibility(View.VISIBLE);
-            binding.iconDownCity.setVisibility(View.GONE);
-        }
-//        if(!cityList.isEmpty()){
-//            addCity(cityList);
+//
+//        if(!numberString.isEmpty()){
+//            Pattern patternNumber = Pattern.compile("\\d{10}");
+//            String strippedPhoneNumber = numberString.replaceAll("\\s+", "");
+//            if(!patternNumber.matcher(strippedPhoneNumber).matches()){
+//                binding.numberEdittext.setError("Telefon numaranızı doğrulanamadı");
+//                return;
+//            }else {
+//                numberCheck = true;
+//            }
+//        }else {
+//            numberCheck = false;
 //        }
-    }
+//
+//        uploadProfile(view,nameString,mailString,numberString,nameCheck,mailCheck,numberCheck);
+//
+//    }
 
-    private void showCityDialog(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//    private void uploadProfile(View view, String uploadName,String uploadMail,String uploadNumber,boolean nameCheck,boolean mailCheck,boolean numberCheck) {
+//        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+//        progressDialog.setMessage("Kaydediliyor..");
+//        progressDialog.show();
+//        DocumentReference usersRef = firestore.collection("usersInstitutional").document(userMail);
+//        WriteBatch batch = firestore.batch();
+//        Map<String, Object> updates = new HashMap<>();
+//        if (imageData != null) {
+//            if(nameCheck && mailCheck && numberCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates, SetOptions.merge());
+//            }else if (nameCheck && mailCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            } else if (nameCheck && numberCheck) {
+//                updates.put("name", uploadName);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (mailCheck && numberCheck){
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else {
+//                if(nameCheck){
+//                    updates.put("name", uploadName);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if(mailCheck){
+//                    updates.put("mail", uploadMail);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if (numberCheck){
+//                    updates.put("number", uploadNumber);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//            }
+//
+//            Map<String, Object> citiesMap = new HashMap<>();
+//            citiesMap.put("cities", new ArrayList<>(cityList));
+//
+//            DocumentReference userDocRef = firestore.collection("usersInstitutional").document(userMail);
+//            batch.set(userDocRef, citiesMap, SetOptions.merge());
+//
+//            storageReference.child("usersInstitutionalProfilePhoto").child(userMail).putFile(imageData)
+//                .addOnSuccessListener(taskSnapshot -> {
+//                    Task<Uri> downloadUrlTask = taskSnapshot.getStorage().getDownloadUrl();
+//                    downloadUrlTask.addOnCompleteListener(task -> {
+//                        String imageUrl = task.getResult().toString();
+//
+//                        batch.update(usersRef, "imageUrl", imageUrl);
+//
+//                        batch.commit()
+//                            .addOnSuccessListener(aVoid -> {
+//                                progressDialog.dismiss();
+//                                updateProfile(!citiesMap.isEmpty(),nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber,imageUrl);
+//                                showToastShort("Profiliniz kaydedildi");
+//                            })
+//                            .addOnFailureListener(e -> {
+//                                progressDialog.dismiss();
+//                                showErrorMessage(view.getContext(), e.getLocalizedMessage());
+//                            });
+//                    });
+//                })
+//                .addOnFailureListener(e -> {
+//                    progressDialog.dismiss();
+//                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
+//                });
+//
+//        } else {
+//            if(nameCheck && mailCheck && numberCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (nameCheck && mailCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            } else if (nameCheck && numberCheck) {
+//                updates.put("name", uploadName);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (mailCheck && numberCheck){
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else {
+//                if(nameCheck){
+//                    updates.put("name", uploadName);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if(mailCheck){
+//                    updates.put("mail", uploadMail);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if (numberCheck){
+//                    updates.put("number", uploadNumber);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//            }
+//
+//            Map<String, Object> citiesMap = new HashMap<>();
+//            citiesMap.put("cities", new ArrayList<>(cityList));
+//
+//            DocumentReference userDocRef = firestore.collection("usersInstitutional").document(userMail);
+//            batch.set(userDocRef, citiesMap, SetOptions.merge());
+//
+//            batch.commit()
+//                .addOnSuccessListener(aVoid -> {
+//                    progressDialog.dismiss();
+//                    updateProfile(!citiesMap.isEmpty(),nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber);
+//                    showToastShort("Profiliniz kaydedildi");
+//                })
+//                .addOnFailureListener(e -> {
+//                    progressDialog.dismiss();
+//                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
+//                });
+//
+//        }
+//    }
 
-        builder.setTitle("Şehir seçiniz");
-        builder.setCancelable(false);
+//    private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
+//        if(nameCheck){
+//            SharedPreferences.Editor editor = institutionalNameShared.edit();
+//            editor.putString("name",uploadName);
+//            editor.apply();
+//
+//            binding.nameEdittext.setEnabled(false);
+//            binding.nameEdittext.setText("");
+//            binding.nameEdittext.setHint(uploadName);
+//            binding.nameTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(mailCheck){
+//            SharedPreferences.Editor editor = institutionalMailShared.edit();
+//            editor.putString("mail",uploadMail);
+//            editor.apply();
+//
+//            binding.mailEdittext.setEnabled(false);
+//            binding.mailEdittext.setText("");
+//            binding.mailEdittext.setHint(uploadMail);
+//            binding.mailTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(numberCheck){
+//            SharedPreferences.Editor editor = institutionalNumberShared.edit();
+//            editor.putString("number",uploadNumber);
+//            editor.apply();
+//
+//            binding.numberEdittext.setEnabled(false);
+//            binding.numberEdittext.setText("");
+//            binding.numberEdittext.setHint(uploadNumber);
+//            binding.numberTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(cityCheck){
+//            binding.cityCardView.setEnabled(false);
+//            binding.editCity.setVisibility(View.VISIBLE);
+//            binding.iconDownCity.setVisibility(View.GONE);
+//        }
+////        if(!cityList.isEmpty()){
+////            addCity(cityList);
+////        }
+//
+//        SharedPreferences.Editor editor = institutionalImageUrlShared.edit();
+//        editor.putString("imageUrl",uploadImageUrl);
+//        editor.apply();
+//
+//        imageData = null;
+//    }
 
-        builder.setMultiChoiceItems(cityArray, selectedCity, (dialog, which, isChecked) -> {
-            String city = cityArray[which];
-            if(isChecked){
-                cityList.add(city);
-            }else {
-                cityList.remove(city);
-            }
-        }).setPositiveButton("TAMAM", (dialog, which) -> {
-            StringBuilder stringBuilder = new StringBuilder();
-            int i = 0;
-            for(String city : cityList){
-                stringBuilder.append(city);
-                if(i != cityList.size() - 1){
-                    stringBuilder.append(",");
-                }
-                binding.selectCityText.setText(stringBuilder.toString());
-                i++;
-            }
-            if(cityList.isEmpty()){
-                binding.selectCityText.setText("");
-            }
-        }).setNegativeButton("ÇIK", (dialog, which) -> {
-            dialog.dismiss();
-        }).setNeutralButton("TEMİZLE", (dialog, which) -> {
-            for(int i = 0; i < selectedCity.length; i++){
-                selectedCity[i] = false;
-                cityList.clear();
-                binding.selectCityText.setText("");
-            }
-        });
-        builder.show();
-    }
+//    private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
+//        if(nameCheck){
+//            SharedPreferences.Editor editor = institutionalNameShared.edit();
+//            editor.putString("name",uploadName);
+//            editor.apply();
+//
+//            binding.nameEdittext.setEnabled(false);
+//            binding.nameEdittext.setText("");
+//            binding.nameEdittext.setHint(uploadName);
+//            binding.nameTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(mailCheck){
+//            SharedPreferences.Editor editor = institutionalMailShared.edit();
+//            editor.putString("mail",uploadMail);
+//            editor.apply();
+//
+//            binding.mailEdittext.setEnabled(false);
+//            binding.mailEdittext.setText("");
+//            binding.mailEdittext.setHint(uploadMail);
+//            binding.mailTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(numberCheck){
+//            SharedPreferences.Editor editor = institutionalNumberShared.edit();
+//            editor.putString("number",uploadNumber);
+//            editor.apply();
+//
+//            binding.numberEdittext.setEnabled(false);
+//            binding.numberEdittext.setText("");
+//            binding.numberEdittext.setHint(uploadNumber);
+//            binding.numberTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(cityCheck){
+//            binding.cityCardView.setEnabled(false);
+//            binding.editCity.setVisibility(View.VISIBLE);
+//            binding.iconDownCity.setVisibility(View.GONE);
+//        }
+////        if(!cityList.isEmpty()){
+////            addCity(cityList);
+////        }
+//    }
+
+//    private void showCityDialog(View view){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//
+//        builder.setTitle("Şehir seçiniz");
+//        builder.setCancelable(false);
+//
+//        builder.setMultiChoiceItems(cityArray, selectedCity, (dialog, which, isChecked) -> {
+//            String city = cityArray[which];
+//            if(isChecked){
+//                cityList.add(city);
+//            }else {
+//                cityList.remove(city);
+//            }
+//        }).setPositiveButton("TAMAM", (dialog, which) -> {
+//            StringBuilder stringBuilder = new StringBuilder();
+//            int i = 0;
+//            for(String city : cityList){
+//                stringBuilder.append(city);
+//                if(i != cityList.size() - 1){
+//                    stringBuilder.append(",");
+//                }
+//                binding.selectCityText.setText(stringBuilder.toString());
+//                i++;
+//            }
+//            if(cityList.isEmpty()){
+//                binding.selectCityText.setText("");
+//            }
+//        }).setNegativeButton("ÇIK", (dialog, which) -> {
+//            dialog.dismiss();
+//        }).setNeutralButton("TEMİZLE", (dialog, which) -> {
+//            for(int i = 0; i < selectedCity.length; i++){
+//                selectedCity[i] = false;
+//                cityList.clear();
+//                binding.selectCityText.setText("");
+//            }
+//        });
+//        builder.show();
+//    }
 
     private void goPersonalProfile(View v){
         Navigation.findNavController(v).navigate(R.id.action_institutionalFragment_to_profileFragment);
@@ -531,28 +533,28 @@ public class InstitutionalFragment extends Fragment {
         }
     }
 
-    private void showAllCity(){
-        Cursor cursor = databaseHelper.getAllCities();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                String cityName = cursor.getString(cursor.getColumnIndexOrThrow("cityName"));
-                cityList.add(cityName);
-            }
-            cursor.close();
-            StringBuilder stringBuilder = new StringBuilder();
-            int i = 0;
-            for(String city : cityList){
-                stringBuilder.append(city);
-                if(i != cityList.size() - 1){
-                    stringBuilder.append(",");
-                }
-                binding.selectCityText.setText(stringBuilder.toString());
-                i++;
-            }
-        }else {
-            cityList.clear();
-        }
-    }
+//    private void showAllCity(){
+//        Cursor cursor = databaseHelper.getAllCities();
+//        if (cursor != null) {
+//            while (cursor.moveToNext()) {
+//                String cityName = cursor.getString(cursor.getColumnIndexOrThrow("cityName"));
+//                cityList.add(cityName);
+//            }
+//            cursor.close();
+//            StringBuilder stringBuilder = new StringBuilder();
+//            int i = 0;
+//            for(String city : cityList){
+//                stringBuilder.append(city);
+//                if(i != cityList.size() - 1){
+//                    stringBuilder.append(",");
+//                }
+//                binding.selectCityText.setText(stringBuilder.toString());
+//                i++;
+//            }
+//        }else {
+//            cityList.clear();
+//        }
+//    }
 
     private void markSelectedCities() {
         if (selectedCity == null || cityList == null || cityList.isEmpty()) {
@@ -576,7 +578,7 @@ public class InstitutionalFragment extends Fragment {
         return -1;
     }
 
-    private void setProfile(){
+    private void setProfile(View view){
 
         String name = institutionalNameShared.getString("name","");
         String mail = institutionalMailShared.getString("mail","");
@@ -585,27 +587,35 @@ public class InstitutionalFragment extends Fragment {
 
         if(!name.isEmpty()){
             myInstitutionalName = name;
-            binding.nameEdittext.setHint(name);
-            binding.nameEdittext.setEnabled(false);
+            binding.profileName.setText(name);
+//            binding.nameEdittext.setHint(name);
+//            binding.nameEdittext.setEnabled(false);
         }else {
-            binding.nameTextInputLayout.setEndIconVisible(false);
+//            binding.nameTextInputLayout.setEndIconVisible(false);
         }
-        if(!number.isEmpty()){
-            myInstitutionalNumber = number;
-            binding.numberEdittext.setHint(number);
-            binding.numberEdittext.setEnabled(false);
-        }else {
-            binding.numberTextInputLayout.setEndIconVisible(false);
-        }
-        if(!mail.isEmpty()){
-            myInstitutionalMail = mail;
-            binding.mailEdittext.setHint(mail);
-            binding.mailEdittext.setEnabled(false);
-        }else {
-            binding.mailTextInputLayout.setEndIconVisible(false);
-        }
+//        if(!number.isEmpty()){
+//            myInstitutionalNumber = number;
+//            binding.numberEdittext.setHint(number);
+//            binding.numberEdittext.setEnabled(false);
+//        }else {
+//            binding.numberTextInputLayout.setEndIconVisible(false);
+//        }
+//        if(!mail.isEmpty()){
+//            myInstitutionalMail = mail;
+//            binding.mailEdittext.setHint(mail);
+//            binding.mailEdittext.setEnabled(false);
+//        }else {
+//            binding.mailTextInputLayout.setEndIconVisible(false);
+//        }
         if(!imageUrl.isEmpty()){
-            Picasso.get().load(imageUrl).into(binding.profileImage);
+//            Picasso.get().load(imageUrl).into(binding.profileImage);
+
+            Glide.with(view.getContext())
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(binding.profileImage);
         }else {
             binding.profileImage.setImageResource(R.drawable.person_square);
         }
@@ -613,38 +623,38 @@ public class InstitutionalFragment extends Fragment {
     }
 
     @SuppressWarnings("unchecked")
-    private void getDataInstitutional(){
-        firestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
-            if(documentSnapshot.exists()){
-
-                Map<String, Object> userData = documentSnapshot.getData();
-
-                if(userData != null){
-
-                    ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
-
-                    if(citiesData != null && !citiesData.isEmpty()){
-                        cityList.addAll(citiesData);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        int i = 0;
-                        for(String city : cityList){
-                            stringBuilder.append(city);
-                            if(i != cityList.size() - 1){
-                                stringBuilder.append(",");
-                            }
-                            binding.selectCityText.setText(stringBuilder.toString());
-                            binding.selectCityText.setTextColor(Color.GRAY);
-                            binding.cityCardView.setEnabled(false);
-                            i++;
-                        }
-                        markSelectedCities();
-                    }else {
-                        binding.cityCardView.setEnabled(false);
-                    }
-                }
-            }
-        });
-    }
+//    private void getDataInstitutional(){
+//        firestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
+//            if(documentSnapshot.exists()){
+//
+//                Map<String, Object> userData = documentSnapshot.getData();
+//
+//                if(userData != null){
+//
+//                    ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
+//
+//                    if(citiesData != null && !citiesData.isEmpty()){
+//                        cityList.addAll(citiesData);
+//                        StringBuilder stringBuilder = new StringBuilder();
+//                        int i = 0;
+//                        for(String city : cityList){
+//                            stringBuilder.append(city);
+//                            if(i != cityList.size() - 1){
+//                                stringBuilder.append(",");
+//                            }
+//                            binding.selectCityText.setText(stringBuilder.toString());
+//                            binding.selectCityText.setTextColor(Color.GRAY);
+//                            binding.cityCardView.setEnabled(false);
+//                            i++;
+//                        }
+//                        markSelectedCities();
+//                    }else {
+//                        binding.cityCardView.setEnabled(false);
+//                    }
+//                }
+//            }
+//        });
+//    }
 
     public void showToastShort(String message){
         Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_SHORT).show();

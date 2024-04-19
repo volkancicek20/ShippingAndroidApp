@@ -3,47 +3,28 @@ package com.socksapp.mobileproject.adapter;
 import static com.socksapp.mobileproject.model.GetOffersModel.LAYOUT_ONE;
 import static com.socksapp.mobileproject.model.GetOffersModel.LAYOUT_EMPTY;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyOfferBinding;
-import com.socksapp.mobileproject.databinding.RecyclerViewEmptyPostBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewOfferBinding;
-import com.socksapp.mobileproject.databinding.RecyclerViewPostBinding;
-import com.socksapp.mobileproject.fragment.OffersFragment;
 import com.socksapp.mobileproject.fragment.UserOffersFragment;
 import com.socksapp.mobileproject.model.GetOffersModel;
-import com.socksapp.mobileproject.model.GetPostingModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GetOffersAdapter extends RecyclerView.Adapter{
 

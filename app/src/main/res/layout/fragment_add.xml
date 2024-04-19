@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/black"
     tools:context=".fragment.AddFragment">
 
     <ScrollView
@@ -35,7 +35,7 @@
                     android:id="@+id/first_location_title_constraint_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_map_card_view"
                     app:layout_constraintTop_toBottomOf="@id/first_location_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -46,6 +46,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@drawable/icon_down_arrow"
+                        android:backgroundTint="@color/gray"
                         app:layout_constraintTop_toTopOf="@id/first_location_title_text"
                         app:layout_constraintBottom_toBottomOf="@id/first_location_title_text"
                         app:layout_constraintStart_toStartOf="parent"/>
@@ -55,6 +56,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Başlangıç Noktası"
+                        android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:textStyle="normal"
                         android:layout_marginTop="16dp"
@@ -69,7 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
@@ -80,13 +82,23 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
                             android:hint="İl"
-                            android:textColorHint="@color/black"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:textColorHint="@color/text_input_title_change"
+                            app:hintTextColor="@color/text_input_title_change"
+                            app:boxStrokeWidthFocused="1dp"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:endIconTint="@color/text_input_icon_tint_change"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            style="@style/CustomTextInputLayout.Dark">
 
                             <AutoCompleteTextView
                                 android:id="@+id/city_complete_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 android:inputType="none"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -95,17 +107,25 @@
                             android:id="@+id/district_text_input"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_margin="16dp"
                             android:hint="İlçe"
-                            android:textColorHint="@color/black"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:textColorHint="@color/text_input_title_change"
+                            app:hintTextColor="@color/text_input_title_change"
+                            app:boxStrokeWidthFocused="1dp"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:endIconTint="@color/text_input_icon_tint_change"
+                            app:layout_constraintTop_toBottomOf="@id/city_text_input"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            style="@style/CustomTextInputLayout.Dark">
 
                             <AutoCompleteTextView
                                 android:id="@+id/district_complete_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 android:inputType="none"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -131,7 +151,7 @@
                     android:id="@+id/second_location_title_constraint_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_map_card_view"
                     app:layout_constraintTop_toBottomOf="@id/second_location_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -142,6 +162,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@drawable/icon_down_arrow"
+                        android:backgroundTint="@color/gray"
                         app:layout_constraintTop_toTopOf="@id/second_location_title_text"
                         app:layout_constraintBottom_toBottomOf="@id/second_location_title_text"
                         app:layout_constraintStart_toStartOf="parent"/>
@@ -151,6 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Varış Noktası"
+                        android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:textStyle="normal"
                         android:layout_marginTop="16dp"
@@ -176,13 +198,23 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
                             android:hint="İl"
-                            android:textColorHint="@color/black"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:textColorHint="@color/text_input_title_change"
+                            app:hintTextColor="@color/text_input_title_change"
+                            app:boxStrokeWidthFocused="1dp"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:endIconTint="@color/text_input_icon_tint_change"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            style="@style/CustomTextInputLayout.Dark">
 
                             <AutoCompleteTextView
                                 android:id="@+id/city_complete_text_2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 android:inputType="none"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -191,17 +223,25 @@
                             android:id="@+id/district_text_input_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_margin="16dp"
                             android:hint="İlçe"
-                            android:textColorHint="@color/black"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            android:textColorHint="@color/text_input_title_change"
+                            app:hintTextColor="@color/text_input_title_change"
+                            app:boxStrokeWidthFocused="1dp"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:endIconTint="@color/text_input_icon_tint_change"
+                            app:layout_constraintTop_toBottomOf="@id/city_text_input"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            style="@style/CustomTextInputLayout.Dark">
 
                             <AutoCompleteTextView
                                 android:id="@+id/district_complete_text_2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 android:inputType="none"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -227,7 +267,7 @@
                     android:id="@+id/load_info_title_constraint_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_map_card_view"
                     app:layout_constraintTop_toBottomOf="@id/second_location_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -238,6 +278,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@drawable/icon_down_arrow"
+                        android:backgroundTint="@color/gray"
                         app:layout_constraintTop_toTopOf="@id/load_info_title_text"
                         app:layout_constraintBottom_toBottomOf="@id/load_info_title_text"
                         app:layout_constraintStart_toStartOf="parent"/>
@@ -247,6 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Yük Bilgileri"
+                        android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:textStyle="normal"
                         android:layout_marginTop="16dp"
@@ -272,16 +314,23 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
                             android:hint="Yük Tipi"
-                            android:textColorHint="@color/black"
+                            android:textColorHint="@color/text_input_title_change"
+                            app:hintTextColor="@color/text_input_title_change"
+                            app:boxStrokeWidthFocused="1dp"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:endIconTint="@color/text_input_icon_tint_change"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/second_location_card_view"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            style="@style/CustomTextInputLayout.Dark">
 
                             <AutoCompleteTextView
                                 android:id="@+id/load_type_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 android:inputType="none" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -294,11 +343,16 @@
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="16dp"
                             android:hint="Yük Miktarı"
-                            android:textColorHint="@color/black"
+                            android:textColorHint="@color/text_input_title_change"
+                            app:hintTextColor="@color/text_input_title_change"
+                            app:boxStrokeWidthFocused="1dp"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:endIconTint="@color/text_input_icon_tint_change"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/second_location_card_view"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                            style="@style/CustomTextInputLayout.Dark">
 
                             <AutoCompleteTextView
                                 android:id="@+id/load_amount_text"
@@ -329,7 +383,7 @@
                     android:id="@+id/date_title_constraint_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_map_card_view"
                     app:layout_constraintTop_toBottomOf="@id/load_info_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -340,6 +394,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@drawable/icon_down_arrow"
+                        android:backgroundTint="@color/gray"
                         app:layout_constraintTop_toTopOf="@id/date_title_text"
                         app:layout_constraintBottom_toBottomOf="@id/date_title_text"
                         app:layout_constraintStart_toStartOf="parent"/>
@@ -349,6 +404,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tarih Seçimi"
+                        android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:textStyle="normal"
                         android:layout_marginTop="16dp"
@@ -363,7 +419,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
@@ -378,7 +434,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:text="Ne Zaman?"
-                                android:textColor="@color/black"
+                                android:textColor="@color/gray"
                                 android:textSize="14sp"
                                 android:layout_gravity="center"
                                 />
@@ -388,6 +444,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="GG/AA/YYYY"
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/gray"
                                 android:inputType="date"
                                 android:gravity="center"
                                 android:layout_gravity="center"
@@ -405,7 +463,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:text="Saat Kaçta?"
-                                android:textColor="@color/black"
+                                android:textColor="@color/gray"
                                 android:textSize="14sp"
                                 android:layout_gravity="center"
                                 />
@@ -414,6 +472,8 @@
                                 android:id="@+id/time_edit_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/gray"
                                 android:hint="SS:DD"
                                 android:inputType="time"
                                 android:gravity="center"
@@ -443,7 +503,7 @@
                     android:id="@+id/contact_title_constraint_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_map_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/contact_card_view">
@@ -454,6 +514,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@drawable/icon_down_arrow"
+                        android:backgroundTint="@color/gray"
                         app:layout_constraintBottom_toBottomOf="@id/contact_title_text"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/contact_title_text" />
@@ -466,6 +527,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="8dp"
                         android:text="İletişim"
+                        android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:textStyle="normal"
                         app:layout_constraintBottom_toTopOf="@id/visible_contact_picker"
@@ -477,12 +539,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
 
                         <LinearLayout
+                            android:id="@+id/linearCheckBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
@@ -493,7 +556,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Profilimdeki iletişim bilgilerimi kullan"
-                                android:textColor="@color/black"
+                                android:textColor="@color/gray"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -505,7 +568,6 @@
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/mail_text_input_layout"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
@@ -514,8 +576,10 @@
                                 app:hintEnabled="false"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/name_text_input_layout"
-                                app:startIconDrawable="@drawable/icon_mail">
+                                app:layout_constraintTop_toBottomOf="@id/linearCheckBox"
+                                app:startIconDrawable="@drawable/icon_mail"
+                                app:startIconTint="@color/gray"
+                                style="@style/CustomTextInputLayout.Dark2">
 
                                 <EditText
                                     android:id="@+id/mail_edittext"
@@ -523,14 +587,13 @@
                                     android:layout_height="wrap_content"
                                     android:hint="user@example.com"
                                     android:inputType="textEmailAddress"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/white"
                                     android:textColorHint="@color/gray"
                                     android:textSize="16sp"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/number_text_input_layout"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
@@ -542,7 +605,9 @@
                                 app:layout_constraintTop_toBottomOf="@id/mail_text_input_layout"
                                 app:prefixText="+90"
                                 app:prefixTextColor="@color/black"
-                                app:startIconDrawable="@drawable/icon_phone">
+                                app:startIconDrawable="@drawable/icon_phone"
+                                app:startIconTint="@color/gray"
+                                style="@style/CustomTextInputLayout.Dark2">
 
                                 <EditText
                                     android:id="@+id/number_edittext"
@@ -550,7 +615,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="555 555 55 55"
                                     android:inputType="number"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/white"
                                     android:textColorHint="@color/gray"
                                     android:textSize="16sp"/>
                             </com.google.android.material.textfield.TextInputLayout>

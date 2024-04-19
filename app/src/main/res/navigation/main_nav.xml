@@ -21,7 +21,7 @@
             app:destination="@id/getPostingJobFragment" />
         <action
             android:id="@+id/action_mainFragment_to_offersFragment"
-            app:destination="@id/offersFragment" />
+            app:destination="@id/profilePageFragment" />
         <action
             android:id="@+id/action_mainFragment_to_searchingFragment"
             app:destination="@id/searchingFragment" />
@@ -74,12 +74,12 @@
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/offersFragment"
-        android:name="com.socksapp.mobileproject.fragment.OffersFragment"
-        android:label="fragment_offers"
-        tools:layout="@layout/fragment_offers" >
+        android:id="@+id/profilePageFragment"
+        android:name="com.socksapp.mobileproject.fragment.ProfilePageFragment"
+        android:label="fragment_profile_page"
+        tools:layout="@layout/fragment_profile_page" >
         <action
-            android:id="@+id/action_offersFragment_to_mainFragment"
+            android:id="@+id/action_profilePageFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment

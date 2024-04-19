@@ -72,8 +72,8 @@ public class MainFragment extends Fragment {
         binding.cardView6.setOnClickListener(this::goProfileFragment);
         binding.cardView3.setOnClickListener(this::goAddFragment);
         binding.cardView1.setOnClickListener(this::goGetPostingJobFragment);
-        binding.cardView2.setOnClickListener(this::goSearchingFragment);
-        binding.cardView4.setOnClickListener(this::goOffersFragment);
+//        binding.cardView2.setOnClickListener(this::goSearchingFragment);
+//        binding.cardView4.setOnClickListener(this::goOffersFragment);
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
@@ -112,7 +112,7 @@ public class MainFragment extends Fragment {
     }
 
     private void goProfileFragment(View v){
-        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_profileFragment);
+        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_offersFragment);
     }
 
     private void goAddFragment(View v){

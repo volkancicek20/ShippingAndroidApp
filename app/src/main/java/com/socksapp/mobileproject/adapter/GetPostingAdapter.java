@@ -49,9 +49,9 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private FirebaseFirestore firebaseFirestore;
-    ArrayList<GetPostingModel> arrayList;
-    Context context;
-    Fragment fragment;
+    public ArrayList<GetPostingModel> arrayList;
+    public Context context;
+    public Fragment fragment;
 
     public GetPostingAdapter(ArrayList<GetPostingModel> arrayList,Context context,Fragment fragment){
         this.arrayList = arrayList;
@@ -123,17 +123,19 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                 getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,getPostingHolder);
 
                 if(checkMail != null && checkMail.equals(user.getEmail())){
-                    getPostingHolder.recyclerViewPostBinding.offersButton.setVisibility(View.GONE);
-                    getPostingHolder.recyclerViewPostBinding.deleteButton.setVisibility(View.VISIBLE);
+//                    getPostingHolder.recyclerViewPostBinding.offersButton.setVisibility(View.GONE);
+//                    getPostingHolder.recyclerViewPostBinding.deleteButton.setVisibility(View.VISIBLE);
                 }
 
-                getPostingHolder.recyclerViewPostBinding.offersButton.setOnClickListener(v ->{
-                    getOffers(mail,startCity,startDistrict,endCity,endDistrict);
-                });
+//                getPostingHolder.recyclerViewPostBinding.offersButton.setOnClickListener(v ->{
+//                    getOffers(mail,startCity,startDistrict,endCity,endDistrict);
+//                });
 
-                getPostingHolder.recyclerViewPostBinding.deleteButton.setOnClickListener(v ->{
+                getPostingHolder.recyclerViewPostBinding.verticalMenu.setOnClickListener(v ->{
                     if(fragment instanceof MyPostFragment){
-                        MyPostFragment.deleteOffers(v,ref,user.getEmail(),getPostingHolder.getAdapterPosition(),startCity);
+                        MyPostFragment.dialogShow(v,ref,user.getEmail(),getPostingHolder.getAdapterPosition(),startCity);
+                    }else if (fragment instanceof GetPostingJobFragment){
+                        GetPostingJobFragment.dialogShow(v,mail,startCity,startDistrict,endCity,endDistrict);
                     }
                 });
 
@@ -172,47 +174,49 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         if(imageUrl.isEmpty()){
             ImageView imageView;
             imageView = holder.recyclerViewPostBinding.recyclerProfileImage;
-            imageView.setImageResource(R.drawable.icon_person);
+            imageView.setImageResource(R.drawable.icon_person_white);
         }else {
             Picasso.get().load(imageUrl).into(holder.recyclerViewPostBinding.recyclerProfileImage);
         }
 
-        ImageView start_icon = holder.recyclerViewPostBinding.startIcon;
-        ImageView end_icon = holder.recyclerViewPostBinding.endIcon;
-        ImageView down_icon = holder.recyclerViewPostBinding.downIcon;
+//        ImageView start_icon = holder.recyclerViewPostBinding.startIcon;
+//        ImageView end_icon = holder.recyclerViewPostBinding.endIcon;
+//        ImageView down_icon = holder.recyclerViewPostBinding.downIcon;
+//
+//        float scale = context.getResources().getDisplayMetrics().density;
+//        int widthPx = (int) (24 * scale + 0.5f);
+//        int heightPx = (int) (24 * scale + 0.5f);
 
-        float scale = context.getResources().getDisplayMetrics().density;
-        int widthPx = (int) (24 * scale + 0.5f);
-        int heightPx = (int) (24 * scale + 0.5f);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.gif_shipping_move)
-                .override(widthPx,heightPx)
-                .into(start_icon);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.gif_shipping_stop)
-                .override(widthPx,heightPx)
-                .into(end_icon);
-
-        Glide.with(context)
-                .asGif()
-                .load(R.drawable.gif_movement_down)
-                .override(widthPx,heightPx)
-                .into(down_icon);
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.gif_shipping_move)
+//                .override(widthPx,heightPx)
+//                .into(start_icon);
+//
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.gif_shipping_stop)
+//                .override(widthPx,heightPx)
+//                .into(end_icon);
+//
+//        Glide.with(context)
+//                .asGif()
+//                .load(R.drawable.gif_movement_down)
+//                .override(widthPx,heightPx)
+//                .into(down_icon);
 
         String startPoint = startCity + "/" + startDistrict;
         String endPoint = endCity + "/" + endDistrict;
+        String point = startPoint + " -> " + endPoint;
         String loadInfo = loadAmount + ",  " + loadType;
         String plannedDate = time + ",  " + date;
         String phoneNumber = "+90 " + number;
 
 
         holder.recyclerViewPostBinding.recyclerUserId.setText(userName);
-        holder.recyclerViewPostBinding.recyclerStartingPoint.setText(startPoint);
-        holder.recyclerViewPostBinding.recyclerEndingPoint.setText(endPoint);
+//        holder.recyclerViewPostBinding.recyclerStartingPoint.setText(startPoint);
+//        holder.recyclerViewPostBinding.recyclerEndingPoint.setText(endPoint);
+        holder.recyclerViewPostBinding.recyclerPoint.setText(point);
         holder.recyclerViewPostBinding.recyclerLoadInfo.setText(loadInfo);
         holder.recyclerViewPostBinding.recyclerPlannedDate.setText(plannedDate);
         holder.recyclerViewPostBinding.recyclerNumber.setText(phoneNumber);
@@ -222,42 +226,42 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         String elapsedTime;
 
         if(secondsElapsed < 0){
-            elapsedTime = "şimdi •";
+            elapsedTime = "şimdi";
         } else if (secondsElapsed >= 31536000) {
-            elapsedTime = "" + (secondsElapsed / 31536000) + " yıl önce •";
+            elapsedTime = "• " + (secondsElapsed / 31536000) + " yıl önce";
         } else if (secondsElapsed >= 2592000) {
-            elapsedTime = "" + (secondsElapsed / 2592000) + " ay önce •";
+            elapsedTime = "• " + (secondsElapsed / 2592000) + " ay önce";
         } else if (secondsElapsed >= 86400) {
-            elapsedTime = "" + (secondsElapsed / 86400) + " gün önce •";
+            elapsedTime = "• " + (secondsElapsed / 86400) + " gün önce";
         } else if (secondsElapsed >= 3600) {
-            elapsedTime = "" + (secondsElapsed / 3600) + " saat önce •";
+            elapsedTime = "• " + (secondsElapsed / 3600) + " saat önce";
         } else if (secondsElapsed >= 60) {
-            elapsedTime = "" + (secondsElapsed / 60) + " dakika önce •";
+            elapsedTime = "• " + (secondsElapsed / 60) + " dakika önce";
         } else {
-            elapsedTime = "" + secondsElapsed + " saniye önce •";
+            elapsedTime = "• " + secondsElapsed + " saniye önce";
         }
 
         holder.recyclerViewPostBinding.timestampTime.setText(elapsedTime);
 
     }
 
-    private void getOffers(String offersMail,String startCity,String startDistrict,String endCity,String endDistrict){
-        View view = LayoutInflater.from(context).inflate(R.layout.offers_layout, null);
-
-        EditText editText = view.findViewById(R.id.price_edittext);
-        Button okButton = view.findViewById(R.id.getOffersButton);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(view);
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        okButton.setOnClickListener(v -> {
-            String price = editText.getText().toString();
-            getInstitutionalData(user.getEmail(),offersMail,price,startCity,startDistrict,endCity,endDistrict,alertDialog);
-        });
-    }
+//    private void getOffers(String offersMail,String startCity,String startDistrict,String endCity,String endDistrict){
+//        View view = LayoutInflater.from(context).inflate(R.layout.offers_layout, null);
+//
+//        EditText editText = view.findViewById(R.id.price_edittext);
+//        Button okButton = view.findViewById(R.id.getOffersButton);
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setView(view);
+//
+//        AlertDialog alertDialog = builder.create();
+//        alertDialog.show();
+//
+//        okButton.setOnClickListener(v -> {
+//            String price = editText.getText().toString();
+//            getInstitutionalData(user.getEmail(),offersMail,price,startCity,startDistrict,endCity,endDistrict,alertDialog);
+//        });
+//    }
 
 //    public void deleteOffers(DocumentReference ref,String myMail,int position){
 //        AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -289,79 +293,79 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
 //        dialog.show();
 //    }
 
-    private void getInstitutionalData(String userMail,String offersMail,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog){
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Teklifiniz ekleniyor..");
-        progressDialog.show();
-        firebaseFirestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
-            if(documentSnapshot.exists()){
-                Map<String, Object> userData = documentSnapshot.getData();
-
-                if(userData != null) {
-                    String name = (String) userData.get("name");
-                    String mail = (String) userData.get("mail");
-                    String number = (String) userData.get("number");
-                    String imageUrl = (String) userData.get("imageUrl");
-
-                    ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
-
-                    if(name != null && !name.isEmpty() && mail != null && !mail.isEmpty() && number != null && !number.isEmpty() && imageUrl != null && citiesData != null && !citiesData.isEmpty()){
-
-                        WriteBatch batch = firebaseFirestore.batch();
-
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("price",price);
-                        data.put("personalMail",offersMail);
-                        data.put("institutionalMail",mail);
-                        data.put("institutionalName",name);
-                        data.put("institutionalNumber",number);
-                        if(imageUrl.isEmpty()){
-                            data.put("institutionalImageUrl","");
-                        }else {
-                            data.put("institutionalImageUrl",imageUrl);
-                        }
-                        data.put("startCity",startCity);
-                        data.put("startDistrict",startDistrict);
-                        data.put("endCity",endCity);
-                        data.put("endDistrict",endDistrict);
-                        data.put("timestamp",new Date());
-
-                        CollectionReference collectionReference = firebaseFirestore.collection("offers").document(offersMail).collection(offersMail);
-                        DocumentReference offerDocRef = collectionReference.document();
-                        batch.set(offerDocRef, data, SetOptions.merge());
-
-                        Map<String, Object> citiesMap = new HashMap<>();
-                        citiesMap.put("cities", new ArrayList<>(citiesData));
-
-                        batch.set(offerDocRef, citiesMap, SetOptions.merge());
-
-                        batch.commit().addOnSuccessListener(unused -> {
-                            Toast.makeText(context,"Teklifiniz eklendi",Toast.LENGTH_LONG).show();
-                            alertDialog.dismiss();
-                            progressDialog.dismiss();
-
-                        }).addOnFailureListener(e -> {
-
-                            alertDialog.dismiss();
-                            progressDialog.dismiss();
-                        });
-
-                    }else {
-                        // kurumsal profili tam tamamlamamış
-                        alertDialog.dismiss();
-                        progressDialog.dismiss();
-                    }
-                }
-
-            }else {
-                // kurumsal hesabı bulunmuyor
-                alertDialog.dismiss();
-                progressDialog.dismiss();
-            }
-        }).addOnFailureListener(e -> {
-            alertDialog.dismiss();
-            progressDialog.dismiss();
-        });
-    }
+//    private void getInstitutionalData(String userMail,String offersMail,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog){
+//        ProgressDialog progressDialog = new ProgressDialog(context);
+//        progressDialog.setMessage("Teklifiniz ekleniyor..");
+//        progressDialog.show();
+//        firebaseFirestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
+//            if(documentSnapshot.exists()){
+//                Map<String, Object> userData = documentSnapshot.getData();
+//
+//                if(userData != null) {
+//                    String name = (String) userData.get("name");
+//                    String mail = (String) userData.get("mail");
+//                    String number = (String) userData.get("number");
+//                    String imageUrl = (String) userData.get("imageUrl");
+//
+//                    ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
+//
+//                    if(name != null && !name.isEmpty() && mail != null && !mail.isEmpty() && number != null && !number.isEmpty() && imageUrl != null && citiesData != null && !citiesData.isEmpty()){
+//
+//                        WriteBatch batch = firebaseFirestore.batch();
+//
+//                        Map<String, Object> data = new HashMap<>();
+//                        data.put("price",price);
+//                        data.put("personalMail",offersMail);
+//                        data.put("institutionalMail",mail);
+//                        data.put("institutionalName",name);
+//                        data.put("institutionalNumber",number);
+//                        if(imageUrl.isEmpty()){
+//                            data.put("institutionalImageUrl","");
+//                        }else {
+//                            data.put("institutionalImageUrl",imageUrl);
+//                        }
+//                        data.put("startCity",startCity);
+//                        data.put("startDistrict",startDistrict);
+//                        data.put("endCity",endCity);
+//                        data.put("endDistrict",endDistrict);
+//                        data.put("timestamp",new Date());
+//
+//                        CollectionReference collectionReference = firebaseFirestore.collection("offers").document(offersMail).collection(offersMail);
+//                        DocumentReference offerDocRef = collectionReference.document();
+//                        batch.set(offerDocRef, data, SetOptions.merge());
+//
+//                        Map<String, Object> citiesMap = new HashMap<>();
+//                        citiesMap.put("cities", new ArrayList<>(citiesData));
+//
+//                        batch.set(offerDocRef, citiesMap, SetOptions.merge());
+//
+//                        batch.commit().addOnSuccessListener(unused -> {
+//                            Toast.makeText(context,"Teklifiniz eklendi",Toast.LENGTH_LONG).show();
+//                            alertDialog.dismiss();
+//                            progressDialog.dismiss();
+//
+//                        }).addOnFailureListener(e -> {
+//
+//                            alertDialog.dismiss();
+//                            progressDialog.dismiss();
+//                        });
+//
+//                    }else {
+//                        // kurumsal profili tam tamamlamamış
+//                        alertDialog.dismiss();
+//                        progressDialog.dismiss();
+//                    }
+//                }
+//
+//            }else {
+//                // kurumsal hesabı bulunmuyor
+//                alertDialog.dismiss();
+//                progressDialog.dismiss();
+//            }
+//        }).addOnFailureListener(e -> {
+//            alertDialog.dismiss();
+//            progressDialog.dismiss();
+//        });
+//    }
 
 }

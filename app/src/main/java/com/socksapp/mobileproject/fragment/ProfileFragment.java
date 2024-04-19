@@ -32,6 +32,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.integrity.n;
@@ -98,57 +100,48 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//
+//        binding.institutionalFragmentText.setOnClickListener(this::goInstitutionalFragment);
+//        binding.goInstitutionalProfile.setOnClickListener(this::goInstitutionalFragment);
 
-        binding.institutionalFragmentText.setOnClickListener(this::goInstitutionalFragment);
-        binding.goInstitutionalProfile.setOnClickListener(this::goInstitutionalFragment);
-
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                goMainFragment(view);
-            }
-        });
 
         userMail = user.getEmail();
 
         imageData = null;
 
-        setProfile();
+        setProfile(view);
         registerLauncher(view);
 
         binding.profileImage.setOnClickListener(this::setImage);
 
-        binding.saveProfile.setOnClickListener(this::saveProfile);
-
-        binding.nameTextInputLayout.setEndIconOnLongClickListener(v -> {
-            binding.nameEdittext.setEnabled(true);
-            binding.nameEdittext.requestFocus();
-            binding.nameTextInputLayout.setEndIconVisible(false);
-            return false;
-        });
-
-        binding.mailTextInputLayout.setEndIconOnLongClickListener(v -> {
-            binding.mailEdittext.setEnabled(true);
-            binding.mailEdittext.requestFocus();
-            binding.mailTextInputLayout.setEndIconVisible(false);
-            return false;
-        });
-
-        binding.numberTextInputLayout.setEndIconOnLongClickListener(v -> {
-            binding.numberEdittext.setEnabled(true);
-            binding.numberEdittext.requestFocus();
-            binding.numberTextInputLayout.setEndIconVisible(false);
-            return false;
-        });
-
-        if(existsInstitutional.getString("exists","").equals("exists")){
-            binding.institutionalFragmentText.setVisibility(View.GONE);
-            binding.goInstitutionalProfile.setVisibility(View.VISIBLE);
-        }
-
-        binding.myGetJob.setOnClickListener(v ->{
-            Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_myPostFragment);
-        });
+//        binding.saveProfile.setOnClickListener(this::saveProfile);
+//
+//        binding.nameTextInputLayout.setEndIconOnClickListener(v ->{
+//            binding.nameEdittext.setEnabled(true);
+//            binding.nameEdittext.requestFocus();
+//            binding.nameTextInputLayout.setEndIconVisible(false);
+//        });
+//
+//        binding.mailTextInputLayout.setEndIconOnClickListener(v ->{
+//            binding.mailEdittext.setEnabled(true);
+//            binding.mailEdittext.requestFocus();
+//            binding.mailTextInputLayout.setEndIconVisible(false);
+//        });
+//
+//        binding.numberTextInputLayout.setEndIconOnClickListener(v -> {
+//            binding.numberEdittext.setEnabled(true);
+//            binding.numberEdittext.requestFocus();
+//            binding.numberTextInputLayout.setEndIconVisible(false);
+//        });
+//
+//        if(existsInstitutional.getString("exists","").equals("exists")){
+//            binding.institutionalFragmentText.setVisibility(View.GONE);
+//            binding.goInstitutionalProfile.setVisibility(View.VISIBLE);
+//        }
+//
+//        binding.myGetJob.setOnClickListener(v ->{
+//            Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_myPostFragment);
+//        });
 
     }
 
@@ -160,234 +153,239 @@ public class ProfileFragment extends Fragment {
         Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_institutionalFragment);
     }
 
-    private void saveProfile(View view){
+//    private void saveProfile(View view){
+//
+//        String nameString = binding.nameEdittext.getText().toString();
+//        String numberString = binding.numberEdittext.getText().toString();
+//        String mailString = binding.mailEdittext.getText().toString();
+//
+//        boolean nameCheck,numberCheck,mailCheck;
+//
+//        nameCheck = !nameString.isEmpty();
+//
+//        if(!mailString.isEmpty()){
+//            Pattern patternMail = Patterns.EMAIL_ADDRESS;
+//            if (!patternMail.matcher(mailString).matches()){
+//                binding.mailEdittext.setError("E-posta adresiniz doğrulanamadı");
+//                return;
+//            }else {
+//                mailCheck = true;
+//            }
+//        }else {
+//            mailCheck = false;
+//        }
+//
+//        if(!numberString.isEmpty()){
+//            Pattern patternNumber = Pattern.compile("\\d{10}");
+//            String strippedPhoneNumber = numberString.replaceAll("\\s+", "");
+//            if(!patternNumber.matcher(strippedPhoneNumber).matches()){
+//                binding.numberEdittext.setError("Telefon numaranızı doğrulanamadı");
+//                return;
+//            }else {
+//                numberCheck = true;
+//            }
+//        }else {
+//            numberCheck = false;
+//        }
+//
+//
+//        uploadProfile(view,nameString,mailString,numberString,nameCheck,mailCheck,numberCheck);
+//
+//    }
 
-        String nameString = binding.nameEdittext.getText().toString();
-        String numberString = binding.numberEdittext.getText().toString();
-        String mailString = binding.mailEdittext.getText().toString();
+//    private void uploadProfile(View view, String uploadName,String uploadMail,String uploadNumber,boolean nameCheck,boolean mailCheck,boolean numberCheck) {
+//        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+//        progressDialog.setMessage("Kaydediliyor..");
+//        progressDialog.show();
+//        DocumentReference usersRef = firestore.collection("users").document(userMail);
+//        WriteBatch batch = firestore.batch();
+//        Map<String, Object> updates = new HashMap<>();
+//        if (imageData != null) {
+//            if(nameCheck && mailCheck && numberCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (nameCheck && mailCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            } else if (nameCheck && numberCheck) {
+//                updates.put("name", uploadName);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (mailCheck && numberCheck){
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else {
+//                if(nameCheck){
+//                    updates.put("name", uploadName);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if(mailCheck){
+//                    updates.put("mail", uploadMail);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if (numberCheck){
+//                    updates.put("number", uploadNumber);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//            }
+//
+//            storageReference.child("userProfilePhoto").child(userMail).putFile(imageData)
+//                .addOnSuccessListener(taskSnapshot -> {
+//                    Task<Uri> downloadUrlTask = taskSnapshot.getStorage().getDownloadUrl();
+//                    downloadUrlTask.addOnCompleteListener(task -> {
+//                        String imageUrl = task.getResult().toString();
+//
+//                        batch.update(usersRef, "imageUrl", imageUrl);
+//
+//                        batch.commit()
+//                            .addOnSuccessListener(aVoid -> {
+//                                progressDialog.dismiss();
+//                                updateProfile(nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber,imageUrl);
+//                                showToastShort("Profiliniz kaydedildi");
+//                            })
+//                            .addOnFailureListener(e -> {
+//                                progressDialog.dismiss();
+//                                showErrorMessage(view.getContext(), e.getLocalizedMessage());
+//                            });
+//                    });
+//                })
+//                .addOnFailureListener(e -> {
+//                    progressDialog.dismiss();
+//                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
+//                });
+//
+//        } else {
+//            if(nameCheck && mailCheck && numberCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (nameCheck && mailCheck){
+//                updates.put("name", uploadName);
+//                updates.put("mail", uploadMail);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            } else if (nameCheck && numberCheck) {
+//                updates.put("name", uploadName);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else if (mailCheck && numberCheck){
+//                updates.put("mail", uploadMail);
+//                updates.put("number", uploadNumber);
+//                batch.set(usersRef, updates,SetOptions.merge());
+//            }else {
+//                if(nameCheck){
+//                    updates.put("name", uploadName);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if(mailCheck){
+//                    updates.put("mail", uploadMail);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//                if (numberCheck){
+//                    updates.put("number", uploadNumber);
+//                    batch.set(usersRef, updates,SetOptions.merge());
+//                }
+//            }
+//
+//            batch.commit()
+//                .addOnSuccessListener(aVoid -> {
+//                    progressDialog.dismiss();
+//                    updateProfile(nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber);
+//                    showToastShort("Profiliniz kaydedildi");
+//                })
+//                .addOnFailureListener(e -> {
+//                    progressDialog.dismiss();
+//                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
+//                });
+//
+//        }
+//    }
 
-        boolean nameCheck,numberCheck,mailCheck;
+//    private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
+//        if(nameCheck){
+//            SharedPreferences.Editor editor = nameShared.edit();
+//            editor.putString("name",uploadName);
+//            editor.apply();
+//
+//            binding.nameEdittext.setEnabled(false);
+//            binding.nameEdittext.setText("");
+//            binding.nameEdittext.setHint(uploadName);
+//            binding.nameTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(mailCheck){
+//            SharedPreferences.Editor editor = mailShared.edit();
+//            editor.putString("mail",uploadMail);
+//            editor.apply();
+//
+//            binding.mailEdittext.setEnabled(false);
+//            binding.mailEdittext.setText("");
+//            binding.mailEdittext.setHint(uploadMail);
+//            binding.mailTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(numberCheck){
+//            SharedPreferences.Editor editor = numberShared.edit();
+//            editor.putString("number",uploadNumber);
+//            editor.apply();
+//
+//            binding.numberEdittext.setEnabled(false);
+//            binding.numberEdittext.setText("");
+//            binding.numberEdittext.setHint(uploadNumber);
+//            binding.numberTextInputLayout.setEndIconVisible(true);
+//        }
+//
+//        SharedPreferences.Editor editor = imageUrlShared.edit();
+//        editor.putString("imageUrl",uploadImageUrl);
+//        editor.apply();
+//
+//        imageData = null;
+//    }
 
-        nameCheck = !nameString.isEmpty();
-
-        if(!mailString.isEmpty()){
-            Pattern patternMail = Patterns.EMAIL_ADDRESS;
-            if (!patternMail.matcher(mailString).matches()){
-                binding.mailEdittext.setError("E-posta adresiniz doğrulanamadı");
-                return;
-            }else {
-                mailCheck = true;
-            }
-        }else {
-            mailCheck = false;
-        }
-
-        if(!numberString.isEmpty()){
-            Pattern patternNumber = Pattern.compile("\\d{10}");
-            String strippedPhoneNumber = numberString.replaceAll("\\s+", "");
-            if(!patternNumber.matcher(strippedPhoneNumber).matches()){
-                binding.numberEdittext.setError("Telefon numaranızı doğrulanamadı");
-                return;
-            }else {
-                numberCheck = true;
-            }
-        }else {
-            numberCheck = false;
-        }
-
-        uploadProfile(view,nameString,mailString,numberString,nameCheck,mailCheck,numberCheck);
-
-    }
-
-    private void uploadProfile(View view, String uploadName,String uploadMail,String uploadNumber,boolean nameCheck,boolean mailCheck,boolean numberCheck) {
-        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
-        progressDialog.setMessage("Kaydediliyor..");
-        progressDialog.show();
-        DocumentReference usersRef = firestore.collection("users").document(userMail);
-        WriteBatch batch = firestore.batch();
-        Map<String, Object> updates = new HashMap<>();
-        if (imageData != null) {
-            if(nameCheck && mailCheck && numberCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (nameCheck && mailCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                batch.set(usersRef, updates,SetOptions.merge());
-            } else if (nameCheck && numberCheck) {
-                updates.put("name", uploadName);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (mailCheck && numberCheck){
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else {
-                if(nameCheck){
-                    updates.put("name", uploadName);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if(mailCheck){
-                    updates.put("mail", uploadMail);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if (numberCheck){
-                    updates.put("number", uploadNumber);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-            }
-
-            storageReference.child("userProfilePhoto").child(userMail).putFile(imageData)
-                .addOnSuccessListener(taskSnapshot -> {
-                    Task<Uri> downloadUrlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    downloadUrlTask.addOnCompleteListener(task -> {
-                        String imageUrl = task.getResult().toString();
-
-                        batch.update(usersRef, "imageUrl", imageUrl);
-
-                        batch.commit()
-                            .addOnSuccessListener(aVoid -> {
-                                progressDialog.dismiss();
-                                updateProfile(nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber,imageUrl);
-                                showToastShort("Profiliniz kaydedildi");
-                            })
-                            .addOnFailureListener(e -> {
-                                progressDialog.dismiss();
-                                showErrorMessage(view.getContext(), e.getLocalizedMessage());
-                            });
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
-                });
-
-        } else {
-            if(nameCheck && mailCheck && numberCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (nameCheck && mailCheck){
-                updates.put("name", uploadName);
-                updates.put("mail", uploadMail);
-                batch.set(usersRef, updates,SetOptions.merge());
-            } else if (nameCheck && numberCheck) {
-                updates.put("name", uploadName);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else if (mailCheck && numberCheck){
-                updates.put("mail", uploadMail);
-                updates.put("number", uploadNumber);
-                batch.set(usersRef, updates,SetOptions.merge());
-            }else {
-                if(nameCheck){
-                    updates.put("name", uploadName);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if(mailCheck){
-                    updates.put("mail", uploadMail);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-                if (numberCheck){
-                    updates.put("number", uploadNumber);
-                    batch.set(usersRef, updates,SetOptions.merge());
-                }
-            }
-
-            batch.commit()
-                .addOnSuccessListener(aVoid -> {
-                    progressDialog.dismiss();
-                    updateProfile(nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber);
-                    showToastShort("Profiliniz kaydedildi");
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    showErrorMessage(view.getContext(), e.getLocalizedMessage());
-                });
-
-        }
-    }
-
-    private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
-        if(nameCheck){
-            SharedPreferences.Editor editor = nameShared.edit();
-            editor.putString("name",uploadName);
-            editor.apply();
-
-            binding.nameEdittext.setEnabled(false);
-            binding.nameEdittext.setText("");
-            binding.nameEdittext.setHint(uploadName);
-            binding.nameTextInputLayout.setEndIconVisible(true);
-        }
-        if(mailCheck){
-            SharedPreferences.Editor editor = mailShared.edit();
-            editor.putString("mail",uploadMail);
-            editor.apply();
-
-            binding.mailEdittext.setEnabled(false);
-            binding.mailEdittext.setText("");
-            binding.mailEdittext.setHint(uploadMail);
-            binding.mailTextInputLayout.setEndIconVisible(true);
-        }
-        if(numberCheck){
-            SharedPreferences.Editor editor = numberShared.edit();
-            editor.putString("number",uploadNumber);
-            editor.apply();
-
-            binding.numberEdittext.setEnabled(false);
-            binding.numberEdittext.setText("");
-            binding.numberEdittext.setHint(uploadNumber);
-            binding.numberTextInputLayout.setEndIconVisible(true);
-        }
-
-        SharedPreferences.Editor editor = imageUrlShared.edit();
-        editor.putString("imageUrl",uploadImageUrl);
-        editor.apply();
-
-        imageData = null;
-    }
-
-    private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
-        if(nameCheck){
-            SharedPreferences.Editor editor = nameShared.edit();
-            editor.putString("name",uploadName);
-            editor.apply();
-
-            binding.nameEdittext.setEnabled(false);
-            binding.nameEdittext.setText("");
-            binding.nameEdittext.setHint(uploadName);
-            binding.nameTextInputLayout.setEndIconVisible(true);
-        }
-        if(mailCheck){
-            SharedPreferences.Editor editor = mailShared.edit();
-            editor.putString("mail",uploadMail);
-            editor.apply();
-
-            binding.mailEdittext.setEnabled(false);
-            binding.mailEdittext.setText("");
-            binding.mailEdittext.setHint(uploadMail);
-            binding.mailTextInputLayout.setEndIconVisible(true);
-        }
-        if(numberCheck){
-            SharedPreferences.Editor editor = numberShared.edit();
-            editor.putString("number",uploadNumber);
-            editor.apply();
-
-            binding.numberEdittext.setEnabled(false);
-            binding.numberEdittext.setText("");
-            binding.numberEdittext.setHint(uploadNumber);
-            binding.numberTextInputLayout.setEndIconVisible(true);
-        }
-    }
+//    private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
+//        if(nameCheck){
+//            SharedPreferences.Editor editor = nameShared.edit();
+//            editor.putString("name",uploadName);
+//            editor.apply();
+//
+//            binding.nameEdittext.setEnabled(false);
+//            binding.nameEdittext.setText("");
+//            binding.nameEdittext.setHint(uploadName);
+//            binding.nameTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(mailCheck){
+//            SharedPreferences.Editor editor = mailShared.edit();
+//            editor.putString("mail",uploadMail);
+//            editor.apply();
+//
+//            binding.mailEdittext.setEnabled(false);
+//            binding.mailEdittext.setText("");
+//            binding.mailEdittext.setHint(uploadMail);
+//            binding.mailTextInputLayout.setEndIconVisible(true);
+//        }
+//        if(numberCheck){
+//            SharedPreferences.Editor editor = numberShared.edit();
+//            editor.putString("number",uploadNumber);
+//            editor.apply();
+//
+//            binding.numberEdittext.setEnabled(false);
+//            binding.numberEdittext.setText("");
+//            binding.numberEdittext.setHint(uploadNumber);
+//            binding.numberTextInputLayout.setEndIconVisible(true);
+//        }
+//    }
 
     private void setImage(View view) {
         String[] permissions;
         String rationaleMessage;
 
-        permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES};
+        } else {
+            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+        }
 
         rationaleMessage = "Galeriye gitmek için izin gerekli";
 
@@ -444,7 +442,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setProfile(){
+    private void setProfile(View view){
 
         String name = nameShared.getString("name","");
         String mail = mailShared.getString("mail","");
@@ -453,28 +451,36 @@ public class ProfileFragment extends Fragment {
 
         if(!name.isEmpty()){
             myUserName = name;
-            binding.nameEdittext.setHint(name);
-            binding.nameEdittext.setEnabled(false);
+            binding.profileName.setText(name);
+//            binding.nameEdittext.setHint(name);
+//            binding.nameEdittext.setEnabled(false);
         }else {
-            binding.nameTextInputLayout.setEndIconVisible(false);
+//            binding.nameTextInputLayout.setEndIconVisible(false);
         }
-        if(!number.isEmpty()){
-            myNumber = number;
-            binding.numberEdittext.setHint(number);
-            binding.numberEdittext.setEnabled(false);
-        }else {
-            binding.numberTextInputLayout.setEndIconVisible(false);
-        }
-        if(!mail.isEmpty()){
-            myMail = mail;
-            binding.mailEdittext.setHint(mail);
-            binding.mailEdittext.setEnabled(false);
-        }else {
-            binding.mailTextInputLayout.setEndIconVisible(false);
-        }
+//        if(!number.isEmpty()){
+//            myNumber = number;
+//            binding.numberEdittext.setHint(number);
+//            binding.numberEdittext.setEnabled(false);
+//        }else {
+//            binding.numberTextInputLayout.setEndIconVisible(false);
+//        }
+//        if(!mail.isEmpty()){
+//            myMail = mail;
+//            binding.mailEdittext.setHint(mail);
+//            binding.mailEdittext.setEnabled(false);
+//        }else {
+//            binding.mailTextInputLayout.setEndIconVisible(false);
+//        }
         if(!imageUrl.isEmpty()){
             myImageUrl = imageUrl;
-            Picasso.get().load(imageUrl).into(binding.profileImage);
+//            Picasso.get().load(imageUrl).into(binding.profileImage);
+
+            Glide.with(view.getContext())
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(binding.profileImage);
         }else {
             binding.profileImage.setImageResource(R.drawable.icon_person);
         }
