@@ -43,6 +43,8 @@ public class ProfilePageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.content.nameFragment.setText("Profilim");
+        binding.content.buttonDrawerToggle.setOnClickListener(this::goMainFragment);
 
         tabLayout = binding.tabLayout;
         viewPager2 = binding.viewPager;

@@ -165,12 +165,21 @@ public class InstitutionalFragment extends Fragment {
 //        });
 
         binding.editProfileLinearLayout.setOnClickListener(this::goEditInstitutionalFragment);
-
+        binding.bookmarkLinearLayout.setOnClickListener(this::goSavedPostFragment);
+        binding.notificationLinearLayout.setOnClickListener(this::goInstitutionalOffersNotificationFragment);
 
     }
 
     private void goEditInstitutionalFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_editInstitutionalFragment);
+    }
+
+    private void goSavedPostFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_savedPostFragment);
+    }
+
+    private void goInstitutionalOffersNotificationFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_institutionalOffersNotificationFragment);
     }
 
 //    private void saveProfile(View view){

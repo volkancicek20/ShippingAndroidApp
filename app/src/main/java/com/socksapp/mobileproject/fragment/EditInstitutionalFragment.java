@@ -25,6 +25,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.util.Patterns;
@@ -119,6 +120,9 @@ public class EditInstitutionalFragment extends Fragment {
 
         setPrefix();
 
+        binding.content.nameFragment.setText("Kurumsal Profilim");
+        binding.content.buttonDrawerToggle.setOnClickListener(this::backProfilePage);
+
         cityList = new HashSet<>();
         selectedCity = new boolean[cityArray.length];
 
@@ -160,6 +164,10 @@ public class EditInstitutionalFragment extends Fragment {
             binding.editCity.setVisibility(View.GONE);
             binding.iconDownCity.setVisibility(View.VISIBLE);
         });
+    }
+
+    private void backProfilePage(View view) {
+        Navigation.findNavController(view).navigate(R.id.action_editInstitutionalFragment_to_profilePageFragment);
     }
 
     private void setPrefix(){

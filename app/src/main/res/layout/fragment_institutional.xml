@@ -88,7 +88,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/myPostLinearLayout"
+            android:id="@+id/bookmarkLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -104,14 +104,14 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/icon_back_arrow"
+                android:background="@drawable/icon_bookmark_white"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="İlanlarım"
+                android:text="Kaydedilen İlanlar"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -120,7 +120,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/bookmarkLinearLayout"
+            android:id="@+id/notificationLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +24,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.util.Patterns;
@@ -101,6 +103,9 @@ public class EditProfileFragment extends Fragment {
 
         setPrefix();
 
+        binding.content.nameFragment.setText("Kişisel Profilim");
+        binding.content.buttonDrawerToggle.setOnClickListener(this::backProfilePage);
+
         userMail = user.getEmail();
 
         imageData = null;
@@ -136,6 +141,10 @@ public class EditProfileFragment extends Fragment {
         }
 
 
+    }
+
+    private void backProfilePage(View view) {
+        Navigation.findNavController(view).navigate(R.id.action_editProfileFragment_to_profilePageFragment);
     }
 
     private void setPrefix(){

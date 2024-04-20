@@ -135,7 +135,7 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                     if(fragment instanceof MyPostFragment){
                         MyPostFragment.dialogShow(v,ref,user.getEmail(),getPostingHolder.getAdapterPosition(),startCity);
                     }else if (fragment instanceof GetPostingJobFragment){
-                        GetPostingJobFragment.dialogShow(v,mail,startCity,startDistrict,endCity,endDistrict);
+                        GetPostingJobFragment.dialogShow(v,mail,startCity,startDistrict,endCity,endDistrict,ref);
                     }
                 });
 

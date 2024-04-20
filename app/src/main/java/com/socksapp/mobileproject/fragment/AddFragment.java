@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Patterns;
 import android.view.Gravity;
@@ -103,6 +104,9 @@ public class AddFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         userMail = user.getEmail();
+
+        binding.content.nameFragment.setText("YENİ İLAN EKLE");
+        binding.content.buttonDrawerToggle.setOnClickListener(this::goMainFragment);
 
         loadTypes = getResources().getStringArray(R.array.load_types);
         loadAdapter = new ArrayAdapter<>(requireContext(), R.layout.list_item,loadTypes);
@@ -220,6 +224,10 @@ public class AddFragment extends Fragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         prefixView.setLayoutParams(layoutParams);
         prefixView.setGravity(Gravity.CENTER);
+    }
+
+    private void goMainFragment(View view){
+        Navigation.findNavController(view).navigate(R.id.action_addFragment_to_mainFragment);
     }
 
     private void showCustomTimeDialog(View view) {

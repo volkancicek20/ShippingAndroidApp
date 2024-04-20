@@ -50,6 +50,38 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_bookmark_white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textStyle="normal"
+            android:textSize="18sp"
+            android:text="Kaydet"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/layoutDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

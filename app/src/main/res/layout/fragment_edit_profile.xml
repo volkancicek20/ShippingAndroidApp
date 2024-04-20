@@ -8,13 +8,19 @@
     android:background="@color/black"
     tools:context=".fragment.EditProfileFragment">
 
+    <include android:id="@+id/content"
+        layout="@layout/activity_main_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/erlik"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />

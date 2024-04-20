@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,12 +82,19 @@ public class MyPostFragment extends Fragment {
 
         userMail = user.getEmail();
 
+        binding.content.nameFragment.setText("İlanlarım");
+        binding.content.buttonDrawerToggle.setOnClickListener(this::backProfilePage);
+
         binding.recyclerViewMyPost.setLayoutManager(new LinearLayoutManager(view.getContext()));
         getPostingAdapter = new GetPostingAdapter(getPostingModelArrayList,view.getContext(),MyPostFragment.this);
         binding.recyclerViewMyPost.setAdapter(getPostingAdapter);
 
         getPost(view);
 
+    }
+
+    private void backProfilePage(View view) {
+        Navigation.findNavController(view).navigate(R.id.action_myPostFragment_to_profilePageFragment);
     }
 
     private void getPost(View view){
@@ -169,10 +177,12 @@ public class MyPostFragment extends Fragment {
 
         LinearLayout delete = dialog.findViewById(R.id.layoutDelete);
 
+        LinearLayout save = dialog.findViewById(R.id.layoutSave);
         LinearLayout offers = dialog.findViewById(R.id.layoutOffer);
         LinearLayout report = dialog.findViewById(R.id.layoutReport);
         View line = dialog.findViewById(R.id.line);
 
+        save.setVisibility(View.GONE);
         offers.setVisibility(View.GONE);
         report.setVisibility(View.GONE);
         line.setVisibility(View.GONE);

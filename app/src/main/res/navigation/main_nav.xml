@@ -67,25 +67,65 @@
         <action
             android:id="@+id/action_profilePageFragment_to_editInstitutionalFragment"
             app:destination="@id/editInstitutionalFragment" />
+        <action
+            android:id="@+id/action_profilePageFragment_to_savedPostFragment"
+            app:destination="@id/savedPostFragment" />
+        <action
+            android:id="@+id/action_profilePageFragment_to_institutionalOffersNotificationFragment"
+            app:destination="@id/institutionalOffersNotificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
         android:name="com.socksapp.mobileproject.fragment.MyPostFragment"
         android:label="fragment_my_post"
-        tools:layout="@layout/fragment_my_post" />
+        tools:layout="@layout/fragment_my_post" >
+        <action
+            android:id="@+id/action_myPostFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userOffersFragment"
         android:name="com.socksapp.mobileproject.fragment.UserOffersFragment"
         android:label="fragment_user_offers"
-        tools:layout="@layout/fragment_user_offers" />
+        tools:layout="@layout/fragment_user_offers" >
+        <action
+            android:id="@+id/action_userOffersFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.socksapp.mobileproject.fragment.EditProfileFragment"
         android:label="fragment_edit_profile"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editInstitutionalFragment"
         android:name="com.socksapp.mobileproject.fragment.EditInstitutionalFragment"
         android:label="fragment_edit_institutional"
-        tools:layout="@layout/fragment_edit_institutional" />
+        tools:layout="@layout/fragment_edit_institutional" >
+        <action
+            android:id="@+id/action_editInstitutionalFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedPostFragment"
+        android:name="com.socksapp.mobileproject.fragment.SavedPostFragment"
+        android:label="fragment_saved_post"
+        tools:layout="@layout/fragment_saved_post" >
+        <action
+            android:id="@+id/action_savedPostFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/institutionalOffersNotificationFragment"
+        android:name="com.socksapp.mobileproject.fragment.InstitutionalOffersNotificationFragment"
+        android:label="fragment_institutional_offers_notification"
+        tools:layout="@layout/fragment_institutional_offers_notification" >
+        <action
+            android:id="@+id/action_institutionalOffersNotificationFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
+    </fragment>
 </navigation>

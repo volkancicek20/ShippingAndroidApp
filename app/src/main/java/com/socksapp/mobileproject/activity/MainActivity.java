@@ -17,6 +17,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.ActivityMainBinding;
+import com.socksapp.mobileproject.myclass.RefDataAccess;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences personalDone,institutionalDone;
     private SharedPreferences existsInstitutional;
     private String userMail;
+    public RefDataAccess refDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        refDataAccess = new RefDataAccess(this);
+        refDataAccess.open();
 
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -152,4 +157,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        refDataAccess.close();
+    }
 }

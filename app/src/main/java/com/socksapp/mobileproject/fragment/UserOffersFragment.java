@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,13 +69,20 @@ public class UserOffersFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        userMail = user.getEmail();
+
+        binding.content.nameFragment.setText("Gelen Teklifler");
+        binding.content.buttonDrawerToggle.setOnClickListener(this::backProfilePage);
+
         binding.recyclerViewOffers.setLayoutManager(new LinearLayoutManager(view.getContext()));
         getOffersAdapter = new GetOffersAdapter(getOffersModelArrayList,view.getContext(),UserOffersFragment.this);
         binding.recyclerViewOffers.setAdapter(getOffersAdapter);
 
-        userMail = user.getEmail();
-
         getOffersData(view);
+    }
+
+    private void backProfilePage(View view) {
+        Navigation.findNavController(view).navigate(R.id.action_userOffersFragment_to_profilePageFragment);
     }
 
     private void getOffersData(View view){

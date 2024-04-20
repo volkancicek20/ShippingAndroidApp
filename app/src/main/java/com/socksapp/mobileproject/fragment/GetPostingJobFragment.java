@@ -3,6 +3,7 @@ package com.socksapp.mobileproject.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.Gravity;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
+import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.adapter.GetPostingAdapter;
 import com.socksapp.mobileproject.databinding.FragmentGetPostingJobBinding;
 import com.socksapp.mobileproject.model.GetPostingModel;
@@ -57,6 +60,7 @@ public class GetPostingJobFragment extends Fragment {
 
     public ArrayList<GetPostingModel> getPostingModelArrayList;
     public GetPostingAdapter getPostingAdapter;
+    private static MainActivity mainActivity;
 
     public GetPostingJobFragment() {
         // Required empty public constructor
@@ -83,6 +87,8 @@ public class GetPostingJobFragment extends Fragment {
 
         userMail = user.getEmail();
 
+        binding.content.buttonDrawerToggle.setOnClickListener(this::goMainFragment);
+
         cityNames = getResources().getStringArray(R.array.city_names);
         cityAdapter = new ArrayAdapter<>(requireContext(), R.layout.list_item,cityNames);
         cityCompleteTextView = binding.getRoot().findViewById(R.id.city_complete_text);
@@ -94,10 +100,14 @@ public class GetPostingJobFragment extends Fragment {
 
         getPost(view,"");
 
-        binding.findPost.setOnClickListener(v -> {
+        binding.content.findPost.setOnClickListener(v -> {
             getPostingModelArrayList.clear();
-            getPost(v,binding.cityCompleteText.getText().toString());
+            getPost(v,binding.content.cityCompleteText.getText().toString());
         });
+    }
+
+    private void goMainFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_getPostingJobFragment_to_mainFragment);
     }
 
 
@@ -130,8 +140,9 @@ public class GetPostingJobFragment extends Fragment {
                     String number = documentSnapshot.getString("number");
                     String mail = documentSnapshot.getString("mail");
                     Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
+                    DocumentReference ref = documentSnapshot.getReference();
 
-                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp);
+                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userMail,ref);
                     getPostingModelArrayList.add(post);
                     getPostingAdapter.notifyDataSetChanged();
                 }
@@ -141,15 +152,23 @@ public class GetPostingJobFragment extends Fragment {
         });
     }
 
-    public static void dialogShow(View view, String myMail, String startCity, String startDistrict, String endCity, String endDistrict){
+    public static void dialogShow(View view, String myMail, String startCity, String startDistrict, String endCity, String endDistrict,DocumentReference ref){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
 
         LinearLayout offers = dialog.findViewById(R.id.layoutOffer);
+        LinearLayout save = dialog.findViewById(R.id.layoutSave);
         LinearLayout delete = dialog.findViewById(R.id.layoutDelete);
         delete.setVisibility(View.GONE);
 
+
+        save.setOnClickListener(v -> {
+            dialog.dismiss();
+            mainActivity.refDataAccess.insertRef(ref.getId(),myMail);
+            Toast.makeText(view.getContext(), "Kaydedildi", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
 
         offers.setOnClickListener(v -> {
             dialog.dismiss();
@@ -259,5 +278,13 @@ public class GetPostingJobFragment extends Fragment {
             alertDialog.dismiss();
             progressDialog.dismiss();
         });
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            mainActivity = (MainActivity) context;
+        }
     }
 }
