@@ -2,15 +2,17 @@ package com.socksapp.mobileproject.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -46,29 +48,46 @@ import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.socksapp.mobileproject.R;
-import com.socksapp.mobileproject.databinding.FragmentEditProfileBinding;
+import com.socksapp.mobileproject.databinding.FragmentEditInstitutionalBinding;
+import com.socksapp.mobileproject.myclass.DatabaseHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
-public class EditProfileFragment extends Fragment {
+public class EditInstitutionalFragment extends Fragment {
 
-    private FragmentEditProfileBinding binding;
+    private FragmentEditInstitutionalBinding binding;
     private FirebaseFirestore firestore;
     private FirebaseAuth auth;
     private FirebaseUser user;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
-    private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared;
-    private SharedPreferences existsInstitutional;
-    private String myUserName,myNumber,myMail,myImageUrl,userMail;
+    private DatabaseHelper databaseHelper;
+    private SharedPreferences institutionalNameShared,institutionalNumberShared,institutionalMailShared,institutionalImageUrlShared;;
+    private String myInstitutionalName,myInstitutionalNumber,myInstitutionalMail,myInstitutionalImageUrl,userMail;
     public ActivityResultLauncher<Intent> activityResultLauncher;
     public ActivityResultLauncher<String> permissionLauncher;
     private Bitmap selectedBitmap;
     private Uri imageData;
+    private boolean [] selectedCity;
+    private Set<String> cityList;
+    private final String[] cityArray = {
+            "İstanbul","Ankara","İzmir","Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Antalya", "Artvin", "Aydın", "Balıkesir",
+            "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli",
+            "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkâri",
+            "Hatay", "Isparta", "Mersin", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir",
+            "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir",
+            "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat",
+            "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman",
+            "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye",
+            "Düzce"
+    };
 
-    public EditProfileFragment() {
+    public EditInstitutionalFragment() {
         // Required empty public constructor
     }
 
@@ -80,18 +99,17 @@ public class EditProfileFragment extends Fragment {
         storageReference = firebaseStorage.getReference();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        databaseHelper = new DatabaseHelper(requireContext());
 
-        nameShared = requireActivity().getSharedPreferences("Name", Context.MODE_PRIVATE);
-        numberShared = requireActivity().getSharedPreferences("Number",Context.MODE_PRIVATE);
-        mailShared = requireActivity().getSharedPreferences("Mail",Context.MODE_PRIVATE);
-        imageUrlShared = requireActivity().getSharedPreferences("ImageUrl",Context.MODE_PRIVATE);
-
-        existsInstitutional = requireActivity().getSharedPreferences("ExistsInstitutional", Context.MODE_PRIVATE);
+        institutionalNameShared = requireActivity().getSharedPreferences("InstitutionalName", Context.MODE_PRIVATE);
+        institutionalNumberShared = requireActivity().getSharedPreferences("InstitutionalNumber", Context.MODE_PRIVATE);
+        institutionalMailShared = requireActivity().getSharedPreferences("InstitutionalMail", Context.MODE_PRIVATE);
+        institutionalImageUrlShared = requireActivity().getSharedPreferences("InstitutionalImageUrl", Context.MODE_PRIVATE);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentEditProfileBinding.inflate(inflater,container,false);
+        binding = FragmentEditInstitutionalBinding.inflate(inflater,container,false);
         return binding.getRoot();
     }
 
@@ -101,10 +119,13 @@ public class EditProfileFragment extends Fragment {
 
         setPrefix();
 
-        userMail = user.getEmail();
+        cityList = new HashSet<>();
+        selectedCity = new boolean[cityArray.length];
 
+        userMail = user.getEmail();
         imageData = null;
 
+        getDataInstitutional();
         setProfile(view);
         registerLauncher(view);
 
@@ -112,13 +133,15 @@ public class EditProfileFragment extends Fragment {
 
         binding.saveProfile.setOnClickListener(this::saveProfile);
 
-        binding.nameTextInputLayout.setEndIconOnClickListener(v ->{
+        binding.cityCardView.setOnClickListener(this::showCityDialog);
+
+        binding.nameTextInputLayout.setEndIconOnClickListener(v -> {
             binding.nameEdittext.setEnabled(true);
             binding.nameEdittext.requestFocus();
             binding.nameTextInputLayout.setEndIconVisible(false);
         });
 
-        binding.mailTextInputLayout.setEndIconOnClickListener(v ->{
+        binding.mailTextInputLayout.setEndIconOnClickListener(v -> {
             binding.mailEdittext.setEnabled(true);
             binding.mailEdittext.requestFocus();
             binding.mailTextInputLayout.setEndIconVisible(false);
@@ -130,12 +153,13 @@ public class EditProfileFragment extends Fragment {
             binding.numberTextInputLayout.setEndIconVisible(false);
         });
 
-        if(existsInstitutional.getString("exists","").equals("exists")){
-//            binding.institutionalFragmentText.setVisibility(View.GONE);
-//            binding.goInstitutionalProfile.setVisibility(View.VISIBLE);
-        }
-
-
+        binding.editCity.setOnClickListener(v ->{
+            binding.cityCardView.setEnabled(true);
+            binding.cityCardView.requestFocus();
+            binding.selectCityText.setTextColor(Color.GRAY);
+            binding.editCity.setVisibility(View.GONE);
+            binding.iconDownCity.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setPrefix(){
@@ -147,7 +171,6 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void saveProfile(View view){
-
         String nameString = binding.nameEdittext.getText().toString();
         String numberString = binding.numberEdittext.getText().toString();
         String mailString = binding.mailEdittext.getText().toString();
@@ -181,7 +204,6 @@ public class EditProfileFragment extends Fragment {
             numberCheck = false;
         }
 
-
         uploadProfile(view,nameString,mailString,numberString,nameCheck,mailCheck,numberCheck);
 
     }
@@ -190,7 +212,7 @@ public class EditProfileFragment extends Fragment {
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Kaydediliyor..");
         progressDialog.show();
-        DocumentReference usersRef = firestore.collection("users").document(userMail);
+        DocumentReference usersRef = firestore.collection("usersInstitutional").document(userMail);
         WriteBatch batch = firestore.batch();
         Map<String, Object> updates = new HashMap<>();
         if (imageData != null) {
@@ -226,7 +248,13 @@ public class EditProfileFragment extends Fragment {
                 }
             }
 
-            storageReference.child("userProfilePhoto").child(userMail).putFile(imageData)
+            Map<String, Object> citiesMap = new HashMap<>();
+            citiesMap.put("cities", new ArrayList<>(cityList));
+
+            DocumentReference userDocRef = firestore.collection("usersInstitutional").document(userMail);
+            batch.set(userDocRef, citiesMap, SetOptions.merge());
+
+            storageReference.child("usersInstitutionalProfilePhoto").child(userMail).putFile(imageData)
                 .addOnSuccessListener(taskSnapshot -> {
                     Task<Uri> downloadUrlTask = taskSnapshot.getStorage().getDownloadUrl();
                     downloadUrlTask.addOnCompleteListener(task -> {
@@ -237,7 +265,7 @@ public class EditProfileFragment extends Fragment {
                         batch.commit()
                             .addOnSuccessListener(aVoid -> {
                                 progressDialog.dismiss();
-                                updateProfile(nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber,imageUrl);
+                                updateProfile(!citiesMap.isEmpty(),nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber,imageUrl);
                                 showToastShort("Profiliniz kaydedildi");
                             })
                             .addOnFailureListener(e -> {
@@ -284,10 +312,16 @@ public class EditProfileFragment extends Fragment {
                 }
             }
 
+            Map<String, Object> citiesMap = new HashMap<>();
+            citiesMap.put("cities", new ArrayList<>(cityList));
+
+            DocumentReference userDocRef = firestore.collection("usersInstitutional").document(userMail);
+            batch.set(userDocRef, citiesMap, SetOptions.merge());
+
             batch.commit()
                 .addOnSuccessListener(aVoid -> {
                     progressDialog.dismiss();
-                    updateProfile(nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber);
+                    updateProfile(!citiesMap.isEmpty(),nameCheck,mailCheck,numberCheck,uploadName,uploadMail,uploadNumber);
                     showToastShort("Profiliniz kaydedildi");
                 })
                 .addOnFailureListener(e -> {
@@ -298,9 +332,9 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
-    private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
+    private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
         if(nameCheck){
-            SharedPreferences.Editor editor = nameShared.edit();
+            SharedPreferences.Editor editor = institutionalNameShared.edit();
             editor.putString("name",uploadName);
             editor.apply();
 
@@ -310,7 +344,7 @@ public class EditProfileFragment extends Fragment {
             binding.nameTextInputLayout.setEndIconVisible(true);
         }
         if(mailCheck){
-            SharedPreferences.Editor editor = mailShared.edit();
+            SharedPreferences.Editor editor = institutionalMailShared.edit();
             editor.putString("mail",uploadMail);
             editor.apply();
 
@@ -320,7 +354,7 @@ public class EditProfileFragment extends Fragment {
             binding.mailTextInputLayout.setEndIconVisible(true);
         }
         if(numberCheck){
-            SharedPreferences.Editor editor = numberShared.edit();
+            SharedPreferences.Editor editor = institutionalNumberShared.edit();
             editor.putString("number",uploadNumber);
             editor.apply();
 
@@ -329,17 +363,25 @@ public class EditProfileFragment extends Fragment {
             binding.numberEdittext.setHint(uploadNumber);
             binding.numberTextInputLayout.setEndIconVisible(true);
         }
+        if(cityCheck){
+            binding.cityCardView.setEnabled(false);
+            binding.editCity.setVisibility(View.VISIBLE);
+            binding.iconDownCity.setVisibility(View.GONE);
+        }
+//        if(!cityList.isEmpty()){
+//            addCity(cityList);
+//        }
 
-        SharedPreferences.Editor editor = imageUrlShared.edit();
+        SharedPreferences.Editor editor = institutionalImageUrlShared.edit();
         editor.putString("imageUrl",uploadImageUrl);
         editor.apply();
 
         imageData = null;
     }
 
-    private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
+    private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
         if(nameCheck){
-            SharedPreferences.Editor editor = nameShared.edit();
+            SharedPreferences.Editor editor = institutionalNameShared.edit();
             editor.putString("name",uploadName);
             editor.apply();
 
@@ -349,7 +391,7 @@ public class EditProfileFragment extends Fragment {
             binding.nameTextInputLayout.setEndIconVisible(true);
         }
         if(mailCheck){
-            SharedPreferences.Editor editor = mailShared.edit();
+            SharedPreferences.Editor editor = institutionalMailShared.edit();
             editor.putString("mail",uploadMail);
             editor.apply();
 
@@ -359,7 +401,7 @@ public class EditProfileFragment extends Fragment {
             binding.mailTextInputLayout.setEndIconVisible(true);
         }
         if(numberCheck){
-            SharedPreferences.Editor editor = numberShared.edit();
+            SharedPreferences.Editor editor = institutionalNumberShared.edit();
             editor.putString("number",uploadNumber);
             editor.apply();
 
@@ -368,17 +410,61 @@ public class EditProfileFragment extends Fragment {
             binding.numberEdittext.setHint(uploadNumber);
             binding.numberTextInputLayout.setEndIconVisible(true);
         }
+        if(cityCheck){
+            binding.cityCardView.setEnabled(false);
+            binding.editCity.setVisibility(View.VISIBLE);
+            binding.iconDownCity.setVisibility(View.GONE);
+        }
+//        if(!cityList.isEmpty()){
+//            addCity(cityList);
+//        }
+    }
+
+    private void showCityDialog(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+        builder.setTitle("Şehir seçiniz");
+        builder.setCancelable(false);
+
+        builder.setMultiChoiceItems(cityArray, selectedCity, (dialog, which, isChecked) -> {
+            String city = cityArray[which];
+            if(isChecked){
+                cityList.add(city);
+            }else {
+                cityList.remove(city);
+            }
+        }).setPositiveButton("TAMAM", (dialog, which) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            int i = 0;
+            for(String city : cityList){
+                stringBuilder.append(city);
+                if(i != cityList.size() - 1){
+                    stringBuilder.append(",");
+                }
+                i++;
+            }
+            binding.selectCityText.setText(stringBuilder.toString());
+            binding.selectCityText.setTextColor(Color.GRAY);
+            if(cityList.isEmpty()){
+                binding.selectCityText.setText("");
+            }
+        }).setNegativeButton("ÇIK", (dialog, which) -> {
+            dialog.dismiss();
+        }).setNeutralButton("TEMİZLE", (dialog, which) -> {
+            for(int i = 0; i < selectedCity.length; i++){
+                selectedCity[i] = false;
+                cityList.clear();
+                binding.selectCityText.setText("");
+            }
+        });
+        builder.show();
     }
 
     private void setImage(View view) {
         String[] permissions;
         String rationaleMessage;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES};
-        } else {
-            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-        }
+        permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES};
 
         rationaleMessage = "Galeriye gitmek için izin gerekli";
 
@@ -437,34 +523,33 @@ public class EditProfileFragment extends Fragment {
 
     private void setProfile(View view){
 
-        String name = nameShared.getString("name","");
-        String mail = mailShared.getString("mail","");
-        String number = numberShared.getString("number","");
-        String imageUrl = imageUrlShared.getString("imageUrl","");
+        String name = institutionalNameShared.getString("name","");
+        String mail = institutionalMailShared.getString("mail","");
+        String number = institutionalNumberShared.getString("number","");
+        String imageUrl = institutionalImageUrlShared.getString("imageUrl","");
 
         if(!name.isEmpty()){
-            myUserName = name;
+            myInstitutionalName = name;
             binding.nameEdittext.setHint(name);
             binding.nameEdittext.setEnabled(false);
         }else {
             binding.nameTextInputLayout.setEndIconVisible(false);
         }
         if(!number.isEmpty()){
-            myNumber = number;
+            myInstitutionalNumber = number;
             binding.numberEdittext.setHint(number);
             binding.numberEdittext.setEnabled(false);
         }else {
             binding.numberTextInputLayout.setEndIconVisible(false);
         }
         if(!mail.isEmpty()){
-            myMail = mail;
+            myInstitutionalMail = mail;
             binding.mailEdittext.setHint(mail);
             binding.mailEdittext.setEnabled(false);
         }else {
             binding.mailTextInputLayout.setEndIconVisible(false);
         }
         if(!imageUrl.isEmpty()){
-            myImageUrl = imageUrl;
 //            Picasso.get().load(imageUrl).into(binding.profileImage);
 
             Glide.with(view.getContext())
@@ -476,15 +561,75 @@ public class EditProfileFragment extends Fragment {
         }else {
             binding.profileImage.setImageResource(R.drawable.person_active_96);
         }
+
     }
+
+    @SuppressWarnings("unchecked")
+    private void getDataInstitutional(){
+        firestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
+            if(documentSnapshot.exists()){
+
+                Map<String, Object> userData = documentSnapshot.getData();
+
+                if(userData != null){
+
+                    ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
+
+                    if(citiesData != null && !citiesData.isEmpty()){
+                        cityList.addAll(citiesData);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        int i = 0;
+                        for(String city : cityList){
+                            stringBuilder.append(city);
+                            if(i != cityList.size() - 1){
+                                stringBuilder.append(",");
+                            }
+                            i++;
+                        }
+                        binding.selectCityText.setText(stringBuilder.toString());
+                        binding.selectCityText.setTextColor(Color.GRAY);
+                        binding.cityCardView.setEnabled(false);
+                        markSelectedCities();
+                    }else {
+                        binding.cityCardView.setEnabled(false);
+                    }
+                }
+            }
+        });
+    }
+
+    private void markSelectedCities() {
+        if (selectedCity == null || cityList == null || cityList.isEmpty()) {
+            return;
+        }
+
+        for (String city : cityList) {
+            int index = findCityIndex(city);
+            if (index != -1) {
+                selectedCity[index] = true;
+            }
+        }
+    }
+
+    private int findCityIndex(String cityName) {
+        for (int i = 0; i < cityArray.length; i++) {
+            if (cityArray[i].equals(cityName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     public void showToastShort(String message){
         Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_SHORT).show();
     }
+
     public void showToastLong(String message){
         Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_LONG).show();
     }
-    private void showErrorMessage(Context context, String message) {
+
+    public void showErrorMessage(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

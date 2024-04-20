@@ -164,7 +164,13 @@ public class InstitutionalFragment extends Fragment {
 //            binding.iconDownCity.setVisibility(View.VISIBLE);
 //        });
 
+        binding.editProfileLinearLayout.setOnClickListener(this::goEditInstitutionalFragment);
 
+
+    }
+
+    private void goEditInstitutionalFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_editInstitutionalFragment);
     }
 
 //    private void saveProfile(View view){
