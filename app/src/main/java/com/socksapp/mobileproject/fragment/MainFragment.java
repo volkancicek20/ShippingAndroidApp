@@ -75,12 +75,12 @@ public class MainFragment extends Fragment {
 //        binding.cardView2.setOnClickListener(this::goSearchingFragment);
 //        binding.cardView4.setOnClickListener(this::goOffersFragment);
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                shutdown(view);
-            }
-        });
+//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                shutdown(view);
+//            }
+//        });
 
     }
 

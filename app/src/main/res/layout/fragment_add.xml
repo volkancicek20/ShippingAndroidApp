@@ -358,6 +358,7 @@
                                 android:id="@+id/load_amount_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
                                 android:inputType="none" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -449,7 +450,7 @@
                                 android:inputType="date"
                                 android:gravity="center"
                                 android:layout_gravity="center"
-                                android:layout_margin="16dp"/>
+                                android:layout_margin="14dp"/>
 
                         </LinearLayout>
 
@@ -478,7 +479,7 @@
                                 android:inputType="time"
                                 android:gravity="center"
                                 android:layout_gravity="center"
-                                android:layout_margin="16dp"/>
+                                android:layout_margin="14dp"/>
 
                         </LinearLayout>
 
@@ -574,6 +575,9 @@
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginBottom="16dp"
                                 app:hintEnabled="false"
+                                app:boxStrokeWidthFocused="1dp"
+                                app:boxStrokeWidth="1dp"
+                                app:boxStrokeColor="@color/text_input_stroke_change"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/linearCheckBox"
@@ -585,11 +589,11 @@
                                     android:id="@+id/mail_edittext"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="user@example.com"
+                                    android:hint="E-posta Adresinizi Giriniz"
                                     android:inputType="textEmailAddress"
                                     android:textColor="@color/white"
                                     android:textColorHint="@color/gray"
-                                    android:textSize="16sp"/>
+                                    android:textSize="14sp"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
@@ -600,11 +604,15 @@
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginBottom="16dp"
                                 app:hintEnabled="false"
+                                app:boxStrokeWidthFocused="1dp"
+                                app:boxStrokeWidth="1dp"
+                                app:boxStrokeColor="@color/text_input_stroke_change"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/mail_text_input_layout"
                                 app:prefixText="+90"
-                                app:prefixTextColor="@color/black"
+                                app:prefixTextColor="@color/gray"
+                                app:prefixTextAppearance="@style/PrefixTextAppearance"
                                 app:startIconDrawable="@drawable/icon_phone"
                                 app:startIconTint="@color/gray"
                                 style="@style/CustomTextInputLayout.Dark2">
@@ -613,11 +621,11 @@
                                     android:id="@+id/number_edittext"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="555 555 55 55"
+                                    android:hint="Telefon Numaranızı Giriniz"
                                     android:inputType="number"
                                     android:textColor="@color/white"
                                     android:textColorHint="@color/gray"
-                                    android:textSize="16sp"/>
+                                    android:textSize="14sp"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>

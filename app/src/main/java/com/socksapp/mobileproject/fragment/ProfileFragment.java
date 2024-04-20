@@ -145,6 +145,7 @@ public class ProfileFragment extends Fragment {
 
         binding.myPostLinearLayout.setOnClickListener(this::goMyPostFragment);
         binding.offersLinearLayout.setOnClickListener(this::goMyOffersFragment);
+        binding.editProfileLinearLayout.setOnClickListener(this::goEditProfileFragment);
     }
 
     private void goMyOffersFragment(View v){
@@ -153,6 +154,10 @@ public class ProfileFragment extends Fragment {
 
     private void goMyPostFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_myPostFragment);
+    }
+
+    private void goEditProfileFragment(View v){
+        Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_editProfileFragment);
     }
 
 //    private void saveProfile(View view){

@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_profilePageFragment_to_userOffersFragment"
             app:destination="@id/userOffersFragment" />
+        <action
+            android:id="@+id/action_profilePageFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"
@@ -72,4 +75,9 @@
         android:name="com.socksapp.mobileproject.fragment.UserOffersFragment"
         android:label="fragment_user_offers"
         tools:layout="@layout/fragment_user_offers" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.socksapp.mobileproject.fragment.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>
