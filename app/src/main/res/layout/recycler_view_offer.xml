@@ -230,21 +230,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <ImageView
-                android:id="@+id/turks_lira"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/icon_turkish_lira"
-                android:backgroundTint="@color/white"
-                app:civ_border_color="#FFFFFFFF"
-                app:civ_border_width="2dp"
-                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:text="GELEN TEKLİF"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+<!--            <ImageView-->
+<!--                android:id="@+id/turks_lira"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:background="@drawable/icon_turkish_lira"-->
+<!--                android:backgroundTint="@color/white"-->
+<!--                app:civ_border_color="#FFFFFFFF"-->
+<!--                app:civ_border_width="2dp"-->
+<!--                />-->
 
             <TextView
                 android:id="@+id/recycler_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5000"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 />

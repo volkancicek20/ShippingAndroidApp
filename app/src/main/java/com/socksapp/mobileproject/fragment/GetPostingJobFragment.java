@@ -221,49 +221,49 @@ public class GetPostingJobFragment extends Fragment {
 
                     ArrayList<String> citiesData = (ArrayList<String>) userData.get("cities");
 
-                    if(name != null && !name.isEmpty() && mail != null && !mail.isEmpty() && number != null && !number.isEmpty() && imageUrl != null && citiesData != null && !citiesData.isEmpty()){
+                    if(name != null && mail != null && number != null && imageUrl != null && citiesData != null){
 
-                        WriteBatch batch = firestore.batch();
+                        if(!name.isEmpty() && !mail.isEmpty() && !number.isEmpty() && !citiesData.isEmpty()){
 
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("price",price);
-                        data.put("personalMail",offersMail);
-                        data.put("institutionalMail",mail);
-                        data.put("institutionalName",name);
-                        data.put("institutionalNumber",number);
-                        if(imageUrl.isEmpty()){
-                            data.put("institutionalImageUrl","");
-                        }else {
+                            WriteBatch batch = firestore.batch();
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("price",price);
+                            data.put("personalMail",userMail);
+                            data.put("institutionalMail",mail);
+                            data.put("institutionalName",name);
+                            data.put("institutionalNumber",number);
                             data.put("institutionalImageUrl",imageUrl);
+                            data.put("startCity",startCity);
+                            data.put("startDistrict",startDistrict);
+                            data.put("endCity",endCity);
+                            data.put("endDistrict",endDistrict);
+                            data.put("timestamp",new Date());
+
+                            CollectionReference collectionReference = firestore.collection("offers").document(offersMail).collection(offersMail);
+                            DocumentReference offerDocRef = collectionReference.document();
+                            batch.set(offerDocRef, data, SetOptions.merge());
+
+                            Map<String, Object> citiesMap = new HashMap<>();
+                            citiesMap.put("cities", new ArrayList<>(citiesData));
+
+                            batch.set(offerDocRef, citiesMap, SetOptions.merge());
+
+                            batch.commit().addOnSuccessListener(unused -> {
+                                Toast.makeText(view.getContext(),"Teklifiniz eklendi",Toast.LENGTH_LONG).show();
+                                alertDialog.dismiss();
+                                progressDialog.dismiss();
+
+                            }).addOnFailureListener(e -> {
+
+                                alertDialog.dismiss();
+                                progressDialog.dismiss();
+                            });
+                        }else {
+                            Toast.makeText(view.getContext(),"Kurumsal proilinizde eksik bilgiler içermektedir",Toast.LENGTH_LONG).show();
                         }
-                        data.put("startCity",startCity);
-                        data.put("startDistrict",startDistrict);
-                        data.put("endCity",endCity);
-                        data.put("endDistrict",endDistrict);
-                        data.put("timestamp",new Date());
-
-                        CollectionReference collectionReference = firestore.collection("offers").document(offersMail).collection(offersMail);
-                        DocumentReference offerDocRef = collectionReference.document();
-                        batch.set(offerDocRef, data, SetOptions.merge());
-
-                        Map<String, Object> citiesMap = new HashMap<>();
-                        citiesMap.put("cities", new ArrayList<>(citiesData));
-
-                        batch.set(offerDocRef, citiesMap, SetOptions.merge());
-
-                        batch.commit().addOnSuccessListener(unused -> {
-                            Toast.makeText(view.getContext(),"Teklifiniz eklendi",Toast.LENGTH_LONG).show();
-                            alertDialog.dismiss();
-                            progressDialog.dismiss();
-
-                        }).addOnFailureListener(e -> {
-
-                            alertDialog.dismiss();
-                            progressDialog.dismiss();
-                        });
-
                     }else {
-                        // kurumsal profili tam tamamlamamış
+                        Toast.makeText(view.getContext(),"Kurumsal Profil oluşturulmamış ya da eksik bilgiler içermektedir",Toast.LENGTH_LONG).show();
                         alertDialog.dismiss();
                         progressDialog.dismiss();
                     }

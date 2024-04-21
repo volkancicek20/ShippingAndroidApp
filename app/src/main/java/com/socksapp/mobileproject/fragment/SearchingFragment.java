@@ -64,11 +64,11 @@ public class SearchingFragment extends Fragment {
         getInstitutionalAdapter = new GetInstitutionalAdapter(getInstitutionalModelArrayList,view.getContext(),SearchingFragment.this);
         binding.recyclerViewFind.setAdapter(getInstitutionalAdapter);
 
-        getData(view,"");
+        getData();
     }
 
     @SuppressWarnings("unchecked")
-    private void getData(View view,String city){
+    private void getData(){
 
         CollectionReference collection;
         collection = firestore.collection("usersInstitutional");
@@ -93,7 +93,7 @@ public class SearchingFragment extends Fragment {
 
             }
         }).addOnFailureListener(e -> {
-            Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         });
     }
 }

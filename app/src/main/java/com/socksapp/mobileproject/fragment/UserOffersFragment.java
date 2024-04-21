@@ -3,6 +3,7 @@ package com.socksapp.mobileproject.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,8 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,11 +35,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.socksapp.mobileproject.R;
+import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.adapter.GetOffersAdapter;
 import com.socksapp.mobileproject.databinding.FragmentUserOffersBinding;
+import com.socksapp.mobileproject.model.GetInstitutionalModel;
 import com.socksapp.mobileproject.model.GetOffersModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserOffersFragment extends Fragment {
 
@@ -46,6 +54,7 @@ public class UserOffersFragment extends Fragment {
     private String userMail;
     public ArrayList<GetOffersModel> getOffersModelArrayList;
     public GetOffersAdapter getOffersAdapter;
+    private MainActivity mainActivity;
     public UserOffersFragment() {
         // Required empty public constructor
     }
@@ -71,6 +80,8 @@ public class UserOffersFragment extends Fragment {
 
         userMail = user.getEmail();
 
+        getOffersModelArrayList.clear();
+
         binding.content.nameFragment.setText("Gelen Teklifler");
         binding.content.buttonDrawerToggle.setOnClickListener(this::backProfilePage);
 
@@ -89,12 +100,19 @@ public class UserOffersFragment extends Fragment {
         CollectionReference collection = firestore.collection("offers").document(userMail).collection(userMail);
 
         collection.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if(queryDocumentSnapshots.isEmpty()){
+                GetOffersModel offers = new GetOffersModel();
+                offers.viewType = 2;
+                getOffersModelArrayList.add(offers);
+                getOffersAdapter.notifyDataSetChanged();
+            }
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 DocumentReference ref = documentSnapshot.getReference();
                 String name = documentSnapshot.getString("institutionalName");
                 String imageUrl = documentSnapshot.getString("institutionalImageUrl");
                 String number = documentSnapshot.getString("institutionalNumber");
                 String mail = documentSnapshot.getString("institutionalMail");
+                String personalMail = documentSnapshot.getString("personalMail");
                 String price = documentSnapshot.getString("price");
                 String startCity = documentSnapshot.getString("startCity");
                 String startDistrict = documentSnapshot.getString("startDistrict");
@@ -102,7 +120,7 @@ public class UserOffersFragment extends Fragment {
                 String endDistrict = documentSnapshot.getString("endDistrict");
                 Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
 
-                GetOffersModel offers = new GetOffersModel(1,imageUrl,name,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,ref);
+                GetOffersModel offers = new GetOffersModel(1,imageUrl,name,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict,timestamp,ref);
                 getOffersModelArrayList.add(offers);
                 getOffersAdapter.notifyDataSetChanged();
 
@@ -112,7 +130,7 @@ public class UserOffersFragment extends Fragment {
         });
     }
 
-    public void dialogShow(View view, String imageUrl,String name,String number,String mail,DocumentReference ref,int position){
+    public void dialogShow(View view, String imageUrl,String name,String number,String mail,String personMail,DocumentReference ref,int position){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout_offers);
@@ -124,11 +142,19 @@ public class UserOffersFragment extends Fragment {
 
         info.setOnClickListener(v -> {
             dialog.dismiss();
+            Bundle args = new Bundle();
+            args.putString("mail", personMail);
+            args.putString("name", name);
 
+            Navigation.findNavController(view).navigate(R.id.action_userOffersFragment_to_infoInstitutionalFragment, args);
         });
 
         approve.setOnClickListener(v -> {
             dialog.dismiss();
+            HashMap<String,Object> data = new HashMap<>();
+
+            CollectionReference collectionReference = firestore.collection("notificationOffers").document(userMail).collection(userMail);
+//            collectionReference.document(ref.getId()).set()
 
         });
 
@@ -217,5 +243,13 @@ public class UserOffersFragment extends Fragment {
         AlertDialog dialog = builder.create();
 
         dialog.show();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            mainActivity = (MainActivity) context;
+        }
     }
 }

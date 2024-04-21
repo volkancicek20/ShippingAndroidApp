@@ -1,26 +1,15 @@
 package com.socksapp.mobileproject.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.ActivityMainBinding;
 import com.socksapp.mobileproject.myclass.RefDataAccess;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared,institutionalNameShared,institutionalNumberShared,institutionalMailShared,institutionalImageUrlShared;;
+    private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared,institutionalNameShared,institutionalNumberShared,institutionalMailShared,institutionalImageUrlShared;
     private SharedPreferences personalDone,institutionalDone;
     private SharedPreferences existsInstitutional;
     private String userMail;

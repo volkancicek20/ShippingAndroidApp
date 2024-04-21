@@ -12,6 +12,7 @@ public class GetOffersModel {
     public String userName;
     public String number;
     public String mail;
+    public String personalMail;
     public String price;
     public String startCity;
     public String startDistrict;
@@ -24,12 +25,13 @@ public class GetOffersModel {
 
     }
 
-    public GetOffersModel(int viewType, String imageUrl, String userName, String number, String mail, String price, String startCity, String startDistrict, String endCity, String endDistrict, Timestamp timestamp,DocumentReference ref) {
+    public GetOffersModel(int viewType, String imageUrl, String userName, String number, String mail,String personalMail, String price, String startCity, String startDistrict, String endCity, String endDistrict, Timestamp timestamp,DocumentReference ref) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;
         this.userName = userName;
         this.number = number;
         this.mail = mail;
+        this.personalMail = personalMail;
         this.price = price;
         this.startCity = startCity;
         this.startDistrict = startDistrict;

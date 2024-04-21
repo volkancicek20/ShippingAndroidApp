@@ -102,6 +102,12 @@ public class MyPostFragment extends Fragment {
         CollectionReference collection = firestore.collection("postMe").document(userMail).collection(userMail);
 
         collection.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if(queryDocumentSnapshots.isEmpty()){
+                GetPostingModel post = new GetPostingModel();
+                post.viewType = 3;
+                getPostingModelArrayList.add(post);
+                getPostingAdapter.notifyDataSetChanged();
+            }
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 String name = documentSnapshot.getString("name");
                 String imageUrl = documentSnapshot.getString("imageUrl");

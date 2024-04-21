@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +23,6 @@ import com.socksapp.mobileproject.databinding.RecyclerViewEmptyOfferBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewOfferBinding;
 import com.socksapp.mobileproject.fragment.UserOffersFragment;
 import com.socksapp.mobileproject.model.GetOffersModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -49,6 +49,9 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
             if (arrayList.get(position).getViewType() == 1) {
                 return LAYOUT_ONE;
             }
+            if (arrayList.get(position).getViewType() == 2) {
+                return 2;
+            }
             return -1;
         }
     }
@@ -74,7 +77,7 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict;
+        String imageUrl,userName,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict;
         DocumentReference ref;
         Timestamp timestamp;
         switch (holder.getItemViewType()) {
@@ -92,11 +95,12 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
                 endCity = arrayList.get(position).endCity;
                 endDistrict = arrayList.get(position).endDistrict;
                 timestamp = arrayList.get(position).timestamp;
+                personalMail = arrayList.get(position).personalMail;
 
                 getShow(imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,getOffersHolder);
 
                 getOffersHolder.recyclerViewOfferBinding.verticalMenu.setOnClickListener(v -> {
-                    fragment.dialogShow(v,imageUrl,userName,number,mail,ref,getOffersHolder.getAdapterPosition());
+                    fragment.dialogShow(v,imageUrl,userName,number,mail,personalMail,ref,getOffersHolder.getAdapterPosition());
                 });
 
                 break;
@@ -136,47 +140,23 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
             imageView = holder.recyclerViewOfferBinding.recyclerProfileImage;
             imageView.setImageResource(R.drawable.person_active_96);
         }else {
-            Picasso.get().load(imageUrl).into(holder.recyclerViewOfferBinding.recyclerProfileImage);
+            Glide.with(context)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(holder.recyclerViewOfferBinding.recyclerProfileImage);
+//            Picasso.get().load(imageUrl).into(holder.recyclerViewOfferBinding.recyclerProfileImage);
         }
 
-//        ImageView start_icon = holder.recyclerViewOfferBinding.startIcon;
-//        ImageView end_icon = holder.recyclerViewOfferBinding.endIcon;
-//        ImageView down_icon = holder.recyclerViewOfferBinding.downIcon;
-//
-//        float scale = context.getResources().getDisplayMetrics().density;
-//        int widthPx = (int) (24 * scale + 0.5f);
-//        int heightPx = (int) (24 * scale + 0.5f);
-//
-//        Glide.with(context)
-//                .asGif()
-//                .load(R.drawable.gif_shipping_move)
-//                .override(widthPx,heightPx)
-//                .into(start_icon);
-//
-//        Glide.with(context)
-//                .asGif()
-//                .load(R.drawable.gif_shipping_stop)
-//                .override(widthPx,heightPx)
-//                .into(end_icon);
-//
-//        Glide.with(context)
-//                .asGif()
-//                .load(R.drawable.gif_movement_down)
-//                .override(widthPx,heightPx)
-//                .into(down_icon);
 
         String startPoint = startCity + "(" + startDistrict + ")";
         String endPoint = endCity + "(" + endDistrict + ")";
         String point = startPoint + " -> " + endPoint;
 
         holder.recyclerViewOfferBinding.recyclerUserId.setText(userName);
-        holder.recyclerViewOfferBinding.recyclerPrice.setText(price);
+        holder.recyclerViewOfferBinding.recyclerPrice.setText(price+" TL");
         holder.recyclerViewOfferBinding.recyclerPoint.setText(point);
-//        holder.recyclerViewOfferBinding.recyclerStartingPoint.setText(startPoint);
-//        holder.recyclerViewOfferBinding.recyclerEndingPoint.setText(endPoint);
-
-//        holder.recyclerViewOfferBinding.recyclerMail.setText(mail);
-//        holder.recyclerViewOfferBinding.recyclerNumber.setText(number);
 
         long secondsElapsed = (Timestamp.now().getSeconds() - timestamp.getSeconds());
         String elapsedTime;

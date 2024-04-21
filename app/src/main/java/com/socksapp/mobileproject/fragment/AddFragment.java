@@ -1257,6 +1257,12 @@ public class AddFragment extends Fragment {
     }
 
     private void addPost(View view){
+
+        if(nameShared.getString("name","").isEmpty() || mailShared.getString("mail","").isEmpty() || numberShared.getString("number","").isEmpty()){
+            Toast.makeText(view.getContext(),"Kullanıcı Profilinizi Tamamlamalısınız",Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail;
         boolean startCityCheck,startDistrictCheck,endCityCheck,endDistrictCheck,loadTypeCheck,loadAmountCheck,dateCheck,timeCheck,numberCheck,mailCheck;
 
@@ -1316,12 +1322,20 @@ public class AddFragment extends Fragment {
 
         if(startCityCheck && startDistrictCheck && endCityCheck && endDistrictCheck && loadTypeCheck && loadAmountCheck && dateCheck && timeCheck && numberCheck && mailCheck){
 
-            String nameString = nameShared.getString("name","");
-            String numberString = numberShared.getString("number","");
-            String imageUrl = imageUrlShared.getString("imageUrl","");
-            String mailString = mailShared.getString("mail","");
+            String numberString,mailString;
 
-            if(!nameString.isEmpty() && !numberString.isEmpty() && !mailString.isEmpty() && !imageUrl.isEmpty()){
+            if(binding.checkBoxContact.isChecked()){
+                numberString = numberShared.getString("number","");
+                mailString = mailShared.getString("mail","");
+            }else {
+                numberString = binding.mailEdittext.getText().toString();
+                mailString = binding.mailEdittext.getText().toString();
+            }
+
+            String nameString = nameShared.getString("name","");
+            String imageUrl = imageUrlShared.getString("imageUrl","");
+
+            if(!nameString.isEmpty() && !numberString.isEmpty() && !mailString.isEmpty()){
                 ProgressDialog progressDialog = new ProgressDialog(view.getContext());
                 progressDialog.setMessage("İlan ekleniyor..");
                 progressDialog.show();
@@ -1335,13 +1349,8 @@ public class AddFragment extends Fragment {
                 post.put("loadAmount",loadAmount);
                 post.put("date",date);
                 post.put("time",time);
-                if(binding.checkBoxContact.isChecked()){
-                    post.put("number",numberString);
-                    post.put("mail",mailString);
-                }else {
-                    post.put("number",number);
-                    post.put("mail",mail);
-                }
+                post.put("number",numberString);
+                post.put("mail",mailString);
                 post.put("name",nameString);
                 post.put("imageUrl",imageUrl);
                 post.put("timestamp", new Date());

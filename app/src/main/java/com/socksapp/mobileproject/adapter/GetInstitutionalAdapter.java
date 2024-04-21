@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.Timestamp;
@@ -28,7 +30,6 @@ import com.socksapp.mobileproject.fragment.InstitutionalFragment;
 import com.socksapp.mobileproject.fragment.SearchingFragment;
 import com.socksapp.mobileproject.model.GetInstitutionalModel;
 import com.socksapp.mobileproject.model.GetOffersModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -136,9 +137,15 @@ public class GetInstitutionalAdapter extends RecyclerView.Adapter{
         if(imageUrl.isEmpty()){
             ImageView imageView;
             imageView = holder.recyclerViewFindBinding.recyclerProfileImage;
-            imageView.setImageResource(R.drawable.person_square);
+            imageView.setImageResource(R.drawable.person_active_96);
         }else {
-            Picasso.get().load(imageUrl).into(holder.recyclerViewFindBinding.recyclerProfileImage);
+            Glide.with(context)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(holder.recyclerViewFindBinding.recyclerProfileImage);
+//            Picasso.get().load(imageUrl).into(holder.recyclerViewFindBinding.recyclerProfileImage);
         }
 
         holder.recyclerViewFindBinding.recyclerName.setText(name);

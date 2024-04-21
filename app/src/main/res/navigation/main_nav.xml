@@ -91,6 +91,9 @@
         <action
             android:id="@+id/action_userOffersFragment_to_profilePageFragment"
             app:destination="@id/profilePageFragment" />
+        <action
+            android:id="@+id/action_userOffersFragment_to_infoInstitutionalFragment"
+            app:destination="@id/infoInstitutionalFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -127,5 +130,20 @@
         <action
             android:id="@+id/action_institutionalOffersNotificationFragment_to_profilePageFragment"
             app:destination="@id/profilePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoInstitutionalFragment"
+        android:name="com.socksapp.mobileproject.fragment.InfoInstitutionalFragment"
+        android:label="fragment_info_institutional"
+        tools:layout="@layout/fragment_info_institutional" >
+        <action
+            android:id="@+id/action_infoInstitutionalFragment_to_userOffersFragment"
+            app:destination="@id/userOffersFragment" />
+        <argument
+            android:name="mail"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
 </navigation>

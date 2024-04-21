@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.activity.LoginActivity;
+import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.databinding.FragmentMainBinding;
 
 public class MainFragment extends Fragment {
@@ -33,7 +34,8 @@ public class MainFragment extends Fragment {
     private FirebaseUser user;
 
     private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared,institutionalNameShared,institutionalNumberShared,institutionalMailShared,institutionalImageUrlShared;;
-    private SharedPreferences personalDone,institutionalDone;
+    private SharedPreferences personalDone,institutionalDone,existsInstitutional;
+    private MainActivity mainActivity;
 
     public MainFragment() {
         // Required empty public constructor
@@ -57,7 +59,7 @@ public class MainFragment extends Fragment {
 
         personalDone = requireActivity().getSharedPreferences("PersonalDone", Context.MODE_PRIVATE);
         institutionalDone = requireActivity().getSharedPreferences("InstitutionalDone", Context.MODE_PRIVATE);
-
+        existsInstitutional = requireActivity().getSharedPreferences("ExistsInstitutional", Context.MODE_PRIVATE);
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,10 +129,6 @@ public class MainFragment extends Fragment {
 //        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_searchingFragment);
 //    }
 
-    private void goOffersFragment(View v){
-        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_offersFragment);
-    }
-
     private void deleteData(){
         deleteSharedPreference(nameShared);
         deleteSharedPreference(mailShared);
@@ -144,10 +142,21 @@ public class MainFragment extends Fragment {
 
         deleteSharedPreference(personalDone);
         deleteSharedPreference(institutionalDone);
+        deleteSharedPreference(existsInstitutional);
+
+        mainActivity.refDataAccess.deleteAllData();
     }
     private void deleteSharedPreference(SharedPreferences sharedPreferences){
         SharedPreferences.Editor delete = sharedPreferences.edit();
         delete.clear();
         delete.apply();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            mainActivity = (MainActivity) context;
+        }
     }
 }

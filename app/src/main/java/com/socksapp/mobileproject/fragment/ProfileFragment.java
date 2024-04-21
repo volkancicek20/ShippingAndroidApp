@@ -1,6 +1,7 @@
 package com.socksapp.mobileproject.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -42,17 +44,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentProfileBinding;
-import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -104,6 +103,13 @@ public class ProfileFragment extends Fragment {
 //        binding.institutionalFragmentText.setOnClickListener(this::goInstitutionalFragment);
 //        binding.goInstitutionalProfile.setOnClickListener(this::goInstitutionalFragment);
 
+        if(!existsInstitutional.getString("exists","").isEmpty()){
+            binding.accountSettingsLinearLayout.setVisibility(View.GONE);
+        }
+
+        binding.accountSettingsLinearLayout.setOnClickListener(v ->{
+            createInstitutionalAccount(v);
+        });
 
         userMail = user.getEmail();
 
@@ -146,6 +152,32 @@ public class ProfileFragment extends Fragment {
         binding.myPostLinearLayout.setOnClickListener(this::goMyPostFragment);
         binding.offersLinearLayout.setOnClickListener(this::goMyOffersFragment);
         binding.editProfileLinearLayout.setOnClickListener(this::goEditProfileFragment);
+    }
+
+    private void createInstitutionalAccount(View v) {
+        ProgressDialog progressDialog = new ProgressDialog(v.getContext());
+        progressDialog.setMessage("Kurumsal Hesap Oluşturuluyor");
+        progressDialog.show();
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                v.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        SharedPreferences.Editor editor = existsInstitutional.edit();
+                        editor.putString("exists","exists");
+                        editor.apply();
+                        binding.accountSettingsLinearLayout.setVisibility(View.GONE);
+                        ProfilePageFragment.tabLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+                timer.cancel();
+            }
+        }, 1000);
+
     }
 
     private void goMyOffersFragment(View v){
@@ -489,7 +521,7 @@ public class ProfileFragment extends Fragment {
                 .centerCrop())
                 .into(binding.profileImage);
         }else {
-            binding.profileImage.setImageResource(R.drawable.icon_person);
+            binding.profileImage.setImageResource(R.drawable.person_active_96);
         }
     }
 

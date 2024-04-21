@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +28,6 @@ import com.socksapp.mobileproject.fragment.GetPostingJobFragment;
 import com.socksapp.mobileproject.fragment.MyPostFragment;
 import com.socksapp.mobileproject.fragment.SavedPostFragment;
 import com.socksapp.mobileproject.model.GetPostingModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -146,7 +147,13 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
             imageView = holder.recyclerViewSavedPostBinding.recyclerProfileImage;
             imageView.setImageResource(R.drawable.icon_person_white);
         }else {
-            Picasso.get().load(imageUrl).into(holder.recyclerViewSavedPostBinding.recyclerProfileImage);
+            Glide.with(context)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(holder.recyclerViewSavedPostBinding.recyclerProfileImage);
+//            Picasso.get().load(imageUrl).into(holder.recyclerViewSavedPostBinding.recyclerProfileImage);
         }
 
         String startPoint = startCity + "/" + startDistrict;

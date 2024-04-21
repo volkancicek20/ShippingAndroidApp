@@ -50,7 +50,6 @@ import com.google.firebase.storage.StorageReference;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentInstitutionalBinding;
 import com.socksapp.mobileproject.myclass.DatabaseHelper;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -632,7 +631,7 @@ public class InstitutionalFragment extends Fragment {
                 .centerCrop())
                 .into(binding.profileImage);
         }else {
-            binding.profileImage.setImageResource(R.drawable.person_square);
+            binding.profileImage.setImageResource(R.drawable.person_active_96);
         }
 
     }

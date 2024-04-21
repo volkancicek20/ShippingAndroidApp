@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
+import com.socksapp.mobileproject.databinding.RecyclerViewEmptyMyPostBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyPostBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewPostBinding;
 import com.socksapp.mobileproject.fragment.GetPostingJobFragment;
@@ -37,7 +39,6 @@ import com.socksapp.mobileproject.fragment.MyPostFragment;
 import com.socksapp.mobileproject.model.GetPostingModel;
 
 import com.google.firebase.Timestamp;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,6 +71,9 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
             if (arrayList.get(position).getViewType() == 2) {
                 return LAYOUT_EMPTY;
             }
+            if (arrayList.get(position).getViewType() == 3) {
+                return 3;
+            }
             return -1;
         }
     }
@@ -84,6 +88,9 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
             case LAYOUT_EMPTY:
                 RecyclerViewEmptyPostBinding recyclerViewEmptyPostBinding = RecyclerViewEmptyPostBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
                 return new GetPostingEmptyHolder(recyclerViewEmptyPostBinding);
+            case 3:
+                RecyclerViewEmptyMyPostBinding recyclerViewEmptyMyPostBinding = RecyclerViewEmptyMyPostBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
+                return new GetMyPostingEmptyHolder(recyclerViewEmptyMyPostBinding);
             default:
                 return null;
 
@@ -143,6 +150,9 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
             case LAYOUT_EMPTY:
 
                 break;
+            case 3:
+                System.out.println();
+                break;
         }
 
     }
@@ -168,6 +178,14 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public static class GetMyPostingEmptyHolder extends RecyclerView.ViewHolder{
+        RecyclerViewEmptyMyPostBinding recyclerViewEmptyMyPostBinding;
+        public GetMyPostingEmptyHolder(RecyclerViewEmptyMyPostBinding recyclerViewEmptyMyPostBinding) {
+            super(recyclerViewEmptyMyPostBinding.getRoot());
+            this.recyclerViewEmptyMyPostBinding = recyclerViewEmptyMyPostBinding;
+        }
+    }
+
 
     private void getShow(String imageUrl,String userName,String startCity,String startDistrict,String endCity,String endDistrict,String loadType,String loadAmount,String date,String time,String number,String mail,Timestamp timestamp,GetPostingHolder holder){
 
@@ -176,7 +194,13 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
             imageView = holder.recyclerViewPostBinding.recyclerProfileImage;
             imageView.setImageResource(R.drawable.icon_person_white);
         }else {
-            Picasso.get().load(imageUrl).into(holder.recyclerViewPostBinding.recyclerProfileImage);
+            Glide.with(context)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(holder.recyclerViewPostBinding.recyclerProfileImage);
+//            Picasso.get().load(imageUrl).into(holder.recyclerViewPostBinding.recyclerProfileImage);
         }
 
 //        ImageView start_icon = holder.recyclerViewPostBinding.startIcon;

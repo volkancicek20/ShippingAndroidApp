@@ -1,5 +1,7 @@
 package com.socksapp.mobileproject.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -20,9 +22,10 @@ import com.socksapp.mobileproject.databinding.FragmentProfilePageBinding;
 public class ProfilePageFragment extends Fragment {
 
     private FragmentProfilePageBinding binding;
-    private TabLayout tabLayout;
+    public static TabLayout tabLayout;
     private ViewPager2 viewPager2;
     private ProfilePagerAdapter adapter;
+    private SharedPreferences existsInstitutional;
 
     public ProfilePageFragment() {
         // Required empty public constructor
@@ -31,6 +34,7 @@ public class ProfilePageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        existsInstitutional = requireActivity().getSharedPreferences("ExistsInstitutional", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -53,6 +57,10 @@ public class ProfilePageFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         adapter = new ProfilePagerAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(adapter);
+
+        if(existsInstitutional.getString("exists","").isEmpty()){
+            tabLayout.setVisibility(View.GONE);
+        }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
