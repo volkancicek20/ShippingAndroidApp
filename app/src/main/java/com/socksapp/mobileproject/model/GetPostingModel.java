@@ -20,8 +20,8 @@ public class GetPostingModel {
     public String time;
     public String number;
     public String mail;
+    public String userId;
     public Timestamp timestamp;
-    public String checkMail;
     public DocumentReference ref;
 
     public GetPostingModel(){
@@ -45,25 +45,6 @@ public class GetPostingModel {
         this.timestamp = timestamp;
     }
 
-    public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,String checkMail,DocumentReference ref) {
-        this.viewType = viewType;
-        this.imageUrl = imageUrl;
-        this.userName = userName;
-        this.startCity = startCity;
-        this.startDistrict = startDistrict;
-        this.endCity = endCity;
-        this.endDistrict = endDistrict;
-        this.loadType = loadType;
-        this.loadAmount = loadAmount;
-        this.date = date;
-        this.time = time;
-        this.number = number;
-        this.mail = mail;
-        this.timestamp = timestamp;
-        this.checkMail = checkMail;
-        this.ref = ref;
-    }
-
     public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,DocumentReference ref) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;
@@ -79,6 +60,25 @@ public class GetPostingModel {
         this.number = number;
         this.mail = mail;
         this.timestamp = timestamp;
+        this.ref = ref;
+    }
+
+    public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,String userId,DocumentReference ref) {
+        this.viewType = viewType;
+        this.imageUrl = imageUrl;
+        this.userName = userName;
+        this.startCity = startCity;
+        this.startDistrict = startDistrict;
+        this.endCity = endCity;
+        this.endDistrict = endDistrict;
+        this.loadType = loadType;
+        this.loadAmount = loadAmount;
+        this.date = date;
+        this.time = time;
+        this.number = number;
+        this.mail = mail;
+        this.timestamp = timestamp;
+        this.userId = userId;
         this.ref = ref;
     }
 
@@ -195,12 +195,12 @@ public class GetPostingModel {
         this.timestamp = timestamp;
     }
 
-    public String getCheckMail() {
-        return checkMail;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCheckMail(String checkMail) {
-        this.checkMail = checkMail;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public DocumentReference getRef() {

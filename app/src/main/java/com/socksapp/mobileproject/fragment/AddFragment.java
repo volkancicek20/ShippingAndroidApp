@@ -1351,6 +1351,7 @@ public class AddFragment extends Fragment {
                 post.put("time",time);
                 post.put("number",numberString);
                 post.put("mail",mailString);
+                post.put("userId",userMail);
                 post.put("name",nameString);
                 post.put("imageUrl",imageUrl);
                 post.put("timestamp", new Date());

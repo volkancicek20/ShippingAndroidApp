@@ -102,7 +102,7 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,checkMail;
+        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,userId;
         Timestamp timestamp;
         DocumentReference ref;
         switch (holder.getItemViewType()) {
@@ -122,14 +122,14 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                 time = arrayList.get(position).time;
                 number = arrayList.get(position).number;
                 mail = arrayList.get(position).mail;
+                userId = arrayList.get(position).userId;
                 timestamp = arrayList.get(position).timestamp;
-                checkMail = arrayList.get(position).checkMail;
                 ref = arrayList.get(position).ref;
 
 
                 getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,getPostingHolder);
 
-                if(checkMail != null && checkMail.equals(user.getEmail())){
+                if(userId != null && userId.equals(user.getEmail())){
 //                    getPostingHolder.recyclerViewPostBinding.offersButton.setVisibility(View.GONE);
 //                    getPostingHolder.recyclerViewPostBinding.deleteButton.setVisibility(View.VISIBLE);
                 }
@@ -138,11 +138,18 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
 //                    getOffers(mail,startCity,startDistrict,endCity,endDistrict);
 //                });
 
+                if (fragment instanceof GetPostingJobFragment){
+                    if(GetPostingJobFragment.existsInstitutional.getString("exists","").isEmpty()){
+                        getPostingHolder.recyclerViewPostBinding.verticalMenu.setVisibility(View.GONE);
+                    }
+                }
+
+
                 getPostingHolder.recyclerViewPostBinding.verticalMenu.setOnClickListener(v ->{
                     if(fragment instanceof MyPostFragment){
                         MyPostFragment.dialogShow(v,ref,user.getEmail(),getPostingHolder.getAdapterPosition(),startCity);
                     }else if (fragment instanceof GetPostingJobFragment){
-                        GetPostingJobFragment.dialogShow(v,mail,startCity,startDistrict,endCity,endDistrict,ref);
+                        GetPostingJobFragment.dialogShow(v,userId,startCity,startDistrict,endCity,endDistrict,ref);
                     }
                 });
 

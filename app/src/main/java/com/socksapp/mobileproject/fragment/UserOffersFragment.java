@@ -34,6 +34,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.adapter.GetOffersAdapter;
@@ -118,9 +119,11 @@ public class UserOffersFragment extends Fragment {
                 String startDistrict = documentSnapshot.getString("startDistrict");
                 String endCity = documentSnapshot.getString("endCity");
                 String endDistrict = documentSnapshot.getString("endDistrict");
+                String offersRef = documentSnapshot.getString("ref");
+                String userId = documentSnapshot.getString("userId");
                 Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
 
-                GetOffersModel offers = new GetOffersModel(1,imageUrl,name,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict,timestamp,ref);
+                GetOffersModel offers = new GetOffersModel(1,imageUrl,name,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict,timestamp,ref,offersRef,userId);
                 getOffersModelArrayList.add(offers);
                 getOffersAdapter.notifyDataSetChanged();
 
@@ -130,7 +133,7 @@ public class UserOffersFragment extends Fragment {
         });
     }
 
-    public void dialogShow(View view, String imageUrl,String name,String number,String mail,String personMail,DocumentReference ref,int position){
+    public void dialogShow(View view, String imageUrl,String name,String number,String mail,String personalMail,DocumentReference ref,int position,String offersRef,String startCity,String userId){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout_offers);
@@ -143,7 +146,7 @@ public class UserOffersFragment extends Fragment {
         info.setOnClickListener(v -> {
             dialog.dismiss();
             Bundle args = new Bundle();
-            args.putString("mail", personMail);
+            args.putString("mail", userId);
             args.putString("name", name);
 
             Navigation.findNavController(view).navigate(R.id.action_userOffersFragment_to_infoInstitutionalFragment, args);
@@ -151,16 +154,23 @@ public class UserOffersFragment extends Fragment {
 
         approve.setOnClickListener(v -> {
             dialog.dismiss();
-            HashMap<String,Object> data = new HashMap<>();
 
-            CollectionReference collectionReference = firestore.collection("notificationOffers").document(userMail).collection(userMail);
+            System.out.println("name: "+name);
+            System.out.println("mail: "+mail);
+            System.out.println("personalMail: "+personalMail);
+            System.out.println("offersRef: "+offersRef);
+            System.out.println("startCity: "+startCity);
+
+            //HashMap<String,Object> data = new HashMap<>();
+
+            //CollectionReference collectionReference = firestore.collection("notificationOffers").document(userMail).collection(userMail);
 //            collectionReference.document(ref.getId()).set()
 
         });
 
         reject.setOnClickListener(v -> {
             dialog.dismiss();
-            rejectOffers(v,ref,mail,position);
+            rejectOffers(v,ref,userId,position);
         });
 
 
@@ -209,31 +219,38 @@ public class UserOffersFragment extends Fragment {
 //        dialog.show();
     }
 
-    public void rejectOffers(View view,DocumentReference ref,String mail,int position){
+    public void rejectOffers(View view,DocumentReference ref,String userId,int position){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklif Reddediliyor..");
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setMessage("Teklifi reddetmek istiyor musunuz?");
         builder.setPositiveButton("REDDET", (dialog, which) ->{
             progressDialog.show();
-            CollectionReference collectionReference = firestore.collection("offers").document(mail).collection(mail);
+
+            WriteBatch batch = firestore.batch();
+
+            CollectionReference collectionReference = firestore.collection("offers").document(userId).collection(userId);
             String deleteRef = ref.getId();
             DocumentReference documentReference = collectionReference.document(deleteRef);
 
-            documentReference.delete().addOnSuccessListener(unused -> {
-                if (position != RecyclerView.NO_POSITION) {
-                    getOffersModelArrayList.remove(position);
-                    getOffersAdapter.notifyItemRemoved(position);
-                    getOffersAdapter.notifyDataSetChanged();
-                }
-                progressDialog.dismiss();
-                dialog.dismiss();
-                Toast.makeText(view.getContext(),"Teklif reddedildi",Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(e -> {
-                progressDialog.dismiss();
-                dialog.dismiss();
-                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-            });
+            batch.delete(documentReference);
+
+            batch.commit()
+                .addOnSuccessListener(unused -> {
+                    if (position != RecyclerView.NO_POSITION) {
+                        getOffersModelArrayList.remove(position);
+                        getOffersAdapter.notifyItemRemoved(position);
+                        getOffersAdapter.notifyDataSetChanged();
+                    }
+                    progressDialog.dismiss();
+                    dialog.dismiss();
+                    Toast.makeText(view.getContext(), "Teklif reddedildi", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    dialog.dismiss();
+                    Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                });
         });
 
         builder.setNegativeButton("Hayır", (dialog, which) -> {

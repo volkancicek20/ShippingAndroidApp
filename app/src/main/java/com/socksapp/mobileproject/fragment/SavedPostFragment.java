@@ -92,10 +92,10 @@ public class SavedPostFragment extends Fragment {
             savedPostAdapter.notifyDataSetChanged();
         }else {
             for (RefItem item : arrayList) {
-                String mail = item.getMail();
+                String userId = item.getMail();
                 String ref = item.getRef();
 
-                firestore.collection("postMe").document(mail).collection(mail).document(ref).get().addOnSuccessListener(documentSnapshot -> {
+                firestore.collection("postMe").document(userId).collection(userId).document(ref).get().addOnSuccessListener(documentSnapshot -> {
                     if(documentSnapshot.exists()){
                         String name = documentSnapshot.getString("name");
                         String imageUrl = documentSnapshot.getString("imageUrl");
@@ -108,11 +108,11 @@ public class SavedPostFragment extends Fragment {
                         String date = documentSnapshot.getString("date");
                         String time = documentSnapshot.getString("time");
                         String number = documentSnapshot.getString("number");
-                        String mail2 = documentSnapshot.getString("mail");
+                        String mail = documentSnapshot.getString("mail");
                         Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
                         DocumentReference reff = documentSnapshot.getReference();
 
-                        GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail2,timestamp,reff);
+                        GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userId,reff);
                         savedPostArrayList.add(post);
                         savedPostAdapter.notifyDataSetChanged();
                     }

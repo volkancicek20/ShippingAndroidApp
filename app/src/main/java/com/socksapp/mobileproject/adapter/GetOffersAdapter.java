@@ -77,7 +77,7 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict;
+        String imageUrl,userName,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict,offersRef,userId;
         DocumentReference ref;
         Timestamp timestamp;
         switch (holder.getItemViewType()) {
@@ -85,6 +85,8 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
                 GetOffersHolder getOffersHolder = (GetOffersHolder) holder;
 
                 ref = arrayList.get(position).ref;
+                offersRef = arrayList.get(position).offersRef;
+                userId = arrayList.get(position).userId;
                 imageUrl = arrayList.get(position).imageUrl;
                 userName = arrayList.get(position).userName;
                 number = arrayList.get(position).number;
@@ -100,7 +102,7 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
                 getShow(imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,getOffersHolder);
 
                 getOffersHolder.recyclerViewOfferBinding.verticalMenu.setOnClickListener(v -> {
-                    fragment.dialogShow(v,imageUrl,userName,number,mail,personalMail,ref,getOffersHolder.getAdapterPosition());
+                    fragment.dialogShow(v,imageUrl,userName,number,mail,personalMail,ref,getOffersHolder.getAdapterPosition(),offersRef,startCity,userId);
                 });
 
                 break;

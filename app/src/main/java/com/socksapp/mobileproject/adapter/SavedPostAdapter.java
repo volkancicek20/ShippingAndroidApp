@@ -82,7 +82,7 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail;
+        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,userId;
         Timestamp timestamp;
         DocumentReference ref;
         switch (holder.getItemViewType()) {
@@ -102,6 +102,7 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
                 time = arrayList.get(position).time;
                 number = arrayList.get(position).number;
                 mail = arrayList.get(position).mail;
+                userId = arrayList.get(position).userId;
                 timestamp = arrayList.get(position).timestamp;
                 ref = arrayList.get(position).ref;
 

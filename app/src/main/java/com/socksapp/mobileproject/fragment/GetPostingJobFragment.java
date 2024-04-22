@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class GetPostingJobFragment extends Fragment {
     private FirebaseUser user;
     private String[] cityNames;
     public static String userMail;
+    public static SharedPreferences existsInstitutional;
     private ArrayAdapter<String> cityAdapter;
     private AutoCompleteTextView cityCompleteTextView;
 
@@ -73,6 +75,8 @@ public class GetPostingJobFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         getPostingModelArrayList = new ArrayList<>();
+
+        existsInstitutional = requireActivity().getSharedPreferences("ExistsInstitutional", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -139,10 +143,11 @@ public class GetPostingJobFragment extends Fragment {
                     String time = documentSnapshot.getString("time");
                     String number = documentSnapshot.getString("number");
                     String mail = documentSnapshot.getString("mail");
+                    String userId = documentSnapshot.getString("userId");
                     Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
                     DocumentReference ref = documentSnapshot.getReference();
 
-                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userMail,ref);
+                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userId,ref);
                     getPostingModelArrayList.add(post);
                     getPostingAdapter.notifyDataSetChanged();
                 }
@@ -152,7 +157,7 @@ public class GetPostingJobFragment extends Fragment {
         });
     }
 
-    public static void dialogShow(View view, String myMail, String startCity, String startDistrict, String endCity, String endDistrict,DocumentReference ref){
+    public static void dialogShow(View view, String userId, String startCity, String startDistrict, String endCity, String endDistrict,DocumentReference ref){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout);
@@ -165,14 +170,14 @@ public class GetPostingJobFragment extends Fragment {
 
         save.setOnClickListener(v -> {
             dialog.dismiss();
-            mainActivity.refDataAccess.insertRef(ref.getId(),myMail);
+            mainActivity.refDataAccess.insertRef(ref.getId(),userId);
             Toast.makeText(view.getContext(), "Kaydedildi", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
 
         offers.setOnClickListener(v -> {
             dialog.dismiss();
-            getOffers(view,myMail,startCity,startDistrict,endCity,endDistrict);
+            getOffers(view,userId,startCity,startDistrict,endCity,endDistrict,ref);
         });
 
 
@@ -187,7 +192,7 @@ public class GetPostingJobFragment extends Fragment {
         }
     }
 
-    public static void getOffers(View v, String offersMail,String startCity,String startDistrict,String endCity,String endDistrict){
+    public static void getOffers(View v, String userId,String startCity,String startDistrict,String endCity,String endDistrict,DocumentReference ref){
         View view = LayoutInflater.from(v.getContext()).inflate(R.layout.offers_layout, null);
 
         EditText editText = view.findViewById(R.id.price_edittext);
@@ -201,15 +206,15 @@ public class GetPostingJobFragment extends Fragment {
 
         okButton.setOnClickListener(vv -> {
             String price = editText.getText().toString();
-            getInstitutionalData(v,userMail,offersMail,price,startCity,startDistrict,endCity,endDistrict,alertDialog);
+            getInstitutionalData(v,userMail,userId,price,startCity,startDistrict,endCity,endDistrict,alertDialog,ref);
         });
     }
 
-    public static void getInstitutionalData(View view,String userMail,String offersMail,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog){
+    public static void getInstitutionalData(View view,String userMail,String userId,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog,DocumentReference ref){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklifiniz ekleniyor..");
         progressDialog.show();
-        firestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
+        firestore.collection("usersInstitutional").document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if(documentSnapshot.exists()){
                 Map<String, Object> userData = documentSnapshot.getData();
 
@@ -230,6 +235,7 @@ public class GetPostingJobFragment extends Fragment {
                             Map<String, Object> data = new HashMap<>();
                             data.put("price",price);
                             data.put("personalMail",userMail);
+                            data.put("userId",userId);
                             data.put("institutionalMail",mail);
                             data.put("institutionalName",name);
                             data.put("institutionalNumber",number);
@@ -239,8 +245,9 @@ public class GetPostingJobFragment extends Fragment {
                             data.put("endCity",endCity);
                             data.put("endDistrict",endDistrict);
                             data.put("timestamp",new Date());
+                            data.put("ref",ref.getId());
 
-                            CollectionReference collectionReference = firestore.collection("offers").document(offersMail).collection(offersMail);
+                            CollectionReference collectionReference = firestore.collection("offers").document(userId).collection(userId);
                             DocumentReference offerDocRef = collectionReference.document();
                             batch.set(offerDocRef, data, SetOptions.merge());
 
