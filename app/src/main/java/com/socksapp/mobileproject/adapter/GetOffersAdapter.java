@@ -2,35 +2,25 @@ package com.socksapp.mobileproject.adapter;
 
 import static com.socksapp.mobileproject.model.GetOffersModel.LAYOUT_ONE;
 import static com.socksapp.mobileproject.model.GetOffersModel.LAYOUT_EMPTY;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyOfferBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewOfferBinding;
 import com.socksapp.mobileproject.fragment.UserOffersFragment;
 import com.socksapp.mobileproject.model.GetOffersModel;
-
 import java.util.ArrayList;
 
 public class GetOffersAdapter extends RecyclerView.Adapter{
 
-    private FirebaseAuth auth;
-    private FirebaseUser user;
-    private FirebaseFirestore firebaseFirestore;
     ArrayList<GetOffersModel> arrayList;
     Context context;
     UserOffersFragment fragment;
@@ -74,9 +64,6 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
         String imageUrl,userName,number,mail,personalMail,price,startCity,startDistrict,endCity,endDistrict,offersRef,userId;
         DocumentReference ref;
         Timestamp timestamp;
@@ -107,7 +94,7 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
 
                 break;
             case LAYOUT_EMPTY:
-                System.out.println("BB");
+                System.out.println();
                 break;
         }
 
@@ -148,7 +135,6 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
                 .error(R.drawable.person_active_96)
                 .centerCrop())
                 .into(holder.recyclerViewOfferBinding.recyclerProfileImage);
-//            Picasso.get().load(imageUrl).into(holder.recyclerViewOfferBinding.recyclerProfileImage);
         }
 
 
@@ -182,31 +168,5 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
         holder.recyclerViewOfferBinding.timestampTime.setText(elapsedTime);
 
     }
-
-//    public void rejectOffers(View view,DocumentReference ref,String mail){
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-//        builder.setMessage("Teklifi reddetmek istiyor musunuz?");
-//        builder.setPositiveButton("REDDET", (dialog, which) ->{
-//            CollectionReference collectionReference = firebaseFirestore.collection("offers").document(mail).collection(mail);
-//            String deleteRef = ref.getId();
-//            DocumentReference documentReference = collectionReference.document(deleteRef);
-//
-//            documentReference.delete().addOnSuccessListener(unused -> {
-//                Toast.makeText(view.getContext(),"Teklif reddedildi",Toast.LENGTH_SHORT).show();
-//            }).addOnFailureListener(e -> {
-//                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-//            });
-//            dialog.dismiss();
-//        });
-//
-//        builder.setNegativeButton("Hayır", (dialog, which) -> {
-//            dialog.dismiss();
-//        });
-//
-//        AlertDialog dialog = builder.create();
-//
-//        dialog.show();
-//    }
 
 }

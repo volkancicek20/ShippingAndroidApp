@@ -3,52 +3,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_offers_layout">
+    android:background="@color/black">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/price_text_input_layout"
-        style="@style/CustomTextInputLayout.Dark2"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Teklif edeceğiniz tutarı giriniz"
-        android:textColorHint="@color/text_input_title_change"
-        app:hintTextColor="@color/text_input_title_change"
-        app:boxStrokeWidthFocused="1dp"
-        app:boxStrokeWidth="1dp"
-        app:boxStrokeColor="@color/text_input_stroke_change"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp"
+        android:background="@drawable/bg_offers_layout"
         app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/icon_turkish_lira"
-        app:startIconTint="@color/gray">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <EditText
-            android:id="@+id/price_edittext"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/price_text_input_layout"
+            style="@style/CustomTextInputLayout.Dark2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:textColor="@color/white"
-            android:textColorHint="@color/gray"
-            android:textSize="16sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Teklif edeceğiniz tutarı giriniz"
+            android:textColorHint="@color/text_input_title_change"
+            app:hintTextColor="@color/text_input_title_change"
+            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeColor="@color/text_input_stroke_change"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/icon_turkish_lira"
+            app:startIconTint="@color/gray">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/getOffersButton"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/edit_time_button_background"
-        android:text="TEKLİF VER"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/price_text_input_layout" />
+            <EditText
+                android:id="@+id/price_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/getOffersButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_time_button_background"
+            android:text="TEKLİF VER"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/price_text_input_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

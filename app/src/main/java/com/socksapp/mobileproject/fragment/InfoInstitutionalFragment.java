@@ -13,8 +13,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentInfoInstitutionalBinding;
@@ -24,8 +22,6 @@ public class InfoInstitutionalFragment extends Fragment {
 
     private FragmentInfoInstitutionalBinding binding;
     private FirebaseFirestore firestore;
-    private FirebaseAuth auth;
-    private FirebaseUser user;
 
     public InfoInstitutionalFragment() {
         // Required empty public constructor
@@ -35,8 +31,6 @@ public class InfoInstitutionalFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
     }
 
     @Override

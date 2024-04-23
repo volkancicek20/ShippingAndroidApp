@@ -27,22 +27,6 @@ public class GetOffersModel {
 
     }
 
-    public GetOffersModel(int viewType, String imageUrl, String userName, String number, String mail,String personalMail, String price, String startCity, String startDistrict, String endCity, String endDistrict, Timestamp timestamp,DocumentReference ref) {
-        this.viewType = viewType;
-        this.imageUrl = imageUrl;
-        this.userName = userName;
-        this.number = number;
-        this.mail = mail;
-        this.personalMail = personalMail;
-        this.price = price;
-        this.startCity = startCity;
-        this.startDistrict = startDistrict;
-        this.endCity = endCity;
-        this.endDistrict = endDistrict;
-        this.timestamp = timestamp;
-        this.ref = ref;
-    }
-
     public GetOffersModel(int viewType, String imageUrl, String userName, String number, String mail,String personalMail, String price, String startCity, String startDistrict, String endCity, String endDistrict, Timestamp timestamp,DocumentReference ref,String offersRef,String userId) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;

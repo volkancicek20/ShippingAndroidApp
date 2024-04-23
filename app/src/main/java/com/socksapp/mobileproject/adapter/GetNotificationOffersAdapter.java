@@ -6,30 +6,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyNotificationOffersBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewNotificationOffersBinding;
 import com.socksapp.mobileproject.fragment.InstitutionalOffersNotificationFragment;
 import com.socksapp.mobileproject.model.GetNotificationOffersModel;
-
 import java.util.ArrayList;
 
 public class GetNotificationOffersAdapter extends RecyclerView.Adapter {
-
-    private FirebaseAuth auth;
-    private FirebaseUser user;
-    private FirebaseFirestore firebaseFirestore;
     ArrayList<GetNotificationOffersModel> arrayList;
     Context context;
     InstitutionalOffersNotificationFragment fragment;
@@ -73,9 +61,6 @@ public class GetNotificationOffersAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
         String imageUrl,userName,number,mail,price,result,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,refId;
         switch (holder.getItemViewType()) {
             case LAYOUT_ONE:
@@ -105,7 +90,7 @@ public class GetNotificationOffersAdapter extends RecyclerView.Adapter {
 
                 break;
             case LAYOUT_EMPTY:
-                System.out.println("BB");
+                System.out.println();
                 break;
         }
     }

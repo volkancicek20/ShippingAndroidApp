@@ -74,46 +74,6 @@
 
         </androidx.cardview.widget.CardView>
 
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/cardView2"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="150dp"-->
-<!--            android:layout_columnWeight="1"-->
-<!--            android:layout_rowWeight="1"-->
-<!--            android:layout_row="0"-->
-<!--            android:layout_column="1"-->
-<!--            android:layout_gravity="center"-->
-<!--            app:cardElevation="12dp"-->
-<!--            app:cardCornerRadius="20dp"-->
-<!--            >-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/line2"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="vertical"-->
-<!--                android:background="@drawable/bg_card"-->
-<!--                android:gravity="center">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="80dp"-->
-<!--                    android:layout_height="80dp"-->
-<!--                    android:src="@drawable/icon_search"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:scaleX="-1"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Fiyat bul"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:textSize="18sp"-->
-<!--                    android:textColor="@color/white"/>-->
-
-<!--            </LinearLayout>-->
-
-<!--        </androidx.cardview.widget.CardView>-->
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView3"
             android:layout_width="150dp"
@@ -152,45 +112,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/cardView4"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="150dp"-->
-<!--            android:layout_columnWeight="1"-->
-<!--            android:layout_rowWeight="1"-->
-<!--            android:layout_row="1"-->
-<!--            android:layout_column="1"-->
-<!--            android:layout_gravity="center"-->
-<!--            app:cardElevation="12dp"-->
-<!--            app:cardCornerRadius="20dp"-->
-<!--            >-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/line4"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="vertical"-->
-<!--                android:background="@drawable/bg_card"-->
-<!--                android:gravity="center">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="80dp"-->
-<!--                    android:layout_height="80dp"-->
-<!--                    android:src="@drawable/icon_mail"-->
-<!--                    android:layout_gravity="center"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Teklifler"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:textSize="18sp"-->
-<!--                    android:textColor="@color/white"/>-->
-
-<!--            </LinearLayout>-->
-
-<!--        </androidx.cardview.widget.CardView>-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView5"

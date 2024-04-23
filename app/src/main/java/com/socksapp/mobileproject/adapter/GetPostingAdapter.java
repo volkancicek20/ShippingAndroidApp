@@ -2,34 +2,19 @@ package com.socksapp.mobileproject.adapter;
 
 import static com.socksapp.mobileproject.model.GetPostingModel.LAYOUT_EMPTY;
 import static com.socksapp.mobileproject.model.GetPostingModel.LAYOUT_ONE;
-
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyMyPostBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyPostBinding;
@@ -37,19 +22,13 @@ import com.socksapp.mobileproject.databinding.RecyclerViewPostBinding;
 import com.socksapp.mobileproject.fragment.GetPostingJobFragment;
 import com.socksapp.mobileproject.fragment.MyPostFragment;
 import com.socksapp.mobileproject.model.GetPostingModel;
-
 import com.google.firebase.Timestamp;
-
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GetPostingAdapter extends RecyclerView.Adapter {
 
-    private FirebaseAuth auth;
-    private FirebaseUser user;
-    private FirebaseFirestore firebaseFirestore;
+    public FirebaseAuth auth;
+    public FirebaseUser user;
     public ArrayList<GetPostingModel> arrayList;
     public Context context;
     public Fragment fragment;
@@ -99,7 +78,6 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,userId,permission;
@@ -137,7 +115,6 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
                     }
                 }
 
-
                 getPostingHolder.recyclerViewPostBinding.verticalMenu.setOnClickListener(v ->{
                     if(fragment instanceof MyPostFragment){
                         MyPostFragment.dialogShow(v,ref,user.getEmail(),getPostingHolder.getAdapterPosition(),startCity);
@@ -148,7 +125,7 @@ public class GetPostingAdapter extends RecyclerView.Adapter {
 
                 break;
             case LAYOUT_EMPTY:
-
+                System.out.println();
                 break;
             case 3:
                 System.out.println();

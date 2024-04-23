@@ -34,9 +34,6 @@ import java.util.ArrayList;
 
 public class SavedPostAdapter extends RecyclerView.Adapter {
 
-    private FirebaseAuth auth;
-    private FirebaseUser user;
-    private FirebaseFirestore firebaseFirestore;
     public ArrayList<GetPostingModel> arrayList;
     public Context context;
     public SavedPostFragment fragment;
@@ -80,9 +77,7 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
+
         String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,userId,permission;
         Timestamp timestamp;
         DocumentReference ref;
@@ -110,14 +105,13 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
 
                 getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,savedPostHolder,permission);
 
-
                 savedPostHolder.recyclerViewSavedPostBinding.verticalMenu.setOnClickListener(v ->{
                     fragment.removeSaved(v,ref,savedPostHolder.getAdapterPosition());
                 });
 
                 break;
             case LAYOUT_EMPTY:
-
+                System.out.println();
                 break;
         }
     }

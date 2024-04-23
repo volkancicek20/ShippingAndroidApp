@@ -1,7 +1,6 @@
 package com.socksapp.mobileproject.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 
 public class GetNotificationOffersModel {
 

@@ -29,41 +29,6 @@ public class GetPostingModel {
 
     }
 
-    public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp) {
-        this.viewType = viewType;
-        this.imageUrl = imageUrl;
-        this.userName = userName;
-        this.startCity = startCity;
-        this.startDistrict = startDistrict;
-        this.endCity = endCity;
-        this.endDistrict = endDistrict;
-        this.loadType = loadType;
-        this.loadAmount = loadAmount;
-        this.date = date;
-        this.time = time;
-        this.number = number;
-        this.mail = mail;
-        this.timestamp = timestamp;
-    }
-
-    public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,DocumentReference ref) {
-        this.viewType = viewType;
-        this.imageUrl = imageUrl;
-        this.userName = userName;
-        this.startCity = startCity;
-        this.startDistrict = startDistrict;
-        this.endCity = endCity;
-        this.endDistrict = endDistrict;
-        this.loadType = loadType;
-        this.loadAmount = loadAmount;
-        this.date = date;
-        this.time = time;
-        this.number = number;
-        this.mail = mail;
-        this.timestamp = timestamp;
-        this.ref = ref;
-    }
-
     public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,String userId,DocumentReference ref,String permission) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;

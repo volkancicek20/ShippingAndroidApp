@@ -2,24 +2,16 @@ package com.socksapp.mobileproject.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.socksapp.mobileproject.R;
@@ -74,28 +66,7 @@ public class MainFragment extends Fragment {
         binding.cardView6.setOnClickListener(this::goProfileFragment);
         binding.cardView3.setOnClickListener(this::goAddFragment);
         binding.cardView1.setOnClickListener(this::goGetPostingJobFragment);
-//        binding.cardView2.setOnClickListener(this::goSearchingFragment);
-//        binding.cardView4.setOnClickListener(this::goOffersFragment);
 
-//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                shutdown(view);
-//            }
-//        });
-
-    }
-
-    private void shutdown(View v){
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setMessage("Uygulamadan çıkış yapılsın mı?");
-        builder.setPositiveButton("Çık", (dialog, which) -> {
-            System.exit(0);
-        });
-        builder.setNegativeButton("Hayır", (dialog, which) -> {
-
-        });
-        builder.show();
     }
     private void logout(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
@@ -125,9 +96,6 @@ public class MainFragment extends Fragment {
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_getPostingJobFragment);
     }
 
-//    private void goSearchingFragment(View v){
-//        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_searchingFragment);
-//    }
 
     private void deleteData(){
         deleteSharedPreference(nameShared);
