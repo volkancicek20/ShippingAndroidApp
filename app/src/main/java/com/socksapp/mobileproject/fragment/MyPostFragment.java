@@ -185,13 +185,9 @@ public class MyPostFragment extends Fragment {
 
         LinearLayout save = dialog.findViewById(R.id.layoutSave);
         LinearLayout offers = dialog.findViewById(R.id.layoutOffer);
-        LinearLayout report = dialog.findViewById(R.id.layoutReport);
-        View line = dialog.findViewById(R.id.line);
 
         save.setVisibility(View.GONE);
         offers.setVisibility(View.GONE);
-        report.setVisibility(View.GONE);
-        line.setVisibility(View.GONE);
 
 
 

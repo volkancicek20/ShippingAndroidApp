@@ -12,8 +12,6 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,7 +23,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
 import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -34,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Task;
@@ -49,7 +45,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentEditProfileBinding;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -63,8 +58,7 @@ public class EditProfileFragment extends Fragment {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
     private SharedPreferences nameShared,numberShared,mailShared,imageUrlShared;
-    private SharedPreferences existsInstitutional;
-    private String myUserName,myNumber,myMail,myImageUrl,userMail;
+    private String userMail;
     public ActivityResultLauncher<Intent> activityResultLauncher;
     public ActivityResultLauncher<String> permissionLauncher;
     private Bitmap selectedBitmap;
@@ -88,7 +82,6 @@ public class EditProfileFragment extends Fragment {
         mailShared = requireActivity().getSharedPreferences("Mail",Context.MODE_PRIVATE);
         imageUrlShared = requireActivity().getSharedPreferences("ImageUrl",Context.MODE_PRIVATE);
 
-        existsInstitutional = requireActivity().getSharedPreferences("ExistsInstitutional", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -134,11 +127,6 @@ public class EditProfileFragment extends Fragment {
             binding.numberEdittext.requestFocus();
             binding.numberTextInputLayout.setEndIconVisible(false);
         });
-
-        if(existsInstitutional.getString("exists","").equals("exists")){
-//            binding.institutionalFragmentText.setVisibility(View.GONE);
-//            binding.goInstitutionalProfile.setVisibility(View.VISIBLE);
-        }
 
 
     }
@@ -383,7 +371,7 @@ public class EditProfileFragment extends Fragment {
         String[] permissions;
         String rationaleMessage;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES};
         } else {
             permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -452,30 +440,24 @@ public class EditProfileFragment extends Fragment {
         String imageUrl = imageUrlShared.getString("imageUrl","");
 
         if(!name.isEmpty()){
-            myUserName = name;
             binding.nameEdittext.setHint(name);
             binding.nameEdittext.setEnabled(false);
         }else {
             binding.nameTextInputLayout.setEndIconVisible(false);
         }
         if(!number.isEmpty()){
-            myNumber = number;
             binding.numberEdittext.setHint(number);
             binding.numberEdittext.setEnabled(false);
         }else {
             binding.numberTextInputLayout.setEndIconVisible(false);
         }
         if(!mail.isEmpty()){
-            myMail = mail;
             binding.mailEdittext.setHint(mail);
             binding.mailEdittext.setEnabled(false);
         }else {
             binding.mailTextInputLayout.setEndIconVisible(false);
         }
         if(!imageUrl.isEmpty()){
-            myImageUrl = imageUrl;
-//            Picasso.get().load(imageUrl).into(binding.profileImage);
-
             Glide.with(view.getContext())
                 .load(imageUrl)
                 .apply(new RequestOptions()
@@ -489,9 +471,6 @@ public class EditProfileFragment extends Fragment {
 
     public void showToastShort(String message){
         Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-    }
-    public void showToastLong(String message){
-        Toast.makeText(requireActivity().getApplicationContext(),message,Toast.LENGTH_LONG).show();
     }
     private void showErrorMessage(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

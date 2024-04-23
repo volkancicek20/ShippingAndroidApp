@@ -1,33 +1,24 @@
 package com.socksapp.mobileproject.fragment;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentInfoInstitutionalBinding;
-
 import java.util.ArrayList;
-import java.util.Map;
 
 public class InfoInstitutionalFragment extends Fragment {
 
@@ -120,12 +111,11 @@ public class InfoInstitutionalFragment extends Fragment {
                     binding.profileMail.setText(mail);
                     binding.profilePhone.setText(number);
 
-
                 }else {
-                    System.out.println("null geliyor");
+                    Toast.makeText(view.getContext(),"Bu profil hatalı yüklenmiştir.",Toast.LENGTH_SHORT).show();
                 }
             }else {
-
+                Toast.makeText(view.getContext(),"Bu profil silinmiştir.",Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
 

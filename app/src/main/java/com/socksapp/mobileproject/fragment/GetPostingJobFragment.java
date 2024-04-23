@@ -8,13 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +24,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +39,6 @@ import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.adapter.GetPostingAdapter;
 import com.socksapp.mobileproject.databinding.FragmentGetPostingJobBinding;
 import com.socksapp.mobileproject.model.GetPostingModel;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

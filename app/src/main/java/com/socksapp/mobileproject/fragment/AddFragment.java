@@ -2,56 +2,34 @@ package com.socksapp.mobileproject.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
 import android.util.Patterns;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentAddBinding;
-import com.socksapp.mobileproject.databinding.FragmentProfileBinding;
-
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -211,7 +189,6 @@ public class AddFragment extends Fragment {
             showCustomTimeDialog(v);
             return false;
         });
-
 
         binding.addPost.setOnClickListener(this::addPost);
 
@@ -1329,7 +1306,7 @@ public class AddFragment extends Fragment {
                 numberString = numberShared.getString("number","");
                 mailString = mailShared.getString("mail","");
             }else {
-                numberString = binding.mailEdittext.getText().toString();
+                numberString = binding.numberEdittext.getText().toString();
                 mailString = binding.mailEdittext.getText().toString();
             }
 
@@ -1484,8 +1461,6 @@ public class AddFragment extends Fragment {
 
         binding.numberEdittext.setText("");
 
-
     }
-
 
 }
