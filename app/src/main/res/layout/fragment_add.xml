@@ -645,6 +645,17 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <CheckBox
+                android:id="@+id/check_box_permission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="İletişim bilgilerimi gizle"
+                android:textColor="@color/gray"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_card_view"/>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/add_post"
                 android:layout_width="match_parent"
@@ -658,7 +669,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/contact_card_view" />
+                app:layout_constraintTop_toBottomOf="@id/check_box_permission" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

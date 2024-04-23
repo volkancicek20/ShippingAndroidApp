@@ -144,10 +144,11 @@ public class GetPostingJobFragment extends Fragment {
                     String number = documentSnapshot.getString("number");
                     String mail = documentSnapshot.getString("mail");
                     String userId = documentSnapshot.getString("userId");
+                    String permission = documentSnapshot.getString("permission");
                     Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
                     DocumentReference ref = documentSnapshot.getReference();
 
-                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userId,ref);
+                    GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userId,ref,permission);
                     getPostingModelArrayList.add(post);
                     getPostingAdapter.notifyDataSetChanged();
                 }
@@ -214,7 +215,7 @@ public class GetPostingJobFragment extends Fragment {
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklifiniz ekleniyor..");
         progressDialog.show();
-        firestore.collection("usersInstitutional").document(userId).get().addOnSuccessListener(documentSnapshot -> {
+        firestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
             if(documentSnapshot.exists()){
                 Map<String, Object> userData = documentSnapshot.getData();
 

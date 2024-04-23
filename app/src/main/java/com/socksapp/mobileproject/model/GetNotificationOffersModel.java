@@ -12,33 +12,49 @@ public class GetNotificationOffersModel {
     public String userName;
     public String number;
     public String mail;
-    public String personalMail;
     public String price;
     public String result;
     public String startCity;
     public String startDistrict;
     public String endCity;
     public String endDistrict;
-    public DocumentReference ref;
+    public String loadType;
+    public String loadAmount;
+    public String date;
+    public String time;
+    public String refId;
+    public Timestamp timestamp;
 
     public GetNotificationOffersModel(){
 
     }
 
-    public GetNotificationOffersModel(int viewType, String imageUrl, String userName, String number, String mail, String personalMail, String price,String result, String startCity, String startDistrict, String endCity, String endDistrict,DocumentReference ref) {
+    public GetNotificationOffersModel(int viewType, String imageUrl, String userName, String number, String mail, String price, String result, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String refId,Timestamp timestamp) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;
         this.userName = userName;
         this.number = number;
         this.mail = mail;
-        this.personalMail = personalMail;
         this.price = price;
         this.result = result;
         this.startCity = startCity;
         this.startDistrict = startDistrict;
         this.endCity = endCity;
         this.endDistrict = endDistrict;
-        this.ref = ref;
+        this.loadType = loadType;
+        this.loadAmount = loadAmount;
+        this.date = date;
+        this.time = time;
+        this.refId = refId;
+        this.timestamp = timestamp;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getViewType() {
@@ -79,14 +95,6 @@ public class GetNotificationOffersModel {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public String getPersonalMail() {
-        return personalMail;
-    }
-
-    public void setPersonalMail(String personalMail) {
-        this.personalMail = personalMail;
     }
 
     public String getPrice() {
@@ -137,11 +145,43 @@ public class GetNotificationOffersModel {
         this.endDistrict = endDistrict;
     }
 
-    public DocumentReference getRef() {
-        return ref;
+    public String getLoadType() {
+        return loadType;
     }
 
-    public void setRef(DocumentReference ref) {
-        this.ref = ref;
+    public void setLoadType(String loadType) {
+        this.loadType = loadType;
+    }
+
+    public String getLoadAmount() {
+        return loadAmount;
+    }
+
+    public void setLoadAmount(String loadAmount) {
+        this.loadAmount = loadAmount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getRefId() {
+        return refId;
+    }
+
+    public void setRefId(String refId) {
+        this.refId = refId;
     }
 }

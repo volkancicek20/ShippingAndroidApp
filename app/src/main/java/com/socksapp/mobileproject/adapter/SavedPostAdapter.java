@@ -5,6 +5,7 @@ import static com.socksapp.mobileproject.model.GetPostingModel.LAYOUT_ONE;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -82,7 +83,7 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,userId;
+        String imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,userId,permission;
         Timestamp timestamp;
         DocumentReference ref;
         switch (holder.getItemViewType()) {
@@ -105,9 +106,9 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
                 userId = arrayList.get(position).userId;
                 timestamp = arrayList.get(position).timestamp;
                 ref = arrayList.get(position).ref;
+                permission = arrayList.get(position).permission;
 
-
-                getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,savedPostHolder);
+                getShow(imageUrl,userName,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,savedPostHolder,permission);
 
 
                 savedPostHolder.recyclerViewSavedPostBinding.verticalMenu.setOnClickListener(v ->{
@@ -142,7 +143,7 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void getShow(String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp, SavedPostHolder holder){
+    private void getShow(String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp, SavedPostHolder holder,String permission){
         if(imageUrl.isEmpty()){
             ImageView imageView;
             imageView = holder.recyclerViewSavedPostBinding.recyclerProfileImage;
@@ -154,7 +155,6 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
                 .error(R.drawable.person_active_96)
                 .centerCrop())
                 .into(holder.recyclerViewSavedPostBinding.recyclerProfileImage);
-//            Picasso.get().load(imageUrl).into(holder.recyclerViewSavedPostBinding.recyclerProfileImage);
         }
 
         String startPoint = startCity + "/" + startDistrict;
@@ -169,8 +169,17 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
         holder.recyclerViewSavedPostBinding.recyclerPoint.setText(point);
         holder.recyclerViewSavedPostBinding.recyclerLoadInfo.setText(loadInfo);
         holder.recyclerViewSavedPostBinding.recyclerPlannedDate.setText(plannedDate);
-        holder.recyclerViewSavedPostBinding.recyclerNumber.setText(phoneNumber);
-        holder.recyclerViewSavedPostBinding.recyclerMail.setText(mail);
+
+        if(permission.equals("1")){
+            holder.recyclerViewSavedPostBinding.recyclerNumber.setText(phoneNumber);
+            holder.recyclerViewSavedPostBinding.recyclerMail.setText(mail);
+        }else {
+            holder.recyclerViewSavedPostBinding.recyclerNumber.setVisibility(View.GONE);
+            holder.recyclerViewSavedPostBinding.recyclerMail.setVisibility(View.GONE);
+            holder.recyclerViewSavedPostBinding.numberIcon.setVisibility(View.GONE);
+            holder.recyclerViewSavedPostBinding.mailIcon.setVisibility(View.GONE);
+        }
+
 
         long secondsElapsed = (Timestamp.now().getSeconds() - timestamp.getSeconds());
         String elapsedTime;

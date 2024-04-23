@@ -24,6 +24,8 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.Timestamp;
@@ -31,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,9 +43,11 @@ import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.adapter.GetOffersAdapter;
 import com.socksapp.mobileproject.databinding.FragmentUserOffersBinding;
 import com.socksapp.mobileproject.model.GetInstitutionalModel;
+import com.socksapp.mobileproject.model.GetNotificationOffersModel;
 import com.socksapp.mobileproject.model.GetOffersModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -133,7 +138,7 @@ public class UserOffersFragment extends Fragment {
         });
     }
 
-    public void dialogShow(View view, String imageUrl,String name,String number,String mail,String personalMail,DocumentReference ref,int position,String offersRef,String startCity,String userId){
+    public void dialogShow(View view, String imageUrl,String name,String number,String mail,String personalMail,DocumentReference ref,int position,String offersRef,String startCity,String userId,String price){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottom_sheet_layout_offers);
@@ -146,31 +151,18 @@ public class UserOffersFragment extends Fragment {
         info.setOnClickListener(v -> {
             dialog.dismiss();
             Bundle args = new Bundle();
-            args.putString("mail", userId);
+            args.putString("mail", personalMail);
             args.putString("name", name);
 
             Navigation.findNavController(view).navigate(R.id.action_userOffersFragment_to_infoInstitutionalFragment, args);
         });
 
         approve.setOnClickListener(v -> {
-            dialog.dismiss();
-
-            System.out.println("name: "+name);
-            System.out.println("mail: "+mail);
-            System.out.println("personalMail: "+personalMail);
-            System.out.println("offersRef: "+offersRef);
-            System.out.println("startCity: "+startCity);
-
-            //HashMap<String,Object> data = new HashMap<>();
-
-            //CollectionReference collectionReference = firestore.collection("notificationOffers").document(userMail).collection(userMail);
-//            collectionReference.document(ref.getId()).set()
-
+            approveOffers(v,offersRef,startCity,personalMail,userId,price,dialog,position,ref);
         });
 
         reject.setOnClickListener(v -> {
-            dialog.dismiss();
-            rejectOffers(v,ref,userId,position);
+            rejectOffers(v,offersRef,startCity,personalMail,userId,price,dialog,position,ref);
         });
 
 
@@ -183,74 +175,190 @@ public class UserOffersFragment extends Fragment {
         }
     }
 
-    public void approveOffers(View view,DocumentReference ref,String mail,int position){
-//        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
-//        progressDialog.setMessage("Teklif Kabul Ediliyor..");
-//        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-//        builder.setMessage("Teklifi kabul etmek istiyor musunuz?");
-//        builder.setPositiveButton("KABUL ET", (dialog, which) ->{
-//            progressDialog.show();
-//            CollectionReference collectionReference = firestore.collection("offers").document(mail).collection(mail);
-//            String deleteRef = ref.getId();
-//            DocumentReference documentReference = collectionReference.document(deleteRef);
-//
-//            documentReference.delete().addOnSuccessListener(unused -> {
-//                if (position != RecyclerView.NO_POSITION) {
-//                    getOffersModelArrayList.remove(position);
-//                    getOffersAdapter.notifyItemRemoved(position);
-//                    getOffersAdapter.notifyDataSetChanged();
-//                }
-//                progressDialog.dismiss();
-//                dialog.dismiss();
-//                Toast.makeText(view.getContext(),"Teklif reddedildi",Toast.LENGTH_SHORT).show();
-//            }).addOnFailureListener(e -> {
-//                progressDialog.dismiss();
-//                dialog.dismiss();
-//                Toast.makeText(view.getContext(),e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-//            });
-//        });
-//
-//        builder.setNegativeButton("Hayır", (dialog, which) -> {
-//            dialog.dismiss();
-//        });
-//
-//        AlertDialog dialog = builder.create();
-//
-//        dialog.show();
+    public void approveOffers(View view,String offersRef,String startCity,String personalMail,String userId,String price,Dialog dialogX,int position,DocumentReference ref){
+        ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+        progressDialog.setMessage("Teklif Kabul Ediliyor..");
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setMessage("Teklifi kabul etmek istiyor musunuz?");
+        builder.setPositiveButton("KABUL ET", (dialog, which) ->{
+            progressDialog.show();
+            String result = "approve";
+            String collect = "post"+startCity;
+            firestore.collection(collect).document(offersRef).get().addOnSuccessListener(documentSnapshot -> {
+                if(documentSnapshot.exists()){
+                    String nameX = documentSnapshot.getString("name");
+                    String imageUrlX = documentSnapshot.getString("imageUrl");
+                    String startCityX = documentSnapshot.getString("startCity");
+                    String startDistrictX = documentSnapshot.getString("startDistrict");
+                    String endCityX = documentSnapshot.getString("endCity");
+                    String endDistrictX = documentSnapshot.getString("endDistrict");
+                    String loadTypeX = documentSnapshot.getString("loadType");
+                    String loadAmountX = documentSnapshot.getString("loadAmount");
+                    String dateX = documentSnapshot.getString("date");
+                    String timeX = documentSnapshot.getString("time");
+                    String numberX = documentSnapshot.getString("number");
+                    String mailX = documentSnapshot.getString("mail");
+                    String userIdX = documentSnapshot.getString("userId");
+                    DocumentReference refX = documentSnapshot.getReference();
+
+                    HashMap<String,Object> data = new HashMap<>();
+                    data.put("name",nameX);
+                    data.put("imageUrl",imageUrlX);
+                    data.put("startCity",startCityX);
+                    data.put("startDistrict",startDistrictX);
+                    data.put("endCity",endCityX);
+                    data.put("endDistrict",endDistrictX);
+                    data.put("loadType",loadTypeX);
+                    data.put("loadAmount",loadAmountX);
+                    data.put("price",price);
+                    data.put("date",dateX);
+                    data.put("time",timeX);
+                    data.put("number",numberX);
+                    data.put("mail",mailX);
+                    data.put("result",result);
+                    data.put("timestamp",new Date());
+
+
+                    WriteBatch batch = firestore.batch();
+
+                    CollectionReference collectionReference = firestore.collection("notificationOffers").document(personalMail).collection(personalMail);
+                    DocumentReference documentReference = collectionReference.document();
+                    data.put("ref",documentReference.getId());
+                    batch.set(documentReference, data);
+
+                    CollectionReference collectionReference2 = firestore.collection("offers").document(userId).collection(userId);
+                    String deleteRef = ref.getId();
+                    DocumentReference documentReference2 = collectionReference2.document(deleteRef);
+
+                    batch.delete(documentReference2);
+
+                    batch.commit()
+                        .addOnSuccessListener(unused -> {
+                            if (position != RecyclerView.NO_POSITION) {
+                                getOffersModelArrayList.remove(position);
+                                getOffersAdapter.notifyItemRemoved(position);
+                                getOffersAdapter.notifyDataSetChanged();
+                            }
+                            progressDialog.dismiss();
+                            dialogX.dismiss();
+                            dialog.dismiss();
+                            Toast.makeText(view.getContext(), "Teklif onayınız karşı tarafa gönderilmiştir.", Toast.LENGTH_LONG).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            dialogX.dismiss();
+                            dialog.dismiss();
+                            e.printStackTrace();
+                        });
+
+                }else {
+                    progressDialog.dismiss();
+                    dialogX.dismiss();
+                    dialog.dismiss();
+                }
+            }).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                dialogX.dismiss();
+                dialog.dismiss();
+            });
+
+        });
+
+        builder.setNegativeButton("Hayır", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 
-    public void rejectOffers(View view,DocumentReference ref,String userId,int position){
+    public void rejectOffers(View view,String offersRef,String startCity,String personalMail,String userId,String price,Dialog dialogX,int position,DocumentReference ref){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklif Reddediliyor..");
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setMessage("Teklifi reddetmek istiyor musunuz?");
         builder.setPositiveButton("REDDET", (dialog, which) ->{
             progressDialog.show();
+            String result = "reject";
+            String collect = "post"+startCity;
+            firestore.collection(collect).document(offersRef).get().addOnSuccessListener(documentSnapshot -> {
+                if(documentSnapshot.exists()){
+                    String nameX = documentSnapshot.getString("name");
+                    String imageUrlX = documentSnapshot.getString("imageUrl");
+                    String startCityX = documentSnapshot.getString("startCity");
+                    String startDistrictX = documentSnapshot.getString("startDistrict");
+                    String endCityX = documentSnapshot.getString("endCity");
+                    String endDistrictX = documentSnapshot.getString("endDistrict");
+                    String loadTypeX = documentSnapshot.getString("loadType");
+                    String loadAmountX = documentSnapshot.getString("loadAmount");
+                    String dateX = documentSnapshot.getString("date");
+                    String timeX = documentSnapshot.getString("time");
+                    String numberX = documentSnapshot.getString("number");
+                    String mailX = documentSnapshot.getString("mail");
+                    String userIdX = documentSnapshot.getString("userId");
+                    DocumentReference refX = documentSnapshot.getReference();
 
-            WriteBatch batch = firestore.batch();
+                    HashMap<String,Object> data = new HashMap<>();
+                    data.put("name",nameX);
+                    data.put("imageUrl",imageUrlX);
+                    data.put("startCity",startCityX);
+                    data.put("startDistrict",startDistrictX);
+                    data.put("endCity",endCityX);
+                    data.put("endDistrict",endDistrictX);
+                    data.put("loadType",loadTypeX);
+                    data.put("loadAmount",loadAmountX);
+                    data.put("price",price);
+                    data.put("date",dateX);
+                    data.put("time",timeX);
+                    data.put("number",numberX);
+                    data.put("mail",mailX);
+                    data.put("result",result);
+                    data.put("timestamp",new Date());
 
-            CollectionReference collectionReference = firestore.collection("offers").document(userId).collection(userId);
-            String deleteRef = ref.getId();
-            DocumentReference documentReference = collectionReference.document(deleteRef);
+                    WriteBatch batch = firestore.batch();
 
-            batch.delete(documentReference);
+                    CollectionReference collectionReference = firestore.collection("notificationOffers").document(personalMail).collection(personalMail);
+                    DocumentReference documentReference = collectionReference.document();
+                    data.put("ref",documentReference.getId());
+                    batch.set(documentReference, data);
 
-            batch.commit()
-                .addOnSuccessListener(unused -> {
-                    if (position != RecyclerView.NO_POSITION) {
-                        getOffersModelArrayList.remove(position);
-                        getOffersAdapter.notifyItemRemoved(position);
-                        getOffersAdapter.notifyDataSetChanged();
-                    }
+                    CollectionReference collectionReference2 = firestore.collection("offers").document(userId).collection(userId);
+                    String deleteRef = ref.getId();
+                    DocumentReference documentReference2 = collectionReference2.document(deleteRef);
+
+                    batch.delete(documentReference2);
+
+                    batch.commit()
+                        .addOnSuccessListener(unused -> {
+                            if (position != RecyclerView.NO_POSITION) {
+                                getOffersModelArrayList.remove(position);
+                                getOffersAdapter.notifyItemRemoved(position);
+                                getOffersAdapter.notifyDataSetChanged();
+                            }
+                            progressDialog.dismiss();
+                            dialogX.dismiss();
+                            dialog.dismiss();
+                            Toast.makeText(view.getContext(), "Teklif reddedildi", Toast.LENGTH_LONG).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            dialogX.dismiss();
+                            dialog.dismiss();
+                            e.printStackTrace();
+                        });
+
+                }else {
                     progressDialog.dismiss();
+                    dialogX.dismiss();
                     dialog.dismiss();
-                    Toast.makeText(view.getContext(), "Teklif reddedildi", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    dialog.dismiss();
-                    Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                });
+                }
+            }).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                dialogX.dismiss();
+                dialog.dismiss();
+            });
+
         });
 
         builder.setNegativeButton("Hayır", (dialog, which) -> {

@@ -102,7 +102,7 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
                 getShow(imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,getOffersHolder);
 
                 getOffersHolder.recyclerViewOfferBinding.verticalMenu.setOnClickListener(v -> {
-                    fragment.dialogShow(v,imageUrl,userName,number,mail,personalMail,ref,getOffersHolder.getAdapterPosition(),offersRef,startCity,userId);
+                    fragment.dialogShow(v,imageUrl,userName,number,mail,personalMail,ref,getOffersHolder.getAdapterPosition(),offersRef,startCity,userId,price);
                 });
 
                 break;

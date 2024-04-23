@@ -109,10 +109,11 @@ public class SavedPostFragment extends Fragment {
                         String time = documentSnapshot.getString("time");
                         String number = documentSnapshot.getString("number");
                         String mail = documentSnapshot.getString("mail");
+                        String permission = documentSnapshot.getString("permission");
                         Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
                         DocumentReference reff = documentSnapshot.getReference();
 
-                        GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userId,reff);
+                        GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userId,reff,permission);
                         savedPostArrayList.add(post);
                         savedPostAdapter.notifyDataSetChanged();
                     }

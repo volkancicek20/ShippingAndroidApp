@@ -124,7 +124,7 @@ public class MyPostFragment extends Fragment {
                 Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
                 DocumentReference ref = documentSnapshot.getReference();
 
-                GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userMail,ref);
+                GetPostingModel post = new GetPostingModel(1,imageUrl,name,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,number,mail,timestamp,userMail,ref,"1");
                 getPostingModelArrayList.add(post);
                 getPostingAdapter.notifyDataSetChanged();
 

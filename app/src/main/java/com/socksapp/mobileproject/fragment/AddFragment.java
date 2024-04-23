@@ -267,6 +267,7 @@ public class AddFragment extends Fragment {
                     binding.dateEditText.setText(timeString);
                 }
             },mYear,mMonth,mDay);
+            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         }
         datePickerDialog.show();
     }
@@ -1355,11 +1356,18 @@ public class AddFragment extends Fragment {
                 post.put("name",nameString);
                 post.put("imageUrl",imageUrl);
                 post.put("timestamp", new Date());
+                if(binding.checkBoxPermission.isChecked()){
+                    post.put("permission","0");
+                }else {
+                    post.put("permission","1");
+                }
 
                 WriteBatch batch = firestore.batch();
 
                 DocumentReference docRef1 = firestore.collection("post" + startCity).document();
                 batch.set(docRef1, post);
+
+                post.put("permission","1");
 
                 DocumentReference docRef2 = firestore.collection("postMe").document(userMail).collection(userMail).document(docRef1.getId());
                 batch.set(docRef2, post);

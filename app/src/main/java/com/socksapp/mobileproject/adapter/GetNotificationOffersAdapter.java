@@ -5,24 +5,27 @@ import static com.socksapp.mobileproject.model.GetNotificationOffersModel.LAYOUT
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.RecyclerViewEmptyNotificationOffersBinding;
 import com.socksapp.mobileproject.databinding.RecyclerViewNotificationOffersBinding;
 import com.socksapp.mobileproject.fragment.InstitutionalOffersNotificationFragment;
-import com.socksapp.mobileproject.fragment.UserOffersFragment;
 import com.socksapp.mobileproject.model.GetNotificationOffersModel;
-import com.socksapp.mobileproject.model.GetOffersModel;
 
 import java.util.ArrayList;
 
-public class GetNotificationOffers extends RecyclerView.Adapter {
+public class GetNotificationOffersAdapter extends RecyclerView.Adapter {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -31,7 +34,7 @@ public class GetNotificationOffers extends RecyclerView.Adapter {
     Context context;
     InstitutionalOffersNotificationFragment fragment;
 
-    public GetNotificationOffers(ArrayList<GetNotificationOffersModel> arrayList, Context context, InstitutionalOffersNotificationFragment fragment) {
+    public GetNotificationOffersAdapter(ArrayList<GetNotificationOffersModel> arrayList, Context context, InstitutionalOffersNotificationFragment fragment) {
         this.arrayList = arrayList;
         this.context = context;
         this.fragment = fragment;
@@ -56,10 +59,10 @@ public class GetNotificationOffers extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType){
-            case 1:
+            case LAYOUT_ONE:
                 RecyclerViewNotificationOffersBinding recyclerViewNotificationOffersBinding = RecyclerViewNotificationOffersBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
                 return new GetNotificationHolder(recyclerViewNotificationOffersBinding);
-            case 2:
+            case LAYOUT_EMPTY:
                 RecyclerViewEmptyNotificationOffersBinding recyclerViewEmptyNotificationOffersBinding = RecyclerViewEmptyNotificationOffersBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
                 return new GetEmptyNotificationHolder(recyclerViewEmptyNotificationOffersBinding);
             default:
@@ -73,13 +76,12 @@ public class GetNotificationOffers extends RecyclerView.Adapter {
         firebaseFirestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        String imageUrl,userName,number,mail,personalMail,price,result,startCity,startDistrict,endCity,endDistrict;
-        DocumentReference ref;
+        String imageUrl,userName,number,mail,price,result,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,refId;
         switch (holder.getItemViewType()) {
             case LAYOUT_ONE:
-                GetOffersAdapter.GetOffersHolder getOffersHolder = (GetOffersAdapter.GetOffersHolder) holder;
+                GetNotificationHolder getNotificationHolder = (GetNotificationHolder) holder;
 
-                ref = arrayList.get(position).ref;
+                refId = arrayList.get(position).refId;
                 imageUrl = arrayList.get(position).imageUrl;
                 userName = arrayList.get(position).userName;
                 number = arrayList.get(position).number;
@@ -90,12 +92,15 @@ public class GetNotificationOffers extends RecyclerView.Adapter {
                 startDistrict = arrayList.get(position).startDistrict;
                 endCity = arrayList.get(position).endCity;
                 endDistrict = arrayList.get(position).endDistrict;
-                personalMail = arrayList.get(position).personalMail;
+                loadType = arrayList.get(position).loadType;
+                loadAmount = arrayList.get(position).loadAmount;
+                date = arrayList.get(position).date;
+                time = arrayList.get(position).time;
 
-                //getShow(imageUrl,userName,number,mail,price,startCity,startDistrict,endCity,endDistrict,timestamp,getOffersHolder);
+                getShow(imageUrl,userName,number,mail,price,result,startCity,startDistrict,endCity,endDistrict,loadType,loadAmount,date,time,getNotificationHolder);
 
-                getOffersHolder.recyclerViewOfferBinding.verticalMenu.setOnClickListener(v -> {
-                    //fragment.dialogShow(v,imageUrl,userName,number,mail,personalMail,ref,getOffersHolder.getAdapterPosition());
+                getNotificationHolder.recyclerViewNotificationOffersBinding.verticalMenu.setOnClickListener(v -> {
+                    fragment.deleteNotification(v,refId,getNotificationHolder.getAdapterPosition());
                 });
 
                 break;
@@ -126,5 +131,49 @@ public class GetNotificationOffers extends RecyclerView.Adapter {
             super(recyclerViewEmptyNotificationOffersBinding.getRoot());
             this.recyclerViewEmptyNotificationOffersBinding = recyclerViewEmptyNotificationOffersBinding;
         }
+    }
+
+    private void getShow(String imageUrl, String userName,String number, String mail,String price,String result, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, GetNotificationHolder holder){
+
+        if(imageUrl.isEmpty()){
+            ImageView imageView;
+            imageView = holder.recyclerViewNotificationOffersBinding.recyclerProfileImage;
+            imageView.setImageResource(R.drawable.icon_person_white);
+        }else {
+            Glide.with(context)
+                .load(imageUrl)
+                .apply(new RequestOptions()
+                .error(R.drawable.person_active_96)
+                .centerCrop())
+                .into(holder.recyclerViewNotificationOffersBinding.recyclerProfileImage);
+        }
+
+
+        String startPoint = startCity + "/" + startDistrict;
+        String endPoint = endCity + "/" + endDistrict;
+        String point = startPoint + " -> " + endPoint;
+        String loadInfo = loadAmount + ",  " + loadType;
+        String plannedDate = time + ",  " + date;
+        String phoneNumber = "+90 " + number;
+
+
+        holder.recyclerViewNotificationOffersBinding.recyclerUserId.setText(userName);
+        holder.recyclerViewNotificationOffersBinding.recyclerPoint.setText(point);
+        holder.recyclerViewNotificationOffersBinding.recyclerLoadInfo.setText(loadInfo);
+        holder.recyclerViewNotificationOffersBinding.recyclerPlannedDate.setText(plannedDate);
+        holder.recyclerViewNotificationOffersBinding.recyclerNumber.setText(phoneNumber);
+        holder.recyclerViewNotificationOffersBinding.recyclerMail.setText(mail);
+
+
+        holder.recyclerViewNotificationOffersBinding.recyclerPrice.setText(price+" TL");
+
+        if(result.equals("approve")){
+            holder.recyclerViewNotificationOffersBinding.resultText.setText("TEKLİFİNİZ KABUL EDİLDİ");
+        }
+
+        if(result.equals("reject")){
+            holder.recyclerViewNotificationOffersBinding.resultText.setText("TEKLİFİNİZ REDDEDİLDİ");
+        }
+
     }
 }

@@ -21,6 +21,7 @@ public class GetPostingModel {
     public String number;
     public String mail;
     public String userId;
+    public String permission;
     public Timestamp timestamp;
     public DocumentReference ref;
 
@@ -63,7 +64,7 @@ public class GetPostingModel {
         this.ref = ref;
     }
 
-    public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,String userId,DocumentReference ref) {
+    public GetPostingModel(int viewType, String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp,String userId,DocumentReference ref,String permission) {
         this.viewType = viewType;
         this.imageUrl = imageUrl;
         this.userName = userName;
@@ -80,6 +81,7 @@ public class GetPostingModel {
         this.timestamp = timestamp;
         this.userId = userId;
         this.ref = ref;
+        this.permission = permission;
     }
 
 
