@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/app_theme"
+    android:background="@color/white"
     tools:context=".fragment.RegisterFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -21,18 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Hoşgeldiniz"
-        android:textColor="@color/white"
+        android:paddingRight="10dp"
+        android:text="Hoşgeldiniz! \nE-posta ve şifreniz ile kayıt olabilirsiniz"
+        android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         style="@style/custom_card_view_style"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,65 +44,164 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/signup_email"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/signup_email_input_layout"
+                style="@style/CustomTextInputLayout.Dark3"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/edit_text_background_login_page"
-                android:layout_marginTop="32dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="15dp"
-                android:drawableStart="@drawable/icon_mail"
-                android:drawableTint="@color/app_theme"
-                android:drawablePadding="8dp"
-                android:hint="E-posta"
-                android:textSize="16sp"
-                android:textColorHint="@color/black"
-                android:textColor="@color/black"
+                app:boxStrokeColor="@color/text_input_stroke_change"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1dp"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/text_input_title_change"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:inputType="textEmailAddress" />
+                app:startIconDrawable="@drawable/icon_mail_outline"
+                app:startIconTint="@color/gray">
 
-            <EditText
-                android:id="@+id/signup_password"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/edit_text_background_login_page"
-                android:layout_marginTop="32dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:drawableStart="@drawable/icon_lock"
-                android:drawableTint="@color/app_theme"
-                android:drawablePadding="8dp"
-                android:hint="Şifre"
-                android:textSize="16sp"
-                android:textColorHint="@color/black"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/signup_email"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:inputType="textPassword" />
+                <EditText
+                    android:id="@+id/signup_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="E-posta"
+                    android:paddingTop="10dp"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_input_title_change"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/signup_confirm"
+<!--            <EditText-->
+<!--                android:id="@+id/signup_email"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:background="@drawable/edit_text_background_login_page"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:drawableStart="@drawable/icon_mail"-->
+<!--                android:drawableTint="@color/app_theme"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="E-posta"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColorHint="@color/black"-->
+<!--                android:textColor="@color/black"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:inputType="textEmailAddress" />-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/signup_password_input_layout"
+                style="@style/CustomTextInputLayout.Dark3"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/edit_text_background_login_page"
-                android:layout_marginTop="32dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="15dp"
-                android:drawableStart="@drawable/icon_lock"
-                android:drawableTint="@color/app_theme"
-                android:drawablePadding="8dp"
-                android:hint="Şifre Tekrar"
-                android:textSize="16sp"
-                android:textColorHint="@color/black"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/signup_password"
-                app:layout_constraintStart_toStartOf="parent"
+                app:boxStrokeColor="@color/text_input_stroke_change"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1dp"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/text_input_title_change"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:inputType="textPassword" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/signup_email_input_layout"
+                app:startIconDrawable="@drawable/icon_lock_outline"
+                app:startIconTint="@color/gray">
+
+                <EditText
+                    android:id="@+id/signup_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Şifre"
+                    android:paddingTop="10dp"
+                    android:inputType="textPassword"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_input_title_change"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <EditText-->
+<!--                android:id="@+id/signup_password"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:background="@drawable/edit_text_background_login_page"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:drawableStart="@drawable/icon_lock"-->
+<!--                android:drawableTint="@color/app_theme"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="Şifre"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColorHint="@color/black"-->
+<!--                android:textColor="@color/black"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/signup_email_input_layout"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:inputType="textPassword" />-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/signup_confirm_input_layout"
+                style="@style/CustomTextInputLayout.Dark3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="15dp"
+                app:boxStrokeColor="@color/text_input_stroke_change"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="1dp"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/text_input_title_change"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/signup_password_input_layout"
+                app:startIconDrawable="@drawable/icon_lock_outline"
+                app:startIconTint="@color/gray">
+
+                <EditText
+                    android:id="@+id/signup_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Şifre tekrar"
+                    android:paddingTop="10dp"
+                    android:inputType="textPassword"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_input_title_change"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <EditText-->
+<!--                android:id="@+id/signup_confirm"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:background="@drawable/edit_text_background_login_page"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:drawableStart="@drawable/icon_lock"-->
+<!--                android:drawableTint="@color/app_theme"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="Şifre Tekrar"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColorHint="@color/black"-->
+<!--                android:textColor="@color/black"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/signup_password"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:inputType="textPassword" />-->
 
 
             <Button
@@ -116,7 +217,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signup_password"
+                app:layout_constraintTop_toBottomOf="@id/signup_password_input_layout"
                 app:layout_constraintVertical_bias="0.517" />
 
             <LinearLayout
@@ -132,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hesabınız var mı? "
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="16sp"/>
 
                 <TextView
