@@ -13,6 +13,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.google.android.material.tabs.TabLayout;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.adapter.ProfilePagerAdapter;
@@ -26,6 +28,7 @@ public class ProfilePageFragment extends Fragment {
     private ProfilePagerAdapter adapter;
     private SharedPreferences existsInstitutional;
 
+    private String type;
     public ProfilePageFragment() {
         // Required empty public constructor
     }
@@ -49,12 +52,24 @@ public class ProfilePageFragment extends Fragment {
         binding.content.nameFragment.setText("Profilim");
         binding.content.buttonDrawerToggle.setOnClickListener(this::goMainFragment);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            type = args.getString("type");
+            if(type != null && type.equals("1")){
+                type = "1";
+            }else {
+                type = "0";
+            }
+        }
+
         tabLayout = binding.tabLayout;
         viewPager2 = binding.viewPager;
         tabLayout.addTab(tabLayout.newTab().setText("Kişisel Hesap"));
         tabLayout.addTab(tabLayout.newTab().setText("Kurumsal Hesap"));
+
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         adapter = new ProfilePagerAdapter(fragmentManager, getLifecycle());
+
         viewPager2.setAdapter(adapter);
 
         if(existsInstitutional.getString("exists","").isEmpty()){
@@ -63,7 +78,11 @@ public class ProfilePageFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager2.setCurrentItem(tab.getPosition());
+                if(type.equals("1")){
+                    viewPager2.setCurrentItem(Integer.parseInt(type));
+                }else {
+                    viewPager2.setCurrentItem(tab.getPosition());
+                }
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -75,7 +94,12 @@ public class ProfilePageFragment extends Fragment {
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                tabLayout.selectTab(tabLayout.getTabAt(position));
+                if(type.equals("1")){
+                    tabLayout.selectTab(tabLayout.getTabAt(Integer.parseInt(type)));
+                    type = "0";
+                }else {
+                    tabLayout.selectTab(tabLayout.getTabAt(position));
+                }
             }
         });
 

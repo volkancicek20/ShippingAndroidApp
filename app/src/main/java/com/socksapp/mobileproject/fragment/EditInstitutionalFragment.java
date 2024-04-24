@@ -160,7 +160,9 @@ public class EditInstitutionalFragment extends Fragment {
     }
 
     private void backProfilePage(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_editInstitutionalFragment_to_profilePageFragment);
+        Bundle args = new Bundle();
+        args.putString("type", "1");
+        Navigation.findNavController(view).navigate(R.id.action_editInstitutionalFragment_to_profilePageFragment,args);
     }
 
     private void setPrefix(){

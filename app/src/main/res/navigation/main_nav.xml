@@ -73,6 +73,10 @@
         <action
             android:id="@+id/action_profilePageFragment_to_institutionalOffersNotificationFragment"
             app:destination="@id/institutionalOffersNotificationFragment" />
+        <argument
+            android:name="type"
+            app:argType="string"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/myPostFragment"

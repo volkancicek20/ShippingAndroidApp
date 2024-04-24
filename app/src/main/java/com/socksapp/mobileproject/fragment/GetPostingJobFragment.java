@@ -164,6 +164,10 @@ public class GetPostingJobFragment extends Fragment {
         LinearLayout delete = dialog.findViewById(R.id.layoutDelete);
         delete.setVisibility(View.GONE);
 
+        if(!existsInstitutional.getString("exists","").equals("exists")){
+            save.setVisibility(View.GONE);
+            offers.setVisibility(View.GONE);
+        }
 
         save.setOnClickListener(v -> {
             dialog.dismiss();
