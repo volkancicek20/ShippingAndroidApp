@@ -30,6 +30,9 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,9 @@ public class ProfileFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Bu methodda gidilecek olan fragmentların listenerları alınır
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -64,6 +70,10 @@ public class ProfileFragment extends Fragment {
         binding.editProfileLinearLayout.setOnClickListener(this::goEditProfileFragment);
     }
 
+
+    /**
+     * Kurumsal hesap açmadıysa kullanıcı bu method ile oluşturabilir
+     */
     private void createInstitutionalAccount(View v) {
         ProgressDialog progressDialog = new ProgressDialog(v.getContext());
         progressDialog.setMessage("Kurumsal Hesap Oluşturuluyor");
@@ -90,18 +100,30 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    /**
+     * UserOffersFragment'a gidiş
+     */
     private void goMyOffersFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_userOffersFragment);
     }
 
+    /**
+     * MyPostFragment'a gidiş
+     */
     private void goMyPostFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_myPostFragment);
     }
 
+    /**
+     * EditProfileFragment'a gidiş
+     */
     private void goEditProfileFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_editProfileFragment);
     }
 
+    /**
+     * Resim ve kullanıcı adını yazar
+     */
     private void setProfile(View view){
 
         String name = nameShared.getString("name","");

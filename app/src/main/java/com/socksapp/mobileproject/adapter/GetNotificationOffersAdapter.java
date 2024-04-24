@@ -121,6 +121,9 @@ public class GetNotificationOffersAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /**
+     * Recyclerview da gösterilecek veriler alınır ve gösterilir
+     */
     private void getShow(String imageUrl, String userName,String number, String mail,String price,String result, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, GetNotificationHolder holder){
 
         if(imageUrl.isEmpty()){

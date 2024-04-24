@@ -59,6 +59,9 @@ public class AddFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda daha önceden kaydetmiş oldugumuz sharedPreferences bilgileri alınıyor.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,9 @@ public class AddFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * onViewCreated methodunda kullanıcı ilan vermek için bilgileri girmesi beklenen nesneler ayarlanıyor.
+     */
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -198,6 +204,9 @@ public class AddFragment extends Fragment {
         setPrefix();
     }
 
+    /**
+     * setPrefix methodu numara girdiğimiz zaman sabit sayı olan "+90" ifadesini dizayn ediyor
+     */
     private void setPrefix(){
         AppCompatTextView prefixView = binding.numberTextInputLayout.findViewById(com.google.android.material.R.id.textinput_prefix_text);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -206,10 +215,16 @@ public class AddFragment extends Fragment {
         prefixView.setGravity(Gravity.CENTER);
     }
 
+    /**
+     * MainFragment fragment'a geri dönme methodu
+     */
     private void goMainFragment(View view){
         Navigation.findNavController(view).navigate(R.id.action_addFragment_to_mainFragment);
     }
 
+    /**
+     * Kullanıcı saati bu method ile seçiyor
+     */
     private void showCustomTimeDialog(View view) {
         if(timePickerDialog == null){
             final Calendar currentTime = Calendar.getInstance();
@@ -232,6 +247,10 @@ public class AddFragment extends Fragment {
         }
         timePickerDialog.show();
     }
+
+    /**
+     * Kullanıcı tarihi bu mehtod ile seçiyor.
+     */
     private void showCustomDateDialog(View view) {
 
         if(datePickerDialog == null){
@@ -247,11 +266,14 @@ public class AddFragment extends Fragment {
                     binding.dateEditText.setText(timeString);
                 }
             },mYear,mMonth,mDay);
-            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis()); // bu kod geçmiş tarihi seçmesine engel oluyor
         }
         datePickerDialog.show();
     }
 
+    /**
+     * 1. İli seçtikten sonra ilçenin kodları oluşturma methodu
+     */
     private void selectDistrict(String selectedCity){
         switch (selectedCity){
             case "İstanbul":
@@ -744,6 +766,10 @@ public class AddFragment extends Fragment {
                 break;
         }
     }
+
+    /**
+     * 2. İli seçtikten sonra ilçenin kodları oluşturma methodu
+     */
     private void selectDistrict2(String selectedCity){
         switch (selectedCity){
             case "İstanbul":
@@ -1237,6 +1263,9 @@ public class AddFragment extends Fragment {
         }
     }
 
+    /**
+     * Tüm verileri doldurduktan sonra aşağıdaki methodda gerekli kontroller yapılır daha sonra firebase'e kaydedilir.
+     */
     private void addPost(View view){
 
         if(nameShared.getString("name","").isEmpty() || mailShared.getString("mail","").isEmpty() || numberShared.getString("number","").isEmpty()){
@@ -1429,6 +1458,9 @@ public class AddFragment extends Fragment {
         }
     }
 
+    /**
+     * İlanı ekledikten sonra veriler sıfırlanır
+     */
     private void resetAction(){
         binding.visibleFirstLocation.setVisibility(View.GONE);
         binding.visibleSecondLocation.setVisibility(View.GONE);
@@ -1463,6 +1495,7 @@ public class AddFragment extends Fragment {
         binding.mailEdittext.setText("");
 
         binding.numberEdittext.setText("");
+
 
     }
 

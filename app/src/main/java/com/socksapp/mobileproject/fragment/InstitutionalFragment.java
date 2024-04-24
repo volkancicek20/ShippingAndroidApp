@@ -26,6 +26,9 @@ public class InstitutionalFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,9 @@ public class InstitutionalFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Bu methodda gidilecek olan fragmentların listenerları alınır
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -53,19 +59,31 @@ public class InstitutionalFragment extends Fragment {
 
     }
 
+    /**
+     * EditInstitutionalFragment'a gitme kodu
+     */
     private void goEditInstitutionalFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_editInstitutionalFragment);
     }
 
+    /**
+     * SavedPostFragment'a gitme kodu
+     */
     private void goSavedPostFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_savedPostFragment);
     }
 
+    /**
+     * InstitutionalOffersNotificationFragment'a gitme kodu
+     */
     private void goInstitutionalOffersNotificationFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_profilePageFragment_to_institutionalOffersNotificationFragment);
     }
 
 
+    /**
+     * Resim ve Kullanıcı adı alınır ve yazılır
+     */
     private void setProfile(View view){
 
         String name = institutionalNameShared.getString("name","");

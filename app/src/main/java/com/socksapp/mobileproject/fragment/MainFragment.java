@@ -37,6 +37,9 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,9 @@ public class MainFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Fragment'lara gitmek için cardviewlar dinlenir
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -72,6 +78,11 @@ public class MainFragment extends Fragment {
         binding.cardView1.setOnClickListener(this::goGetPostingJobFragment);
 
     }
+
+    /**
+     * Hesaptan çıkma kodu
+     * Hesaptan çıkarken sharedPreferences deki verilerde silinir
+     */
     private void logout(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage("Hesaptan çıkış yapılsın mı?");
@@ -88,19 +99,31 @@ public class MainFragment extends Fragment {
         builder.show();
     }
 
+    /**
+     * ProfileFragment'a gider
+     */
     private void goProfileFragment(View v){
-        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_offersFragment);
+        Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_profilePageFragment);
     }
 
+    /**
+     * AddFragment'a gider
+     */
     private void goAddFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_addFragment);
     }
 
+    /**
+     * GetPostingJobFragment'a gider
+     */
     private void goGetPostingJobFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_getPostingJobFragment);
     }
 
 
+    /**
+     * Tüm veriler silinir
+     */
     private void deleteData(){
         deleteSharedPreference(nameShared);
         deleteSharedPreference(mailShared);
@@ -118,12 +141,16 @@ public class MainFragment extends Fragment {
 
         mainActivity.refDataAccess.deleteAllData();
     }
+
     private void deleteSharedPreference(SharedPreferences sharedPreferences){
         SharedPreferences.Editor delete = sharedPreferences.edit();
         delete.clear();
         delete.apply();
     }
 
+    /**
+     * Bu method MainActivity'i fragment'a bağlar bu sayede MainActivity de olan bilgileri kullanabilirim
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

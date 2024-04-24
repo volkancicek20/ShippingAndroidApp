@@ -15,6 +15,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private FirebaseAuth auth;
+
+    /**
+     * onCreate methodunda kullanıcı giriş yapmışsa eğer direkt MainActivity'e yönlendiren komutlar bulunmaktadır.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

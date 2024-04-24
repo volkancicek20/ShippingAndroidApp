@@ -54,6 +54,10 @@ public class LoginFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Bu method da unutulan şifre için resetleme linki gönderilen method çağrılır
+     * Giriş işemini sağlayan login listener ile girişi yapar
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -67,15 +71,15 @@ public class LoginFragment extends Fragment {
         });
         binding.confirmMail.setOnClickListener(v ->{
             user.sendEmailVerification()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(view.getContext(), "Doğrulama e-postası gönderildi. Lütfen e-postanızı kontrol edin.", Toast.LENGTH_SHORT).show();
-                            binding.confirmMail.setVisibility(View.GONE);
-                        } else {
-                            Exception exception = task.getException();
-                            Toast.makeText(view.getContext(), "Doğrulama e-postası gönderilirken bir hata oluştu.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(view.getContext(), "Doğrulama e-postası gönderildi. Lütfen e-postanızı kontrol edin.", Toast.LENGTH_SHORT).show();
+                        binding.confirmMail.setVisibility(View.GONE);
+                    } else {
+                        Exception exception = task.getException();
+                        Toast.makeText(view.getContext(), "Doğrulama e-postası gönderilirken bir hata oluştu.", Toast.LENGTH_SHORT).show();
+                    }
+                });
         });
         binding.register.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registerFragment);
@@ -100,6 +104,9 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    /**
+     * mail ve şifre ile giriş yapılır
+     */
     private void login(View view,String mail,String password){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Giriş yapılıyor..");
@@ -128,6 +135,9 @@ public class LoginFragment extends Fragment {
             });
     }
 
+    /**
+     * şifrenizi unuttuysanız yenileme bağlantısı gönderilir
+     */
     private void resetPassword(View view,String mail) {
         auth.sendPasswordResetEmail(mail)
             .addOnCompleteListener(task -> {
@@ -139,6 +149,10 @@ public class LoginFragment extends Fragment {
             });
     }
 
+    /**
+     * mail adresiniz doğrulanmadıyse uyarı geçer
+     * Eğer doğruladıysanız MainActivity e geçer
+     */
     private void userVerified(View view){
         if(auth.getCurrentUser().isEmailVerified()){
             Intent intent = new Intent(view.getContext(), MainActivity.class);

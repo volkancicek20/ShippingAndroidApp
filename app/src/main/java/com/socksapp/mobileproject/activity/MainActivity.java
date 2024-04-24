@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private String userMail;
     public RefDataAccess refDataAccess;
 
+    /**
+     * onCreate methodunda kullanıcının bilgilerini sharedPreferences ile saklama kodları bulunuyor.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

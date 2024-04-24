@@ -68,6 +68,10 @@ public class MyPostFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Recyclerview bağlanır
+     * getPost ile eklediğin ilanlar gösterilir
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -85,10 +89,16 @@ public class MyPostFragment extends Fragment {
 
     }
 
+    /**
+     * ProfilePageFragment'a döner
+     */
     private void backProfilePage(View view) {
         Navigation.findNavController(view).navigate(R.id.action_myPostFragment_to_profilePageFragment);
     }
 
+    /**
+     * Firebase'den ilanlar alır ve recyclerview da göstermek için adaptere yazdırılır
+     */
     private void getPost(View view){
 
         CollectionReference collection = firestore.collection("postMe").document(userMail).collection(userMail);
@@ -126,6 +136,9 @@ public class MyPostFragment extends Fragment {
         });
     }
 
+    /**
+     * Eklediğiniz ilanı silme kodu
+     */
     public static void deleteOffers(View view, DocumentReference ref, String myMail, int position,String city){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("İlan Kaldırılıyor..");
@@ -168,6 +181,9 @@ public class MyPostFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * İlanı silme seçeneğini görmek için açılan bottomsheetdialog
+     */
     public static void dialogShow(View view, DocumentReference ref, String myMail, int position,String city){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

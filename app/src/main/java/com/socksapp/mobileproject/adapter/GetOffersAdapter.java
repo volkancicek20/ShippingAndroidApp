@@ -125,6 +125,9 @@ public class GetOffersAdapter extends RecyclerView.Adapter{
     }
 
 
+    /**
+     * Recyclerview da gösterilecek veriler alınır ve gösterilir
+     */
     private void getShow(String imageUrl, String userName, String number, String mail,String price,String startCity,String startDistrict,String endCity,String endDistrict, Timestamp timestamp, GetOffersHolder holder){
 
         if(imageUrl.isEmpty()){

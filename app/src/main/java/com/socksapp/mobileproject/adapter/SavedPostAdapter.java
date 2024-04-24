@@ -140,6 +140,9 @@ public class SavedPostAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /**
+     * Recyclerview da gösterilecek veriler alınır ve gösterilir
+     */
     private void getShow(String imageUrl, String userName, String startCity, String startDistrict, String endCity, String endDistrict, String loadType, String loadAmount, String date, String time, String number, String mail, Timestamp timestamp, SavedPostHolder holder,String permission){
         if(imageUrl.isEmpty()){
             ImageView imageView;

@@ -89,6 +89,9 @@ public class EditInstitutionalFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +113,9 @@ public class EditInstitutionalFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * onViewCreated methodunda edittextlerin listener'ları ve veri çekme ve kaydetme methodları yer alıyor
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -162,12 +168,19 @@ public class EditInstitutionalFragment extends Fragment {
         });
     }
 
+    /**
+     * Bu method kurumsal profil fragment'da profili editleme veya kaydedilmiş ilanlara bakarken geri dondugu zaman otomatik olarak tabLayout kişisel profile
+     * dönüyor. Bunu engellemek için ProfilePageFragment'a argument ekledim bu sayede nereden geldiği anlaşıyor ve ona göre tabLayout'u düzgün şekilde gösterebiliyorum.
+     */
     private void backProfilePage(View view) {
         Bundle args = new Bundle();
         args.putString("type", "1");
         Navigation.findNavController(view).navigate(R.id.action_editInstitutionalFragment_to_profilePageFragment,args);
     }
 
+    /**
+     * setPrefix methodu numara girdiğimiz zaman sabit sayı olan "+212" ifadesini dizayn ediyor
+     */
     private void setPrefix(){
         AppCompatTextView prefixView = binding.numberTextInputLayout.findViewById(com.google.android.material.R.id.textinput_prefix_text);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -176,6 +189,9 @@ public class EditInstitutionalFragment extends Fragment {
         prefixView.setGravity(Gravity.CENTER);
     }
 
+    /**
+     * Profili düzenlediğimiz zaman bu method gerekli kontroller yapıldıktan sonra firebase'e kaydediyor.
+     */
     private void saveProfile(View view){
         String nameString = binding.nameEdittext.getText().toString();
         String numberString = binding.numberEdittext.getText().toString();
@@ -214,6 +230,9 @@ public class EditInstitutionalFragment extends Fragment {
 
     }
 
+    /**
+     * Bu method yukarıdaki methodun devamı
+     */
     private void uploadProfile(View view, String uploadName,String uploadMail,String uploadNumber,boolean nameCheck,boolean mailCheck,boolean numberCheck) {
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Kaydediliyor..");
@@ -338,6 +357,10 @@ public class EditInstitutionalFragment extends Fragment {
         }
     }
 
+    /**
+     * Bu method firebase'e yükledikten sonra fragment'ı düzenler. Yeni bilgileri yazdırır ve sharedPreferences'i yeniler.
+     * Kullanıcı profil resmi seçdiyse bu method çalışır
+     */
     private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
         if(nameCheck){
             SharedPreferences.Editor editor = institutionalNameShared.edit();
@@ -382,6 +405,10 @@ public class EditInstitutionalFragment extends Fragment {
         imageData = null;
     }
 
+    /**
+     * Bu method firebase'e yükledikten sonra fragment'ı düzenler. Yeni bilgileri yazdırır ve sharedPreferences'i yeniler.
+     * Kullanıcı profil resmi seçmediyse bu method çalışır
+     */
     private void updateProfile(boolean cityCheck,boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
         if(nameCheck){
             SharedPreferences.Editor editor = institutionalNameShared.edit();
@@ -420,6 +447,9 @@ public class EditInstitutionalFragment extends Fragment {
         }
     }
 
+    /**
+     * Bu method kurumsal profil hangi illerde aktif olduğunu belirtmek için il girer.
+     */
     private void showCityDialog(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
 
@@ -460,14 +490,18 @@ public class EditInstitutionalFragment extends Fragment {
         builder.show();
     }
 
+    /**
+     * Profil resmini seçmemize yarayan method budur.
+     * Gerekli izinler sorulur
+     */
     private void setImage(View view) {
         String[] permissions;
         String rationaleMessage;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES};
+            permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES}; // API 33 ve yukarısı için
         } else {
-            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+            permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}; // API 32 ve aşağısı için
         }
 
         rationaleMessage = "Galeriye gitmek için izin gerekli";
@@ -489,6 +523,10 @@ public class EditInstitutionalFragment extends Fragment {
         }
     }
 
+    /**
+     * Bu method galeriye gider ve resmi seçtiğimiz zaman imageDataya aktarır daha sonra fragment'da belirlediğimiz imageView'a ekler
+     * Eğer izin verilmemiş ise izinlere yönlendirir
+     */
     private void registerLauncher(View view){
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -525,6 +563,9 @@ public class EditInstitutionalFragment extends Fragment {
         });
     }
 
+    /**
+     * Fragment açılınca sharedPreferences den alınan veriler fragment da belirlediğimiz yerlere aktarılır.
+     */
     private void setProfile(View view){
 
         String name = institutionalNameShared.getString("name","");
@@ -563,6 +604,9 @@ public class EditInstitutionalFragment extends Fragment {
 
     }
 
+    /**
+     * Bu method firebase'den kurumsal profilde kaydedilen illeri alır ve ekler
+     */
     @SuppressWarnings("unchecked")
     private void getDataInstitutional(){
         firestore.collection("usersInstitutional").document(userMail).get().addOnSuccessListener(documentSnapshot -> {
@@ -597,6 +641,9 @@ public class EditInstitutionalFragment extends Fragment {
         });
     }
 
+    /**
+     * Bu method yukarıdaki kodun devamı nitelikte illeri hizaya getirir.
+     */
     private void markSelectedCities() {
         if (selectedCity == null || cityList == null || cityList.isEmpty()) {
             return;

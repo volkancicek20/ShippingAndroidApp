@@ -71,6 +71,9 @@ public class EditProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +96,9 @@ public class EditProfileFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * onViewCreated methodunda edittextlerin listener'ları ve veri çekme ve kaydetme methodları yer alıyor
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -134,10 +140,16 @@ public class EditProfileFragment extends Fragment {
 
     }
 
+    /**
+     * ProfilePageFragment fragment'a gider
+     */
     private void backProfilePage(View view) {
         Navigation.findNavController(view).navigate(R.id.action_editProfileFragment_to_profilePageFragment);
     }
 
+    /**
+     * setPrefix methodu numara girdiğimiz zaman sabit sayı olan "+90" ifadesini dizayn ediyor
+     */
     private void setPrefix(){
         AppCompatTextView prefixView = binding.numberTextInputLayout.findViewById(com.google.android.material.R.id.textinput_prefix_text);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -146,6 +158,9 @@ public class EditProfileFragment extends Fragment {
         prefixView.setGravity(Gravity.CENTER);
     }
 
+    /**
+     * Profili düzenlediğimiz zaman bu method gerekli kontroller yapıldıktan sonra firebase'e kaydediyor.
+     */
     private void saveProfile(View view){
 
         String nameString = binding.nameEdittext.getText().toString();
@@ -186,6 +201,9 @@ public class EditProfileFragment extends Fragment {
 
     }
 
+    /**
+     * Bu method yukarıdaki methodun devamı
+     */
     private void uploadProfile(View view, String uploadName,String uploadMail,String uploadNumber,boolean nameCheck,boolean mailCheck,boolean numberCheck) {
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Kaydediliyor..");
@@ -298,6 +316,10 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Bu method firebase'e yükledikten sonra fragment'ı düzenler. Yeni bilgileri yazdırır ve sharedPreferences'i yeniler.
+     * Kullanıcı profil resmi seçdiyse bu method çalışır
+     */
     private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber,String uploadImageUrl){
         if(nameCheck){
             SharedPreferences.Editor editor = nameShared.edit();
@@ -337,6 +359,10 @@ public class EditProfileFragment extends Fragment {
         imageData = null;
     }
 
+    /**
+     * Bu method firebase'e yükledikten sonra fragment'ı düzenler. Yeni bilgileri yazdırır ve sharedPreferences'i yeniler.
+     * Kullanıcı profil resmi seçmediyse bu method çalışır
+     */
     private void updateProfile(boolean nameCheck,boolean mailCheck,boolean numberCheck,String uploadName,String uploadMail,String uploadNumber){
         if(nameCheck){
             SharedPreferences.Editor editor = nameShared.edit();
@@ -370,6 +396,10 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Profil resmini seçmemize yarayan method budur.
+     * Gerekli izinler sorulur
+     */
     private void setImage(View view) {
         String[] permissions;
         String rationaleMessage;
@@ -399,6 +429,10 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Bu method galeriye gider ve resmi seçtiğimiz zaman imageDataya aktarır daha sonra fragment'da belirlediğimiz imageView'a ekler
+     * Eğer izin verilmemiş ise izinlere yönlendirir
+     */
     private void registerLauncher(View view){
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -435,6 +469,9 @@ public class EditProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Fragment açılınca sharedPreferences den alınan veriler fragment da belirlediğimiz yerlere aktarılır.
+     */
     private void setProfile(View view){
 
         String name = nameShared.getString("name","");

@@ -42,6 +42,9 @@ public class InfoInstitutionalFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Kurumsal profilin bilgilerini göstermek için mail ve name bilgilerini karşı fragment'dan alınır
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -63,10 +66,16 @@ public class InfoInstitutionalFragment extends Fragment {
         });
     }
 
+    /**
+     * UserOffersFragment'a geri dönme methodu
+     */
     private void goOffersFragment(View view) {
         Navigation.findNavController(view).navigate(R.id.action_infoInstitutionalFragment_to_userOffersFragment);
     }
 
+    /**
+     * Kurumsal profilin aktif olduğu illerin gösterildiği layout'u gizler ya da gözüktürür
+     */
     private void visibleChip(){
         if(binding.chipGroupCities.getVisibility() == View.GONE){
             binding.chipGroupCities.setVisibility(View.VISIBLE);
@@ -75,6 +84,9 @@ public class InfoInstitutionalFragment extends Fragment {
         }
     }
 
+    /**
+     * kurumsal profilin bilgilerini firebase'den alır
+     */
     @SuppressWarnings("unchecked")
     private void getDataCity(View view,String institutionalMail){
         firestore.collection("usersInstitutional").document(institutionalMail).get().addOnSuccessListener(documentSnapshot -> {

@@ -48,12 +48,16 @@ public class ProfilePageFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Tablayout ile kişisel ve kurumsal profillerin geçişlerini sağlayan kodları bulundurur
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         binding.content.nameFragment.setText("Profilim");
         binding.content.buttonDrawerToggle.setOnClickListener(this::goMainFragment);
+
 
         Bundle args = getArguments();
         if (args != null) {

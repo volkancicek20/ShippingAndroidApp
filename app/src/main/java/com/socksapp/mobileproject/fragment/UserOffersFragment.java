@@ -71,6 +71,10 @@ public class UserOffersFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Recyclerview bağlanır
+     * getOffersData çağrılır.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -93,6 +97,9 @@ public class UserOffersFragment extends Fragment {
         Navigation.findNavController(view).navigate(R.id.action_userOffersFragment_to_profilePageFragment);
     }
 
+    /**
+     * Kurumsalların bizim ilana verdiği teklifleri gösteren methoddur.
+     */
     private void getOffersData(View view){
         CollectionReference collection = firestore.collection("offers").document(userMail).collection(userMail);
 
@@ -129,6 +136,9 @@ public class UserOffersFragment extends Fragment {
         });
     }
 
+    /**
+     * Bu method da kurumsal firmanın teklifini kabul veya reddecek kodlar bulunur
+     */
     public void dialogShow(View view, String imageUrl,String name,String number,String mail,String personalMail,DocumentReference ref,int position,String offersRef,String startCity,String userId,String price){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -166,6 +176,9 @@ public class UserOffersFragment extends Fragment {
         }
     }
 
+    /**
+     * Eğer ilanı kabul edersek bu method çalışır.
+     */
     public void approveOffers(View view,String offersRef,String startCity,String personalMail,String userId,String price,Dialog dialogX,int position,DocumentReference ref){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklif Kabul Ediliyor..");
@@ -264,6 +277,9 @@ public class UserOffersFragment extends Fragment {
         dialog.show();
     }
 
+    /**
+     * Eğer ilanı reddedersek bu ilan çalışır
+     */
     public void rejectOffers(View view,String offersRef,String startCity,String personalMail,String userId,String price,Dialog dialogX,int position,DocumentReference ref){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklif Reddediliyor..");

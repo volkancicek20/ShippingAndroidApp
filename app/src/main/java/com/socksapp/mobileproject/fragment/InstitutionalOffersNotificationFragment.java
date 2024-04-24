@@ -44,6 +44,9 @@ public class InstitutionalOffersNotificationFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,10 @@ public class InstitutionalOffersNotificationFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Bu methodda getData ile geri dönüş yapılan teklifler gösterilir
+     * recyclerview bağlanır
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -76,12 +83,19 @@ public class InstitutionalOffersNotificationFragment extends Fragment {
         getData();
     }
 
+    /**
+     * Bu method kurumsal profil fragment'da profili editleme veya kaydedilmiş ilanlara bakarken geri dondugu zaman otomatik olarak tabLayout kişisel profile
+     * dönüyor. Bunu engellemek için ProfilePageFragment'a argument ekledim bu sayede nereden geldiği anlaşıyor ve ona göre tabLayout'u düzgün şekilde gösterebiliyorum.
+     */
     private void backProfilePage(View view) {
         Bundle args = new Bundle();
         args.putString("type", "1");
         Navigation.findNavController(view).navigate(R.id.action_institutionalOffersNotificationFragment_to_profilePageFragment,args);
     }
 
+    /**
+     * Bu kod gelen teklif bildirimlerinin firebase'den alır ve veriler adapter'e gönderilir
+     */
     private void getData(){
         CollectionReference collection;
         collection = firestore.collection("notificationOffers").document(userMail).collection(userMail);
@@ -121,8 +135,10 @@ public class InstitutionalOffersNotificationFragment extends Fragment {
         });
     }
 
+    /**
+     * Geri dönüşü yapılan teklif bildirimini siler
+     */
     public void deleteNotification(View view,String refId,int position){
-        System.out.println("ref: "+refId);
         firestore.collection("notificationOffers").document(userMail).collection(userMail).document(refId).delete().addOnSuccessListener(unused -> {
             if (position != RecyclerView.NO_POSITION) {
                 getNotificationOffersModelArrayList.remove(position);
@@ -135,6 +151,9 @@ public class InstitutionalOffersNotificationFragment extends Fragment {
         });
     }
 
+    /**
+     * Bu method MainActivity'i fragment'a bağlar bu sayede MainActivity de olan bilgileri kullanabilirim
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

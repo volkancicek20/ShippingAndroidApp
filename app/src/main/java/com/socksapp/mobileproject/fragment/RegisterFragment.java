@@ -50,6 +50,9 @@ public class RegisterFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * mail ve şifre edittextleri kontrol eder
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -85,6 +88,9 @@ public class RegisterFragment extends Fragment {
         });
     }
 
+    /**
+     * Bu method ile firebase'e kayıt olur ve veriler yazılır
+     */
     private void sign(View view,String mail,String password){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Kayıt olunuyor..");
@@ -111,6 +117,9 @@ public class RegisterFragment extends Fragment {
             });
     }
 
+    /**
+     * mail dogrulama linki gönderilir
+     */
     private void sendEmailVerification(View view) {
         auth.getCurrentUser().sendEmailVerification()
             .addOnCompleteListener(task -> {

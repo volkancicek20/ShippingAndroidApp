@@ -60,6 +60,10 @@ public class SavedPostFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Recyclerview bağlanır
+     * getData ile kaydettiğimiz ilanlar gösterilir
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -82,6 +86,9 @@ public class SavedPostFragment extends Fragment {
         Navigation.findNavController(view).navigate(R.id.action_savedPostFragment_to_profilePageFragment,args);
     }
 
+    /**
+     * Bu method da SQLite database de saklanan ilanın referans id si ve mail bilgisi alınır ve ilan gösterilir
+     */
     private void getData(){
         arrayList = mainActivity.refDataAccess.getAllRefs();
 
@@ -125,6 +132,9 @@ public class SavedPostFragment extends Fragment {
 
     }
 
+    /**
+     * kaydettiğimiz ilanı silme methodu
+     */
     public void removeSaved(View view, DocumentReference ref, int position){
         mainActivity.refDataAccess.deleteRef(ref.getId());
         savedPostArrayList.remove(position);

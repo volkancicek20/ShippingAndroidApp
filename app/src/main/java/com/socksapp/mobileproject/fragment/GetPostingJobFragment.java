@@ -69,6 +69,9 @@ public class GetPostingJobFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * onCreate methodunda sharedPreferences ile veriler alınır
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +89,10 @@ public class GetPostingJobFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Bu method da il bilgileri eklenir ve getPost ile veriler alınır
+     * Ayrıca recyclerview bağlanır
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -111,11 +118,17 @@ public class GetPostingJobFragment extends Fragment {
         });
     }
 
+    /**
+     * MainFragment fragment'a gitme kodu
+     */
     private void goMainFragment(View v){
         Navigation.findNavController(v).navigate(R.id.action_getPostingJobFragment_to_mainFragment);
     }
 
-
+    /**
+     * getPost ile verileri alma kodu
+     * veriler alınır ve adapter ile recyclerview a gönderilir.
+     */
     private void getPost(View view,String city){
         CollectionReference collection;
         if(city.isEmpty()){
@@ -159,6 +172,18 @@ public class GetPostingJobFragment extends Fragment {
         });
     }
 
+    /**
+     *
+     * @param view görünüm alınır
+     * @param userId kullanıcı id yani benim ayarladığım kayıt olunurkenki e-posta adresi
+     * @param startCity hangi ilden gidiyor bilgisi
+     * @param startDistrict hangi ilçeden gidiyor bilgisi
+     * @param endCity hangi il'e gidiyor bilgisi
+     * @param endDistrict hangi ilin ilçesine gidiyor bilgisi
+     * @param ref document referansı
+     *
+     * Bu method eğer kurumsal profil aktif ise ilanı kaydetme veya teklif yapma seçeneklerini gösterir
+     */
     public static void dialogShow(View view, String userId, String startCity, String startDistrict, String endCity, String endDistrict,DocumentReference ref){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -198,6 +223,9 @@ public class GetPostingJobFragment extends Fragment {
         }
     }
 
+    /**
+     * Teklif yaparken girilen para değeri girilir
+     */
     public static void getOffers(View v, String userId,String startCity,String startDistrict,String endCity,String endDistrict,DocumentReference ref){
         View view = LayoutInflater.from(v.getContext()).inflate(R.layout.offers_layout, null);
 
@@ -216,6 +244,10 @@ public class GetPostingJobFragment extends Fragment {
         });
     }
 
+    /**
+     * Teklif firebase'e kaydedilir. Bu methodda ilan verenin userId'si kullanılır çünkü karşı tarafın teklifi görmesi gerekir
+     * İlanın tüm verileri tekrar yazdılır ki hangi ilana teklif verildiği belirtilsin
+     */
     public static void getInstitutionalData(View view,String userMail,String userId,String price,String startCity,String startDistrict,String endCity,String endDistrict,AlertDialog alertDialog,DocumentReference ref){
         ProgressDialog progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("Teklifiniz ekleniyor..");
@@ -283,7 +315,7 @@ public class GetPostingJobFragment extends Fragment {
                 }
 
             }else {
-                // kurumsal hesabı bulunmuyor
+                Toast.makeText(view.getContext(),"Kurumsal Hesabınızın Profil verilerini girdikten sonra tekrar deneyin.",Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
                 progressDialog.dismiss();
             }
@@ -293,6 +325,9 @@ public class GetPostingJobFragment extends Fragment {
         });
     }
 
+    /**
+     * Bu method MainActivity'i fragment'a bağlar bu sayede MainActivity de olan bilgileri kullanabilirim
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
