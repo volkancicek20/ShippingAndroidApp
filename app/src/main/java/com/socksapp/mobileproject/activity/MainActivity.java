@@ -12,6 +12,12 @@ import com.socksapp.mobileproject.databinding.ActivityMainBinding;
 import com.socksapp.mobileproject.myclass.RefDataAccess;
 import java.util.Map;
 
+/**
+ * Bu Activity, LoginFragment ve RegisterFragment fragment'ları hariç tüm fragment'ları kapsayan activity'dir.
+ * Bu Activity, Navigation kullanarak fragment'ların geçişlerini sağlayan activity'dir.
+ * Main olarak MainFragment gözükür.
+ * Kullanıcının bilgileri firebase'den alarak SharedPreferences database'e kaydeder.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;

@@ -25,6 +25,10 @@ import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.databinding.FragmentLoginBinding;
 
+/**
+ * Bu Fragment, Kullanıcıların e-posta adresleriyle giriş yapacağı fragment'dır.
+ * Kullanıcı şifresini unuttuyse "şifremi unuttum" seçeneği ile şifre sıfırlama bağlantısını isteyeceği kod bu fragment'da bulunmaktadır.
+ */
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;

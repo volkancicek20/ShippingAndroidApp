@@ -18,6 +18,9 @@ import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentInfoInstitutionalBinding;
 import java.util.ArrayList;
 
+/**
+ * Bu Fragment, Kurumsal hesap size teklif gönderdiyse o hesabın bilgilerine bakmanızı sağlayan fragment'dır.
+ */
 public class InfoInstitutionalFragment extends Fragment {
 
     private FragmentInfoInstitutionalBinding binding;

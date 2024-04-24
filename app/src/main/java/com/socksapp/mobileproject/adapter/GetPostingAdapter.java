@@ -25,6 +25,9 @@ import com.socksapp.mobileproject.model.GetPostingModel;
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 
+/**
+ * Bu Adapter, İlanların gösterimini sağlayan recyclerview'ın adapteridir.
+ */
 public class GetPostingAdapter extends RecyclerView.Adapter {
 
     public FirebaseAuth auth;

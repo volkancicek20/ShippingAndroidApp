@@ -8,6 +8,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.socksapp.mobileproject.fragment.InstitutionalFragment;
 import com.socksapp.mobileproject.fragment.ProfileFragment;
 
+/**
+ * Bu Adapter, ProfileFragment ve InstitutionalFragment fragment'larının gösterimini sağlayan tabLayout'un adapteridir.
+ */
 public class ProfilePagerAdapter extends FragmentStateAdapter {
     public ProfilePagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);

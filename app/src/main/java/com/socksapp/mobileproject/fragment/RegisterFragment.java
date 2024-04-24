@@ -22,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentRegisterBinding;
 
+/**
+ * Bu Fragment, Kullanıcıların e-posta adresleriyle kayıt yapacağı fragment'dır.
+ */
 public class RegisterFragment extends Fragment {
 
     private FragmentRegisterBinding binding;

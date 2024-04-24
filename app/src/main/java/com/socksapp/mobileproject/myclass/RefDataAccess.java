@@ -9,6 +9,9 @@ import com.socksapp.mobileproject.model.RefItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bu Sınıf, ilanı kaydetmek için kullanılan DataBaseAccess sınıfı içerir.
+ */
 public class RefDataAccess {
     private SQLiteDatabase database;
     private RefDatabaseHelper dbHelper;

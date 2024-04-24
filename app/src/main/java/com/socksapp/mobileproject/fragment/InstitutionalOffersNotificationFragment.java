@@ -26,6 +26,9 @@ import com.socksapp.mobileproject.databinding.FragmentInstitutionalOffersNotific
 import com.socksapp.mobileproject.model.GetNotificationOffersModel;
 import java.util.ArrayList;
 
+/**
+ * Bu Fragment, İlanlara yapılan tekliflerin geri bildirimlerini gösteren fragment'dır.(örnegin teklifi kabul etti veya reddetti)
+ */
 public class InstitutionalOffersNotificationFragment extends Fragment {
 
     private FragmentInstitutionalOffersNotificationBinding binding;

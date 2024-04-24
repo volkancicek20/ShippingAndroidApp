@@ -3,6 +3,9 @@ package com.socksapp.mobileproject.model;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
+/**
+ * Bu Model, ilanların gösteriminde kullanıldığı verilerin modelidir.
+ */
 public class GetPostingModel {
 
     public static final int LAYOUT_ONE = 1;

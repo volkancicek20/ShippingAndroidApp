@@ -17,6 +17,9 @@ import com.socksapp.mobileproject.fragment.InstitutionalOffersNotificationFragme
 import com.socksapp.mobileproject.model.GetNotificationOffersModel;
 import java.util.ArrayList;
 
+/**
+ * Bu Adapter, Kurumsal hesapların tekliflerinin geri bildirimini gösterimini yapan recyclerview'ın adapteridir.
+ */
 public class GetNotificationOffersAdapter extends RecyclerView.Adapter {
     ArrayList<GetNotificationOffersModel> arrayList;
     Context context;

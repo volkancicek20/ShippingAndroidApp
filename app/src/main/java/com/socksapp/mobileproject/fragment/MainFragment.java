@@ -19,6 +19,10 @@ import com.socksapp.mobileproject.activity.LoginActivity;
 import com.socksapp.mobileproject.activity.MainActivity;
 import com.socksapp.mobileproject.databinding.FragmentMainBinding;
 
+/**
+ * Bu Fragment, AddFragment,ProfilePageFragment ve GetPostingJobFragment fragment'lara geçiş için gerekli kodları barındıran fragment'dır.
+ * Ayrıca hesaptan çıkış kodu bulunmaktadır.
+ */
 public class MainFragment extends Fragment {
 
     private FragmentMainBinding binding;

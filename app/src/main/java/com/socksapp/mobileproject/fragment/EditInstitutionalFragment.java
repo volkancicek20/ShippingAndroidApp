@@ -54,6 +54,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * Bu Fragment, Eğer kullanıcı kurumsal hesap açmış ise kurumsal hesabın profilini düzenleyen ve firebase'e kaydeden fragment'dır.
+ */
 public class EditInstitutionalFragment extends Fragment {
 
     private FragmentEditInstitutionalBinding binding;

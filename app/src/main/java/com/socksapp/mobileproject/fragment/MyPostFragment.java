@@ -34,6 +34,10 @@ import com.socksapp.mobileproject.databinding.FragmentMyPostBinding;
 import com.socksapp.mobileproject.model.GetPostingModel;
 import java.util.ArrayList;
 
+/**
+ * Bu Fragment, ilan eklediğiniz zaman ilanlarını göz atmak isterseniz bu fragment'da gözükecektir.
+ * İlanlarınızı silme kodu da bu fragment'da bulunmaktadır.
+ */
 public class MyPostFragment extends Fragment {
 
     private FragmentMyPostBinding binding;

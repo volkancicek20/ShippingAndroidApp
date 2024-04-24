@@ -38,6 +38,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+
+/**
+ * Bu Fragment, Kurumsal hesapların ilanlara teklif sunduğu zaman kullanıcının bu teklifleri gördüğü ve kabul veya reddeceği fragment'dır.
+ */
 public class UserOffersFragment extends Fragment {
 
     private FragmentUserOffersBinding binding;

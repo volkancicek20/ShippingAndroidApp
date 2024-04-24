@@ -25,6 +25,9 @@ import com.socksapp.mobileproject.model.RefItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bu Fragment, Kurumsal hesapların ilanları kaydettiği zaman kaydettiği ilanları görmelerini sağlayan fragment'dır.
+ */
 public class SavedPostFragment extends Fragment {
 
     private FragmentSavedPostBinding binding;

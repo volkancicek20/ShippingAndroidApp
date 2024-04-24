@@ -49,6 +49,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Bu Fragment, Kullanıcı profilini düzenleyen ve firebase'e kaydeden fragment'dır.
+ */
 public class EditProfileFragment extends Fragment {
 
     private FragmentEditProfileBinding binding;

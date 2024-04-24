@@ -15,6 +15,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.databinding.FragmentInstitutionalBinding;
 
+/**
+ * Bu Fragment, Kurumsal hesabınız var ise kurumsal hesapta erişebileceğiniz fragment'ları gösterir.(örneğin EditInstitutionalFragment vb.)
+ */
 public class InstitutionalFragment extends Fragment {
 
     private FragmentInstitutionalBinding binding;

@@ -44,6 +44,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Bu Fragment, Kullanıcıların eklediği ilanları recyclerview'da gösteren fragment'dır.
+ * İllere göre ilanlara bakabilir.
+ * Kurumsal hesaplar kullanıcıların eklediği ilanlara bakarak fiyat teklifi verebilir veya ilanı kaydedibilir.
+ */
 public class GetPostingJobFragment extends Fragment {
 
     private FragmentGetPostingJobBinding binding;

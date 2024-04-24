@@ -32,6 +32,9 @@ import com.socksapp.mobileproject.model.GetPostingModel;
 
 import java.util.ArrayList;
 
+/**
+ * Bu Adapter, Kurumsal hesapların kaydettiği ilanların gösterimini sağlayan recyclerview'ın adapteridir.
+ */
 public class SavedPostAdapter extends RecyclerView.Adapter {
 
     public ArrayList<GetPostingModel> arrayList;

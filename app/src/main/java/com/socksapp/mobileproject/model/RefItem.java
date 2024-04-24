@@ -1,5 +1,8 @@
 package com.socksapp.mobileproject.model;
 
+/**
+ * Bu Model, Kaydedilen ilanın referansını ve mail adresini database'e kaydetmek için kullanılan veri modelidir.
+ */
 public class RefItem {
     private String ref;
     private String mail;

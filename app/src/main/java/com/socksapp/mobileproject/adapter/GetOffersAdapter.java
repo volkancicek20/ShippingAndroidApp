@@ -19,6 +19,9 @@ import com.socksapp.mobileproject.fragment.UserOffersFragment;
 import com.socksapp.mobileproject.model.GetOffersModel;
 import java.util.ArrayList;
 
+/**
+ * Bu Adapter, Kullanıcıların ilanlarınına tekliflerinin gösterimini yapan recyclerview'ın adapteridir.
+ */
 public class GetOffersAdapter extends RecyclerView.Adapter{
 
     ArrayList<GetOffersModel> arrayList;

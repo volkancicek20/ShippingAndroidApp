@@ -2,6 +2,9 @@ package com.socksapp.mobileproject.model;
 
 import com.google.firebase.Timestamp;
 
+/**
+ * Bu Model, Tekliflerin geri bildirimini gösteren verilerin modelini içerir.
+ */
 public class GetNotificationOffersModel {
 
     public static final int LAYOUT_ONE = 1;

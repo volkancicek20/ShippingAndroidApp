@@ -7,6 +7,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.socksapp.mobileproject.R;
 
+/**
+ * Bu Activity, LoginFragment ve RegisterFragment fragment'ları kapsar.
+ * Ayrıca kullanıcı daha önceden giriş yapmış ise direkt MainActivity activity'i çağırır.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseUser user;

@@ -20,6 +20,9 @@ import com.socksapp.mobileproject.R;
 import com.socksapp.mobileproject.adapter.ProfilePagerAdapter;
 import com.socksapp.mobileproject.databinding.FragmentProfilePageBinding;
 
+/**
+ * Bu Fragment, Kullanıcı profili ve Kurumsal Profili TabLayout ile gösterimini sağayan fragment'dır.
+ */
 public class ProfilePageFragment extends Fragment {
 
     private FragmentProfilePageBinding binding;

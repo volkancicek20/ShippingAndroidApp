@@ -37,6 +37,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Bu Fragment, Kullanıcı ilan eklemek isterse verilen bilgileri doldurulması takdirinde firebase'e veri ekleyen fragment'dır.
+ */
 public class AddFragment extends Fragment {
 
     private FragmentAddBinding binding;

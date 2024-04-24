@@ -18,7 +18,9 @@ import com.socksapp.mobileproject.databinding.FragmentProfileBinding;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * Bu Fragment, Kişisel hesapta erişebileceğiniz fragment'ları gösterir.(örneğin EditProfileFragment vb.)
+ */
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;

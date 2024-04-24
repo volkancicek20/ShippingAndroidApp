@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Bu Sınıf, ilanı kaydetmek için kullanılan database'i kurar.
+ */
 public class RefDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "saves.db";
     private static final int DATABASE_VERSION = 1;
