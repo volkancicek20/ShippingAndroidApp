@@ -45,35 +45,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_map_card_view"
-                    app:layout_constraintTop_toBottomOf="@id/first_location_card_view"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/first_location_card_view">
 
-                    <ImageView
-                        android:id="@+id/down_arrow_location"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/topFirstLocationLinear"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/icon_down_arrow"
-                        android:backgroundTint="@color/gray"
-                        app:layout_constraintTop_toTopOf="@id/first_location_title_text"
-                        app:layout_constraintBottom_toBottomOf="@id/first_location_title_text"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/first_location_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Başlangıç Noktası"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toTopOf="@id/visible_first_location"
+                        android:orientation="horizontal"
+                        android:gravity="start"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/down_arrow_location"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/visible_first_location">
+
+                        <ImageView
+                            android:id="@+id/down_arrow_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/icon_down_arrow"
+                            android:backgroundTint="@color/gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/first_location_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="center"
+                            android:text="Başlangıç Noktası"
+                            android:textColor="@color/gray"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/visible_first_location"
@@ -87,55 +99,55 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/city_text_input"
+                            style="@style/CustomTextInputLayout.Dark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
                             android:hint="İl"
                             android:textColorHint="@color/text_input_title_change"
-                            app:hintTextColor="@color/text_input_title_change"
-                            app:boxStrokeWidthFocused="1dp"
-                            app:boxStrokeWidth="1dp"
                             app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeWidthFocused="1dp"
                             app:endIconTint="@color/text_input_icon_tint_change"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:hintTextColor="@color/text_input_title_change"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            style="@style/CustomTextInputLayout.Dark">
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <AutoCompleteTextView
                                 android:id="@+id/city_complete_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:inputType="none"
                                 android:textColor="@color/white"
-                                android:textSize="14sp"
-                                android:inputType="none"/>
+                                android:textSize="14sp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/district_text_input"
+                            style="@style/CustomTextInputLayout.Dark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
                             android:hint="İlçe"
                             android:textColorHint="@color/text_input_title_change"
-                            app:hintTextColor="@color/text_input_title_change"
-                            app:boxStrokeWidthFocused="1dp"
-                            app:boxStrokeWidth="1dp"
                             app:boxStrokeColor="@color/text_input_stroke_change"
+                            app:boxStrokeWidth="1dp"
+                            app:boxStrokeWidthFocused="1dp"
                             app:endIconTint="@color/text_input_icon_tint_change"
-                            app:layout_constraintTop_toBottomOf="@id/city_text_input"
+                            app:hintTextColor="@color/text_input_title_change"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            style="@style/CustomTextInputLayout.Dark">
+                            app:layout_constraintTop_toBottomOf="@id/city_text_input">
 
                             <AutoCompleteTextView
                                 android:id="@+id/district_complete_text"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:inputType="none"
                                 android:textColor="@color/white"
-                                android:textSize="14sp"
-                                android:inputType="none"/>
+                                android:textSize="14sp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,31 +177,43 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <ImageView
-                        android:id="@+id/down_arrow_location_2"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/topSecondLocationLinear"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/icon_down_arrow"
-                        android:backgroundTint="@color/gray"
-                        app:layout_constraintTop_toTopOf="@id/second_location_title_text"
-                        app:layout_constraintBottom_toBottomOf="@id/second_location_title_text"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/second_location_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Varış Noktası"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toTopOf="@id/visible_second_location"
+                        android:orientation="horizontal"
+                        android:gravity="start"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/down_arrow_location_2"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/visible_second_location">
+
+                        <ImageView
+                            android:id="@+id/down_arrow_location_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/icon_down_arrow"
+                            android:backgroundTint="@color/gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/second_location_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="center"
+                            android:text="Varış Noktası"
+                            android:textColor="@color/gray"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/visible_second_location"
@@ -281,31 +305,43 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <ImageView
-                        android:id="@+id/down_arrow_load_info"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/topLoadLinear"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/icon_down_arrow"
-                        android:backgroundTint="@color/gray"
-                        app:layout_constraintTop_toTopOf="@id/load_info_title_text"
-                        app:layout_constraintBottom_toBottomOf="@id/load_info_title_text"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/load_info_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Yük Bilgileri"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toTopOf="@id/visible_load_info"
+                        android:orientation="horizontal"
+                        android:gravity="start"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/down_arrow_load_info"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/visible_load_info">
+
+                        <ImageView
+                            android:id="@+id/down_arrow_load_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/icon_down_arrow"
+                            android:backgroundTint="@color/gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/load_info_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="center"
+                            android:text="Yük Bilgileri"
+                            android:textColor="@color/gray"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/visible_load_info"
@@ -398,31 +434,43 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <ImageView
-                        android:id="@+id/down_arrow_date"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/topDateLinear"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/icon_down_arrow"
-                        android:backgroundTint="@color/gray"
-                        app:layout_constraintTop_toTopOf="@id/date_title_text"
-                        app:layout_constraintBottom_toBottomOf="@id/date_title_text"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/date_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tarih Seçimi"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toTopOf="@id/visible_date_picker"
+                        android:orientation="horizontal"
+                        android:gravity="start"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/down_arrow_date"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/visible_date_picker">
+
+                        <ImageView
+                            android:id="@+id/down_arrow_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/icon_down_arrow"
+                            android:backgroundTint="@color/gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/date_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="center"
+                            android:text="Tarih Seçimi"
+                            android:textColor="@color/gray"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/visible_date_picker"
@@ -454,6 +502,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="GG/AA/YYYY"
+                                android:textSize="14sp"
                                 android:textColor="@color/white"
                                 android:textColorHint="@color/gray"
                                 android:inputType="date"
@@ -484,6 +533,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
                                 android:textColorHint="@color/gray"
+                                android:textSize="14sp"
                                 android:hint="SS:DD"
                                 android:inputType="time"
                                 android:gravity="center"
@@ -518,31 +568,43 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/contact_card_view">
 
-                    <ImageView
-                        android:id="@+id/down_arrow_contact"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/topContactLinear"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/icon_down_arrow"
-                        android:backgroundTint="@color/gray"
-                        app:layout_constraintBottom_toBottomOf="@id/contact_title_text"
+                        android:orientation="horizontal"
+                        android:gravity="start"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/contact_title_text" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/visible_contact_picker">
 
-                    <TextView
-                        android:id="@+id/contact_title_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="İletişim"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        app:layout_constraintBottom_toTopOf="@id/visible_contact_picker"
-                        app:layout_constraintStart_toEndOf="@id/down_arrow_contact"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/down_arrow_contact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/icon_down_arrow"
+                            android:backgroundTint="@color/gray"
+                            />
+
+                        <TextView
+                            android:id="@+id/contact_title_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="center"
+                            android:text="İletişim"
+                            android:textColor="@color/gray"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/visible_contact_picker"

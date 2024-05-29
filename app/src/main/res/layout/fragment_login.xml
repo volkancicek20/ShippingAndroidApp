@@ -74,25 +74,6 @@
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--            <EditText-->
-            <!--                android:id="@+id/login_email"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="60dp"-->
-            <!--                android:background="@drawable/edit_text_background_login_page"-->
-            <!--                android:layout_marginTop="32dp"-->
-            <!--                android:layout_marginStart="15dp"-->
-            <!--                android:layout_marginEnd="15dp"-->
-            <!--                android:drawableStart="@drawable/icon_mail"-->
-            <!--                android:drawableTint="@color/app_theme"-->
-            <!--                android:drawablePadding="8dp"-->
-            <!--                android:hint="E-posta"-->
-            <!--                android:textSize="16sp"-->
-            <!--                android:textColorHint="@color/black"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                app:layout_constraintTop_toTopOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                android:inputType="textEmailAddress" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/login_password_input_layout"
@@ -107,6 +88,8 @@
                 app:boxStrokeWidthFocused="1dp"
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/gray"
                 app:hintTextColor="@color/text_input_title_change"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -122,31 +105,13 @@
                     android:inputType="textPassword"
                     android:paddingTop="10dp"
                     android:textColor="@color/white"
+                    android:maxLength="20"
                     android:textColorHint="@color/text_input_title_change"
                     android:textCursorDrawable="@drawable/edittext_cursor_color"
                     android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--            <EditText-->
-            <!--                android:id="@+id/login_password"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="60dp"-->
-            <!--                android:background="@drawable/edit_text_background_login_page"-->
-            <!--                android:layout_marginTop="32dp"-->
-            <!--                android:layout_marginStart="15dp"-->
-            <!--                android:layout_marginEnd="15dp"-->
-            <!--                android:drawableStart="@drawable/icon_lock"-->
-            <!--                android:drawableTint="@color/app_theme"-->
-            <!--                android:drawablePadding="8dp"-->
-            <!--                android:hint="Şifre"-->
-            <!--                android:textSize="16sp"-->
-            <!--                android:textColorHint="@color/black"-->
-            <!--                android:textColor="@color/black"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/login_email_input_layout"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                android:inputType="textPassword" />-->
 
             <TextView
                 android:id="@+id/confirmMail"

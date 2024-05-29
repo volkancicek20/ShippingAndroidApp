@@ -70,14 +70,14 @@ public class LoginFragment extends Fragment {
             }
         });
         binding.confirmMail.setOnClickListener(v ->{
-            user.sendEmailVerification()
+            auth.getCurrentUser().sendEmailVerification()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(view.getContext(), "Doğrulama e-postası gönderildi. Lütfen e-postanızı kontrol edin.", Toast.LENGTH_SHORT).show();
                         binding.confirmMail.setVisibility(View.GONE);
                     } else {
-                        Exception exception = task.getException();
-                        Toast.makeText(view.getContext(), "Doğrulama e-postası gönderilirken bir hata oluştu.", Toast.LENGTH_SHORT).show();
+//                        Exception exception = task.getException();
+                        Toast.makeText(view.getContext(), "Doğrulama e-postası gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.", Toast.LENGTH_SHORT).show();
                     }
                 });
         });
@@ -131,7 +131,7 @@ public class LoginFragment extends Fragment {
                 }
             }).addOnFailureListener(e -> {
                 progressDialog.dismiss();
-                Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             });
     }
 

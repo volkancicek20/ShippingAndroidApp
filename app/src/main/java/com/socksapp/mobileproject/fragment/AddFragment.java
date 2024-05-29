@@ -129,7 +129,7 @@ public class AddFragment extends Fragment {
             selectDistrict2(selectedCity);
         });
 
-        binding.loadInfoTitleConstraintLayout.setOnTouchListener((v, event) -> {
+        binding.topLoadLinear.setOnTouchListener((v, event) -> {
             int checkVisible = binding.visibleLoadInfo.getVisibility();
             if(checkVisible == View.GONE){
                 binding.visibleLoadInfo.setVisibility(View.VISIBLE);
@@ -139,7 +139,7 @@ public class AddFragment extends Fragment {
             return false;
         });
 
-        binding.firstLocationTitleConstraintLayout.setOnTouchListener((v, event) -> {
+        binding.topFirstLocationLinear.setOnTouchListener((v, event) -> {
             int checkVisible = binding.visibleFirstLocation.getVisibility();
             if(checkVisible == View.GONE){
                 binding.visibleFirstLocation.setVisibility(View.VISIBLE);
@@ -149,7 +149,7 @@ public class AddFragment extends Fragment {
             return false;
         });
 
-        binding.secondLocationTitleConstraintLayout.setOnTouchListener((v, event) -> {
+        binding.topSecondLocationLinear.setOnTouchListener((v, event) -> {
             int checkVisible = binding.visibleSecondLocation.getVisibility();
             if(checkVisible == View.GONE){
                 binding.visibleSecondLocation.setVisibility(View.VISIBLE);
@@ -159,7 +159,7 @@ public class AddFragment extends Fragment {
             return false;
         });
 
-        binding.dateTitleConstraintLayout.setOnTouchListener((v, event) -> {
+        binding.topDateLinear.setOnTouchListener((v, event) -> {
             int checkVisible = binding.visibleDatePicker.getVisibility();
             if(checkVisible == View.GONE){
                 binding.visibleDatePicker.setVisibility(View.VISIBLE);
@@ -169,7 +169,7 @@ public class AddFragment extends Fragment {
             return false;
         });
 
-        binding.contactTitleConstraintLayout.setOnTouchListener((v, event) -> {
+        binding.topContactLinear.setOnTouchListener((v, event) -> {
             int checkVisible = binding.visibleContactPicker.getVisibility();
             if(checkVisible == View.GONE){
                 binding.visibleContactPicker.setVisibility(View.VISIBLE);
